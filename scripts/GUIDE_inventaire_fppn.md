@@ -15,7 +15,7 @@ Si tu ne peux pas installer Tesseract (droits administrateur), le script fonctio
 
 ## Étape 2 : placer le script
 
-1. Créer le dossier `...\Missions\FPPN\05-Analyses\scripts`.
+1. Créer le dossier `C:\Dev\Missions\05-FPPN\05-Analyses\scripts`.
 2. Y copier le fichier `inventaire_fppn.py`.
 
 ## Étape 3 : ouvrir et vérifier le script dans VS Code

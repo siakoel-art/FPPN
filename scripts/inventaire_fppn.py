@@ -24,8 +24,8 @@ sauf pour installer les bibliothèques manquantes (pip).
 # =============================================================================
 # PARAMÈTRES (à vérifier avant de lancer)
 # =============================================================================
-DOSSIER_SOURCE = r"C:\Users\jeannoelsialou\OneDrive - ADENKA CONSULTING SA\Bureau\Missions\FPPN\04-Documents reçus du client\01-download"
-DOSSIER_SORTIE = r"C:\Users\jeannoelsialou\OneDrive - ADENKA CONSULTING SA\Bureau\Missions\FPPN\05-Analyses"
+DOSSIER_SOURCE = r"C:\Dev\Missions\05-FPPN\04-Documents reçus du client\01-download"
+DOSSIER_SORTIE = r"C:\Dev\Missions\05-FPPN\05-Analyses"
 
 TESSERACT_EXE = r"C:\Program Files\Tesseract-OCR\tesseract.exe"  # chemin d'installation par défaut sous Windows
 OCR_ACTIF = True            # False pour ne pas lire les scans (beaucoup plus rapide)
