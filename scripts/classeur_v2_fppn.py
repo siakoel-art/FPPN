@@ -4,17 +4,20 @@ FPPN - Classeur des calculs v2 (rapport + compléments + traçabilité des chiff
 ================================================================================
 
 Regroupe les onglets des deux classeurs de calculs et ajoute l'onglet « Traçabilité » :
-chaque chiffre écrit dans le PowerPoint v2, sa diapositive, sa valeur exacte et le résultat du contrôle automatique.
-Utilisation : python classeur_v2_fppn.py <calculs_rapport.xlsx> <calculs_complements.xlsx> <rapport_v2_index.json> <sortie.xlsx>
+chaque chiffre écrit dans le PowerPoint, sa diapositive, sa valeur exacte et le résultat du contrôle automatique.
+Utilisation : python classeur_v2_fppn.py <calculs_rapport.xlsx> <calculs_complements.xlsx> <rapport_index.json> <sortie.xlsx> [calculs_ratios.xlsx]
+Avec le classeur des ratios (version 3), ses onglets « 10_ » sont ajoutés, ainsi qu'un tableau de bord mis en forme.
 """
 import json
 import sys
 from copy import copy
 
 import openpyxl
-from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.formatting.rule import FormulaRule
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
 RAPPORT, COMPLEMENTS, INDEX, SORTIE = sys.argv[1:5]
+RATIOS = sys.argv[5] if len(sys.argv) > 5 else None
 ENTETE = PatternFill("solid", fgColor="112A40")
 
 
@@ -58,7 +61,7 @@ for i, t in enumerate(lignes, 1):
 lm["A1"].font = Font(bold=True, size=12)
 lm.column_dimensions["A"].width = 120
 
-for fichier in (RAPPORT, COMPLEMENTS):
+for fichier in [f for f in (RAPPORT, COMPLEMENTS, RATIOS) if f]:
     src = openpyxl.load_workbook(fichier)
     for ws in src.worksheets:
         copier(ws, wb.create_sheet(ws.title))
@@ -80,6 +83,43 @@ for typ, liste in (("Figure", idx["figures"]), ("Tableau", idx["tableaux"])):
         for j, v in enumerate((typ, n, titre, dia), 1):
             fg.cell(row=r, column=j, value=v)
         r += 1
+
+if RATIOS:
+    src = openpyxl.load_workbook(RATIOS)["10_ratios"]
+    lignes_r = list(src.iter_rows(values_only=True))
+    ent = {v: i for i, v in enumerate(lignes_r[0])}
+    tb = wb.create_sheet("10_tableau_de_bord", 1)
+    tb.sheet_view.showGridLines = False
+    tb["B2"] = "Tableau de bord des ratios prudentiels du FPPN (Décision n° 05/2022/COM/UEMOA)"
+    tb["B2"].font = Font(bold=True, size=14, color="112A40")
+    tb["B3"] = ("Statut : « Conforme » si la valeur respecte la norme du texte ; « Non conforme » sinon ; « En attente » si une donnée manque ; "
+                "« À apprécier » si la norme n'est pas chiffrée. Statut global jugé sur 2022 à 2025 ; 2020, 2021 et 2026 indicatifs.")
+    tb["B3"].font = Font(italic=True, size=9, color="53565A")
+    cols = ["Priorité", "Famille", "Ratio", "Norme", "2022", "2023", "2024", "2025", "2026", "Statut global (2022 à 2025)", "Statut retraité", "Source"]
+    larg = [8, 22, 46, 26, 11, 11, 11, 11, 11, 18, 14, 50]
+    fin = Side(style="thin", color="BBBCBC")
+    for j, (c, w) in enumerate(zip(cols, larg), 2):
+        x = tb.cell(row=5, column=j, value=c.replace("Statut global (2022 à 2025)", "Statut 2022-2025"))
+        x.font, x.fill = Font(bold=True, color="FFFFFF"), PatternFill("solid", fgColor="060606")
+        x.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        tb.column_dimensions[x.column_letter].width = w
+    for i, l in enumerate(lignes_r[1:], 6):
+        pct = "%" in str(l[ent["Norme"]]) and "mois" not in str(l[ent["Norme"]])
+        for j, c in enumerate(cols, 2):
+            v = l[ent[c]] if c in ent else None
+            x = tb.cell(row=i, column=j, value=v)
+            x.border = Border(bottom=fin)
+            x.alignment = Alignment(vertical="center", wrap_text=c in ("Ratio", "Norme", "Source"))
+            if c in ("2022", "2023", "2024", "2025", "2026") and isinstance(v, (int, float)):
+                x.number_format = "0.00%" if pct else "# ##0.00"
+    der = 5 + len(lignes_r) - 1
+    for colonne in ("K", "L"):
+        plage = f"{colonne}6:{colonne}{der}"
+        tb.conditional_formatting.add(plage, FormulaRule(formula=[f'LEFT({colonne}6,4)="Conf"'], fill=PatternFill("solid", fgColor="112A40"), font=Font(color="FFFFFF", bold=True)))
+        tb.conditional_formatting.add(plage, FormulaRule(formula=[f'LEFT({colonne}6,3)="Non"'], fill=PatternFill("solid", fgColor="C00000"), font=Font(color="FFFFFF", bold=True)))
+        tb.conditional_formatting.add(plage, FormulaRule(formula=[f'OR(LEFT({colonne}6,3)="En ",LEFT({colonne}6,1)="À")'], fill=PatternFill("solid", fgColor="F2F2F2"), font=Font(color="53565A")))
+    tb.freeze_panes = "E6"
+    lm.cell(row=len(lignes) + 1, column=1, value="Onglets 10 : ratios prudentiels, classement des comptes, marge de solvabilité, excédent par risque, contrôle du PCMS, adossement par échéance ; onglet 10_tableau_de_bord mis en forme.")
 
 wb.save(SORTIE)
 print(f"{len(wb.sheetnames)} onglets ; {ok}/{len(trace)} chiffres retrouvés")
