@@ -270,6 +270,37 @@ def registre(Q, P, R):
       "Balances (compte 111)", NC, DEC + ", § 1.1.1 ; règlement n° 07/2009/CM/UEMOA", "Formule du texte.", "Écarts 2023 à 2025 publiés en partie 10",
       "PV d'AG non reçus", "Élevé", DEC, "ratios_airms_fppn.py, onglet 10_affectation", "Conforme au texte", r"^(AFF )")
 
+    # ------------------------------------------------------------------ Partie 10 (v8) : sensibilités et leviers de conformité
+    SENS = "sensibilites_fppn.py"
+    f("F-10-92", 10, "Montant à combler", "Montant qui ramène le ratio sur la borne la plus proche du texte, les autres termes restant inchangés.",
+      "Ratio plancher : max(0 ; borne × dénominateur - numérateur). Ratio plafond : max(0 ; numérateur - borne × dénominateur). Sinistralité : borne × cotisations - prestations.",
+      BAL + " ; numérateurs et dénominateurs des ratios", NC, DEC + ", tableaux 1 et 2 (formule inversée)", "Formule du texte inversée, une hypothèse à la fois (IAS 19, § 145).",
+      "Écarts 2020 au 31/08/2026 publiés en partie 10", "Ignore les effets croisés entre ratios", "Moyen", DEC + " ; IAS 19, § 145", SENS + ", onglet 13d_ecarts", "Conforme au texte", r"^S8 gap")
+    f("F-10-93", 10, "Qualification des écarts", "Structurel si le ratio est non conforme toutes les années mesurées ; récurrent s'il l'est au moins deux exercices de 2022 à 2025.",
+      "Structurel : NB.SI(statuts ; \"Non*\") = années mesurées ; Récurrent : NB.SI(statuts 2022 à 2025 ; \"Non*\") ≥ 2", "Statuts des ratios (onglet 13d)", NC,
+      "Règlement n° 07/2009/CM/UEMOA, art. 83 et 84 ; arrêté n° 00115/MEPS/CAB du 12/12/2023, ligne 13", "Seuil de deux exercices repris du texte ; « structurel » est une convention de lecture d'Adenka.",
+      "13 ratios structurels sur 14", "2020, 2021 et 2026 indicatifs", "Faible", "Règlement n° 07/2009, art. 84", SENS + ", onglet 13d_ecarts", "Conforme au texte", r"^S8 (n |STRUCT)")
+    f("F-10-94", 10, "Montant d'équilibre d'un levier", "Montant du levier (cotisations, prestations, charges, réserve, placements, fonds propres) qui ramène un ratio sur sa borne.",
+      "Cotisations pour la sinistralité : prestations / borne - cotisations ; taux équivalent = 5 % × (cotisations + variation) / cotisations ; excédent net : (borne × cotisations - excédent) / (1 - borne)",
+      "Onglets 13c et 13d", NC, "Statuts, art. 17, 79, 81, 85, 90 et 93 ; " + REX + ", art. 17, 19 et 21", "Leviers prévus par les textes ; assiette et recouvrement inchangés.",
+      "Montants 2025 publiés en partie 10", "Réactions des adhérents et effets croisés non modélisés", "Moyen", "Statuts du FPPN ; IAS 19, § 145", SENS + ", onglet 13f_leviers", "Conforme au texte", r"^S8 (L[1-7]|T |ANS|EMP|LIQ)")
+    f("F-10-95", 10, "Effet d'un choc de 100 000 000 FCFA", "Sens de l'effet d'un choc enregistré en partie double sur chaque ratio de l'exercice de référence.",
+      "Distance = max(borne basse - ratio ; 0) + max(ratio - borne haute ; 0) ; « améliore » si la distance diminue après le choc", "Onglet 13c (exercice 2025)", NC,
+      "IFRS 17, § 128 a) ; IFRS 7, § 40 (sensibilité du résultat et des fonds propres)", "Convention de présentation : le montant du choc est modifiable (onglet 13b).", "Matrice publiée en partie 10",
+      "Effet linéaire, une hypothèse à la fois", "Faible", "IFRS 17, § 128 ; IAS 19, § 145", SENS + ", onglet 13h_synthese", "Sans texte applicable", r"^S8 choc")
+    f("F-10-96", 10, "Faisabilité conjointe des normes de flux", "Les autres éléments du résultat doivent être une charge d'au moins 3 % des cotisations pour respecter ensemble sinistralité, coût par unité prestée et excédent net.",
+      "A = excédent - cotisations + prestations + charges ; seuil = 5 % - 100 % + 80 % × (1 + 15 %) = -3,00 % des cotisations", "Onglet 13c", NC,
+      DEC + ", tableau 1, lignes 2 et 5 ; tableau 2, lignes 5 et 10", "Démonstration algébrique à partir des formules du texte.", "Non conciliables de 2020 au 31/08/2026",
+      "Dépend du classement des comptes dans les charges de fonctionnement", "Moyen", DEC, SENS + ", onglet 13h_synthese", "Conforme au texte", r"^S8 (A |seuil|ex ROB)")
+    f("F-10-97", 10, "Inflation médicale pondérée", "Moyenne des variations annuelles des sous-indices de prix de la santé, pondérée par les prestations maladie du FPPN de 2025.",
+      "Inflation = Σ poids(poste) × (moyenne annuelle(n) / moyenne annuelle(n-1) - 1) ; poids = montant de la nature / total des natures associées", "ANStat, IHPC par poste (national) ; prestations maladie par nature (2025)", NC,
+      "Sans texte : référence statistique officielle (ANStat) ; repli 2025 : BCEAO, Rapport sur la Politique Monétaire, mars 2026, tableau 12", "Natures « autres » exclues des poids ; 2024 : glissement d'octobre.",
+      "3,21 % par an en moyenne de 2021 à 2024", "Pondérations officielles et série après octobre 2024 non disponibles", "Moyen", "ANStat ; BCEAO", SENS + ", onglet 13g_inflation", "Sans texte applicable", r"^S8 (inf|hausse|SIN2|S80|S70|poids|labo|mult)")
+    f("F-10-98", 10, "Rendement comparé au marché", "Taux brut de rentabilité des placements comparé au taux moyen des dépôts à terme de Côte d'Ivoire ; produit possible du solde non rémunéré.",
+      "Statut = rendement ≥ moyenne des quatre trimestres ; produit = solde moyen non rémunéré × taux moyen des dépôts à terme", "BCEAO, tableaux 17 et 22 ; onglet 10_ratios", NC,
+      DEC + ", section II (rentabilité des placements, comptes courants non rémunérés)", "Taux de marché de 2024 et 2025 seulement.", "2024 non conforme, 2025 conforme",
+      "Rendement 2025 gonflé par la clôture d'un dépôt à terme", "Moyen", DEC + " ; BCEAO", SENS + ", onglet 13i_rendement", "Conforme au texte", r"^S8 (RL6|DAT|O5|O10|RL7|gain|écart)")
+
     # ------------------------------------------------------------------ Partie 11 : mortalité
     f("F-11-01", 11, "Espérance de vie", "Nombre moyen d'années restant à vivre à l'âge x selon la table.", "e_x = Σ_(k≥1) L_(x+k) / L_x + 0,5", "Tables CIMA H, F, TD, TV",
       "Sans objet", "Code CIMA, art. 338 (tables de référence)", "Indicateur de lecture des tables.", "Valeurs publiées en partie 11", "Table non validée sur la population du FPPN",

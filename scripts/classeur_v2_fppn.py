@@ -9,6 +9,8 @@ Utilisation : python classeur_v2_fppn.py <calculs_rapport.xlsx> <calculs_complem
 Avec le classeur des ratios (version 3), ses onglets « 10_ » sont ajoutés, ainsi qu'un tableau de bord mis en forme.
 Version 5 : arguments facultatifs <calculs_provisions.xlsx> <formules.json> : onglets « 12_ » des provisions et onglet
 « 11_formules » (registre complet des formules, « Non communiquée » en rouge).
+Version 8 : argument facultatif <calculs_sensibilites.xlsx> : onglets « 13 » à formules vivantes (sensibilités et leviers),
+copiés avec leurs formules, commentaires, cellules fusionnées et hauteurs de lignes ; recalcul complet à l'ouverture.
 """
 import json
 import sys
@@ -22,6 +24,7 @@ RAPPORT, COMPLEMENTS, INDEX, SORTIE = sys.argv[1:5]
 RATIOS = sys.argv[5] if len(sys.argv) > 5 else None
 PROV = sys.argv[6] if len(sys.argv) > 6 else None
 FORMULES = sys.argv[7] if len(sys.argv) > 7 else None
+SENSIB = sys.argv[8] if len(sys.argv) > 8 else None
 ENTETE = PatternFill("solid", fgColor="112A40")
 
 
@@ -32,8 +35,16 @@ def copier(src, dst):
             if c.has_style:
                 d.font, d.fill, d.border = copy(c.font), copy(c.fill), copy(c.border)
                 d.number_format, d.alignment = c.number_format, copy(c.alignment)
+            if c.comment:
+                d.comment = copy(c.comment)
     for k, dim in src.column_dimensions.items():
         dst.column_dimensions[k].width = dim.width
+    for k, dim in src.row_dimensions.items():
+        if dim.height:
+            dst.row_dimensions[k].height = dim.height
+    for m in src.merged_cells.ranges:
+        dst.merge_cells(str(m))
+    dst.sheet_view.showGridLines = src.sheet_view.showGridLines
     dst.freeze_panes = src.freeze_panes
 
 
@@ -142,5 +153,13 @@ if FORMULES:
     fo.auto_filter.ref = f"A1:{openpyxl.utils.get_column_letter(len(COLONNES))}{len(reg) + 1}"
     fo.freeze_panes = "D2"
     lm.cell(row=len(lignes) + 2, column=1, value="Onglet 11_formules : registre complet des formules (méthode du FPPN, méthode réglementaire, écart, risques, source). Onglets 12_ : provisions et variantes de sinistralité (version 5).")
+if SENSIB:
+    src = openpyxl.load_workbook(SENSIB)
+    for ws in src.worksheets:
+        copier(ws, wb.create_sheet(ws.title))
+    wb.calculation.fullCalcOnLoad = True
+    lm.cell(row=len(lignes) + 3, column=1, value="Onglets 13 (version 8) : analyses de sensibilité et leviers de conformité, à formules vivantes. Méthode et références (13a), "
+            "paramètres modifiables en jaune (13b), données (13c), statuts et montants à combler (13d), facteurs récurrents (13e), montants d'équilibre des leviers (13f), "
+            "inflation médicale ANStat (13g), choc de 100 000 000 FCFA et faisabilité conjointe (13h), rendement et taux du marché (13i). Un commentaire explique chaque cellule clé.")
 wb.save(SORTIE)
 print(f"{len(wb.sheetnames)} onglets ; {ok}/{len(trace)} chiffres retrouvés")
