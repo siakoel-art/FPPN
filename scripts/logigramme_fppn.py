@@ -262,3 +262,61 @@ def chaine_traitement(slide, y0=3.95):
     lg.lien("c14", "c15", "oui")
     lg.lien("c14", "c13", "non : corriger", de="haut", vers="haut", pointille=True)
     return lg
+
+
+def decision_placement(slide, y0=3.9, h_couloir=2.35):
+    """Circuit de décision d'un placement décrit par le chef comptable (entretien du 19/10/2026)."""
+    lg = Logigramme(slide, 8.5)
+    lg.couloirs(["Banque", "Direction générale", "DAF", "Comptabilité (chef comptable)"], y0, h_couloir)
+    L, H = 3.4, 1.6
+    X = [5.6 + k * 3.85 for k in range(7)]
+    c = lg.centre_couloir
+    lg.noeud("p1", "debut", "Proposition\nde placement", X[0], c(0, H), L, H)
+    lg.noeud("p2", "etape", "Analyse de\nla proposition", X[1], c(1, H), L, H)
+    lg.noeud("p3", "etape", "Demande du point\nde trésorerie", X[2], c(2, H), L, H)
+    lg.noeud("p4", "etape", "Point de\ntrésorerie", X[2], c(3, H), L, H)
+    lg.noeud("p5", "decision", "Investir ?", X[3], c(1, 1.9), L, 1.9)
+    lg.noeud("p6", "fin", "Pas de\nplacement", X[3], c(0, H), L, H)
+    lg.noeud("p7", "document", "Lettre d'ouverture\nà la banque", X[4], c(2, H), L, H)
+    lg.noeud("p8", "etape", "Prélèvements\nmensuels", X[5], c(0, H), L, H)
+    lg.noeud("p9", "document", "Relevés\nbancaires", X[6], c(0, H), L, H)
+    lg.noeud("p10", "etape", "Comptabilisation\nsur relevés", X[6], c(3, H), L, H)
+    lg.noeud("p11", "fin", "Débouclage, dont\npaiement de l'EFC", X[5], c(3, H), L, H)
+    lg.noeud("p12", "alerte", "Ni comité, ni\nprocédure écrite", X[4], c(3, H), L, H)
+    lg.lien("p1", "p2", de="droite", vers="haut")
+    lg.lien("p2", "p3", de="droite", vers="haut")
+    lg.lien("p3", "p4")
+    lg.lien("p4", "p5", de="droite", vers="bas")
+    lg.lien("p5", "p6", "non", de="haut", vers="bas")
+    lg.lien("p5", "p7", "oui", de="droite", vers="haut")
+    lg.lien("p7", "p8", de="droite", vers="bas")
+    lg.lien("p8", "p9")
+    lg.lien("p9", "p10")
+    lg.lien("p10", "p11")
+    return lg
+
+
+def provision_deces(slide, y0=4.0):
+    """Calcul de fin d'année des allocations décès restant à payer, décrit par le chef comptable (19/10/2026)."""
+    lg = Logigramme(slide, 9)
+    L, H = 3.6, 1.6
+    X = [1.6 + k * 4.45 for k in range(7)]
+    y1, y2 = y0 + 0.6, y0 + 4.2
+    lg.noeud("d1", "debut", "Liste des décès\n(direction du personnel)", X[0], y1, L, H)
+    lg.noeud("d2", "etape", "Informaticien :\narrêt du précompte", X[1], y1, L, H)
+    lg.noeud("d3", "document", "Liste annuelle\nau chef comptable", X[2], y1, L, H)
+    lg.noeud("d4", "etape", "Pointage avec les\nallocations payées", X[3], y1, L, H)
+    lg.noeud("d5", "decision", "Allocation\npayée ?", X[4], y1 - 0.15, L, 1.9)
+    lg.noeud("d6", "fin", "Charge de\nl'exercice", X[5], y1, L, H)
+    lg.noeud("d7", "etape", "Valorisation au\nbarème par grade", X[4], y2, L, H)
+    lg.noeud("d8", "alerte", "Compte de la\nprovision à préciser", X[5], y2, L, H)
+    lg.noeud("d9", "alerte", "Décès d'ayants droit\nnon déclarés", X[0], y2, L, H)
+    lg.lien("d1", "d2")
+    lg.lien("d2", "d3")
+    lg.lien("d3", "d4")
+    lg.lien("d4", "d5")
+    lg.lien("d5", "d6", "oui")
+    lg.lien("d5", "d7", "non", de="bas", vers="haut")
+    lg.lien("d7", "d8")
+    lg.lien("d1", "d9", "hors liste", de="bas", vers="haut", pointille=True)
+    return lg

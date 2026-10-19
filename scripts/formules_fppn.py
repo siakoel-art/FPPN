@@ -188,13 +188,13 @@ def registre(Q, P, R):
 
     # ------------------------------------------------------------------ Partie 9 : bilan et provisions
     f("F-09-01", 9, "PSAP en mois de prestations", "Provision pour sinistres à payer divisée par les prestations mensuelles moyennes de l'année.",
-      "PSAP / (prestations de l'année / nombre de mois)", BAL, "Montant inchangé depuis 2020 ; méthode non communiquée",
+      "PSAP / (prestations de l'année / nombre de mois)", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026, à confirmer)",
       REX + ", art. 10 : PSAP calculée exercice par exercice, dossier par dossier, plus les sinistres non déclarés",
       "Indicateur de cohérence, pas une norme : une provision figée ne suit pas les prestations.", f"Maladie : {_nb(pr[2025]['psap_en_mois_de_prestations'], 2)} mois de prestations en 2025 ; décès : {_nb(pr[2025]['psap_deces_en_mois'], 2)} mois",
       "Provision ni suffisante ni excessive démontrable sans base de prestations", "Élevé", REX, "provisions_fppn.py, onglet 12_psap_rapprochement",
       ATT, r"^(Mois 20|Prov tot|Prest mens|PSAP)")
     f("F-09-02", 9, "PSAP et dettes envers les cliniques", "Provision maladie comparée aux factures des cliniques déjà enregistrées et non payées.",
-      "PSAP maladie / 40110000", BAL, "Montant inchangé depuis 2020 ; méthode non communiquée",
+      "PSAP maladie / 40110000", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026, à confirmer)",
       REX + ", art. 10 (dossiers connus + tardifs) ; PCMS (dettes fournisseurs en classe 4)",
       "Une facture enregistrée en dette n'a plus à être provisionnée : la PSAP doit couvrir les soins survenus et non encore facturés.",
       "Rapport mesuré chaque année (partie 9)", "Double compte possible entre dettes et provision", "Élevé", REX + " ; PCMS",
@@ -213,11 +213,18 @@ def registre(Q, P, R):
       BAL, "Aucune provision pour risques en cours", REX + ", art. 9", "Cotisations mensuelles précomptées : la période non couverte est au plus d'un mois. Provision probablement faible.",
       "Non chiffrée", "Faible tant que la cotisation reste mensuelle", "Faible", REX + ", art. 9", "À apprécier", ATT)
     f("F-09-06", 9, "Indemnités de départ à la retraite du personnel", "Somme, pour chaque salarié, de l'indemnité prévue par la convention collective à son départ, pondérée par la probabilité d'être présent et actualisée, au prorata de l'ancienneté acquise.",
-      "PIDR = Σ_i IDR_i × p_i × v^(t_i) × ancienneté acquise_i / ancienneté au départ_i ; IDR = salaire × (30 % par année jusqu'à 5 ans, 35 % de 6 à 10, 40 % au-delà)",
-      "Fichier du personnel, convention collective, note de calcul (non reçus)", "Provision au compte 196, renouvelée chaque année ; méthode non communiquée",
+      "PIDR = Σ_i IDR_i × p_i × v^(t_i) × ancienneté acquise_i / ancienneté au départ_i ; IDR = salaire × (30 % par année jusqu'à 5 ans, 35 % de 6 à 10, 40 % au-delà) ; charges patronales : fiscales 2,80 %, retraite 7,70 % (plafond 3 375 000 FCFA), prestations familiales 5,75 % et risques professionnels 2 % (plafond 75 000 FCFA)",
+      "Fichier du personnel, convention collective, note de calcul (non reçus)", "Convention collective appliquée à l'ancienneté acquise ; provision reprise et dotée en totalité chaque année (chef comptable, 19/10/2026, à confirmer)",
       "SYSCOHADA révisé (engagements de retraite, méthode actuarielle) ; convention collective interprofessionnelle de Côte d'Ivoire (barème, à confirmer par le texte)",
       "Montant du FPPN à recalculer selon la méthode des unités de crédit projetées.", "Provision 2025 : " + _f(P["pidr"][5]["provision_196"]), "Méthode et hypothèses inconnues",
       "Moyen", "SYSCOHADA révisé ; convention collective interprofessionnelle de Côte d'Ivoire", "provisions_fppn.py, onglet 12_pidr_196", ATT, r"^(PIDR)")
+    f("F-09-10", 9, "Allocations décès restant à payer (méthode du FPPN)", "Décès de l'année dont l'allocation n'est pas payée, valorisés au barème par grade.",
+      "Σ dossiers non payés × allocation du grade (sous-officier 1 000 000 FCFA, officier à confirmer, commissaire 2 000 000 FCFA)", "Liste des décès de la direction du personnel ; allocations payées",
+      "Liste des décès moins allocations payées, valorisée au barème (chef comptable, 19/10/2026, à confirmer) ; compte de comptabilisation non précisé",
+      REX + ", art. 10 : dossier par dossier, plus les sinistres non déclarés",
+      "Méthode proche du dossier par dossier, sans les sinistres tardifs (décès d'ayants droit non déclarés). Le compte utilisé est à préciser : le compte 15802000 ne bouge pas.",
+      "Non mesurable sans les fichiers des décès (PBC, item 92)", "Allocations restant à payer peut-être non comptabilisées", "Élevé", REX + ", art. 10",
+      "À produire à réception des fichiers", ATT, r"^(Allocations décès)")
     f("F-09-07", 9, "Adossement par échéance", "Actif mobilisable dans chaque tranche de délai comparé au passif exigible dans la même tranche.",
       "Écart(tranche) = actif(tranche) - passif(tranche)", BAL, NC, DEC + " (liquidité, équilibre stable) ; " + REX + ", art. 15",
       "Lecture par échéance plus fine que les ratios globaux.", "Écart à moins d'un an mesuré en partie 9", "Classement des comptes par jugement", "Moyen",

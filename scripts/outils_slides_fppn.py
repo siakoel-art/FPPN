@@ -30,6 +30,11 @@ SIGLES = [
     ("CMP", r"\bCMP\b", "sigle des comptes du FPPN, signification à confirmer"),
     ("FCP", r"\bFCP\b", "fonds commun de placement"),
     ("DAT", r"\bDAT\b", "dépôt à terme"),
+    ("DAF", r"\bDAF\b", "directeur administratif et financier"),
+    ("CNPS", r"\bCNPS\b", "Caisse nationale de prévoyance sociale"),
+    ("IS", r"\bIS\b", "impôt sur les salaires (part patronale)"),
+    ("FDFP", r"\bFDFP\b", "Fonds de développement de la formation professionnelle"),
+    ("SGI", r"\bSGI\b", "société de gestion et d'intermédiation"),
     ("S/C", r"S/C", "prestations / cotisations"),
     ("TCAM", r"\bTCAM\b", "taux de croissance annuel moyen"),
     ("IC", r"\bIC\b", "intervalle de confiance"),
@@ -108,6 +113,8 @@ def corps(slide, x, y, l, h, paras, tmax=14, tmin=9):
     """Texte d'analyse justifié, **gras** accepté ; la taille est la plus grande qui tient dans la zone."""
     if not paras or h < 0.6:
         return None
+    # Charte retenue le 19/10/2026 : le paragraphe d'implication reste séparé, sans libellé
+    paras = [re.sub(r"^\*\*Implication pour (le FPPN|la mission)\.\*\* ", "", p_) for p_ in paras]
     taille = tmin
     for t in (14, 13, 12, 11.5, 11, 10.5, 10, 9.5, 9):
         if t <= tmax and hauteur_texte(paras, l, t) <= h:

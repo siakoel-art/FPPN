@@ -14,8 +14,8 @@ MODELE, SORTIE = sys.argv[1:3]
 ENTETE = [
     "FPPN : note interne sur l'entretien cotisations et précomptes",
     "Document interne Adenka. Confidentiel. Ne pas diffuser au client.",
-    "Entretien du 19 octobre 2026 avec le responsable des cotisations (nom à compléter), qui est aussi le responsable informatique. "
-    "Eliam Affolaby (FPPN, fonction à préciser) a été contactée par téléphone pendant l'entretien sur la hausse de l'EFC. Conduite : Jean-Noël Sialou (Adenka).",
+    "Entretien du 19 octobre 2026 avec M. Kouamé Attuoman, responsable des cotisations, qui est aussi le responsable informatique. "
+    "Participants Adenka : Jean-Noël Sialou (conduite de l'entretien), Ruth Miensa et Eliam Affolaby.",
     "Objet : consigner, de façon factuelle et neutre, les éléments sensibles relevés pendant l'entretien et non repris dans le compte rendu destiné au client.",
 ]
 

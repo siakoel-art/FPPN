@@ -97,7 +97,7 @@ def diapo(titre, sous_titre, synthese, rendu, notes="", source=SRC):
 
 def r_infos(s):
     tiles = [("19 octobre 2026", "Date de l'entretien"), ("Cotisations", "Circuit des précomptes et produits"),
-             ("Interlocuteur", "responsable des cotisations et informatique"), ("Documentation", "retour annoncé le jour même")]
+             ("Kouamé Attuoman", "responsable des cotisations et informatique"), ("Documentation", "retour annoncé le jour même")]
     tw = (31.2 - 3 * 0.4) / 4
     for i, (a, b) in enumerate(tiles):
         x = 1.4 + i * (tw + 0.4)
@@ -109,9 +109,10 @@ def r_infos(s):
         txt(s, x + 0.3, 3.95, tw - 0.6, 0.8, a, 15, True, ORANGE)
         txt(s, x + 0.3, 4.85, tw - 0.6, 0.6, b, 9, False, GRIS_F)
     bas = tableau(s, {"titre": None, "entetes": ["Structure", "Nom", "Fonction", "Rôle dans l'entretien"], "largeurs": [4.6, 7.0, 10.6, 9.0],
-                      "lignes": [["FPPN", "Nom à compléter", "Responsable des cotisations et responsable informatique", "Interlocuteur"],
-                                 ["FPPN", "Eliam Affolaby", "Fonction à préciser", "Contactée par téléphone pendant l'entretien, sur la hausse de l'EFC"],
-                                 ["Adenka", "Jean-Noël Sialou", "Consultant actuaire", "Conduite de l'entretien"]]}, 6.2, taille=11)
+                      "lignes": [["FPPN", "Kouamé Attuoman", "Responsable des cotisations et responsable informatique", "Interlocuteur"],
+                                 ["Adenka", "Jean-Noël Sialou", "Consultant actuaire", "Conduite de l'entretien"],
+                                 ["Adenka", "Ruth Miensa", "Équipe Adenka", "Participante"],
+                                 ["Adenka", "Eliam Affolaby", "Équipe Adenka", "Participante, échanges avec l'interlocuteur"]]}, 6.2, taille=11)
     corps(s, 1.4, bas + 0.5, 31.2, BAS_CONTENU - bas - 0.5,
           ["**Objet de l'entretien.** Comprendre comment les cotisations sont précomptées et suivies, comment le barème est fixé et quelles règles s'appliquent à chaque produit.",
            "**Méthode.** Chaque déclaration est présentée comme telle et confrontée aux fichiers de précomptes reçus le 15/10/2026. Les points non documentés sont repris dans la demande complémentaire de documents (PBC, items 56 à 70)."], 12)
@@ -237,7 +238,7 @@ def r_documents(s):
 
 
 diapo("Informations de l'entretien", "Entretien avec le responsable des cotisations", "Un entretien consacré au circuit des précomptes, aux règles des produits et aux données des mutualistes", r_infos,
-      "Les participants côté FPPN sont indiqués par leur fonction ; le nom de l'interlocuteur est à compléter.", "Source : entretien du 19/10/2026")
+      "Interlocuteur : Kouamé Attuoman, responsable des cotisations et responsable informatique du FPPN.", "Source : entretien du 19/10/2026")
 diapo("Organisation du suivi des cotisations", "Les cotisations sont suivies par le responsable informatique, sans contrôle des retours",
       "Le responsable des cotisations produit les fichiers aller, mais aucun état des cotisations n'est tenu", r_organisation)
 diapo("Circuit des précomptes", "La maladie et le décès suivent un circuit direct que le FPPN ne maîtrise pas",
