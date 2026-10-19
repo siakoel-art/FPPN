@@ -229,6 +229,18 @@ def registre(Q, P, R):
       "Écart(tranche) = actif(tranche) - passif(tranche)", BAL, NC, DEC + " (liquidité, équilibre stable) ; " + REX + ", art. 15",
       "Lecture par échéance plus fine que les ratios globaux.", "Écart à moins d'un an mesuré en partie 9", "Classement des comptes par jugement", "Moyen",
       "Pratique de gestion actif-passif", "ratios_airms_fppn.py, onglet 10_mobilisation", "Sans texte applicable", r"^(Actif < 1 an|Passif < 1 an|Actif > 5 ans|Écart < 1 an|Actif total mobilisation|Épargne mobilisation)")
+    f("F-09-11", 9, "Couverture des engagements connus selon le scénario", "Actif retenu dans le scénario divisé par les engagements connus (passif à moins d'un an et épargne).",
+      "Couverture(s) = actif retenu(s) / (passif < 1 an + 41195100 + 41195200) ; scénario 2 : actif - 47111100 - 47111105 ; scénario 3 : scénario 2 - 47111104 - 22200000 ; scénario 4 : actif à un an / passif à un an",
+      BAL, NC, REX + ", art. 17, 20, 21 et 27 ; " + DEC + ", section II, § 2.1 (actifs admis / engagements réglementés)",
+      "Les scénarios appliquent des règles tirées des textes (valeur de marché, actifs admis, activités sanitaires séparées, valeur liquidative), et non des taux de décote. Les engagements non provisionnés ne sont pas au dénominateur : chaque couverture est un maximum.",
+      "Voir la partie 9 (scénarios de couverture)", "Liste officielle des actifs admis non reçue (décision ministérielle, PBC, item 54)", "Élevé",
+      REX + ", art. 20 ; PCMS", "rapport_v7_fppn.py (scénarios) ; ratios_airms_fppn.py, onglet 10_mobilisation", "Conforme au texte", r"^(Actif sc|Couv sc|Engagements 20|Scénario|Conclusion sc|RE sc)")
+    f("F-09-12", 9, "Sorties d'épargne observées", "Débits annuels des comptes d'épargne PEP et EFC, utilisés comme ordre de grandeur des sorties futures.",
+      "Sorties(n) = débits 41195100(n) + débits 41195200(n) ; trimestre = max des sorties annuelles / 4", BAL, NC,
+      REX + ", art. 19 (réserve de trésorerie d'un trimestre d'engagements) et art. 21 (prestations des deux derniers exercices)",
+      "Approximation provisoire, cohérente avec les mesures des textes fondées sur les sorties passées ; l'échéancier réel demande les âges et les règlements.",
+      "Sorties annuelles publiées en partie 9", "Les débits comprennent d'autres mouvements que les retraits", "Moyen", REX + ", art. 19 et 21",
+      "rapport_v7_fppn.py (sorties d'épargne)", "Sans texte applicable", r"^(Débit PEP|Débit EFC|Sorties|Versements|Trimestre sorties)")
     f("F-09-08", 9, "Fonds propres", "Réserves, report à nouveau, pertes reportées et résultat de l'exercice.", "10 + 11 + 12 + 13 + 14 + résultat", BAL,
       "Fonds propres des balances", "PCMS ; " + DEC + ", § 1.1.1 (marge de solvabilité)", "Même définition que le plan comptable.", "Fonds propres négatifs de 2020 à 2026",
       "Bilan reconstitué (non transmis)", "Élevé", "PCMS", "analyses_fppn.py, onglet 6_bilan", "Conforme au texte", r"^(FP |FP 20|FP hors|Sous-total FP|Fonds propres)")
