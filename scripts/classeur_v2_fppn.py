@@ -7,6 +7,8 @@ Regroupe les onglets des deux classeurs de calculs et ajoute l'onglet « Traçab
 chaque chiffre écrit dans le PowerPoint, sa diapositive, sa valeur exacte et le résultat du contrôle automatique.
 Utilisation : python classeur_v2_fppn.py <calculs_rapport.xlsx> <calculs_complements.xlsx> <rapport_index.json> <sortie.xlsx> [calculs_ratios.xlsx]
 Avec le classeur des ratios (version 3), ses onglets « 10_ » sont ajoutés, ainsi qu'un tableau de bord mis en forme.
+Version 5 : arguments facultatifs <calculs_provisions.xlsx> <formules.json> : onglets « 12_ » des provisions et onglet
+« 11_formules » (registre complet des formules, « Non communiquée » en rouge).
 """
 import json
 import sys
@@ -18,6 +20,8 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
 RAPPORT, COMPLEMENTS, INDEX, SORTIE = sys.argv[1:5]
 RATIOS = sys.argv[5] if len(sys.argv) > 5 else None
+PROV = sys.argv[6] if len(sys.argv) > 6 else None
+FORMULES = sys.argv[7] if len(sys.argv) > 7 else None
 ENTETE = PatternFill("solid", fgColor="112A40")
 
 
@@ -61,7 +65,7 @@ for i, t in enumerate(lignes, 1):
 lm["A1"].font = Font(bold=True, size=12)
 lm.column_dimensions["A"].width = 120
 
-for fichier in [f for f in (RAPPORT, COMPLEMENTS, RATIOS) if f]:
+for fichier in [f for f in (RAPPORT, COMPLEMENTS, RATIOS, PROV) if f]:
     src = openpyxl.load_workbook(fichier)
     for ws in src.worksheets:
         copier(ws, wb.create_sheet(ws.title))
@@ -121,5 +125,22 @@ if RATIOS:
     tb.freeze_panes = "E6"
     lm.cell(row=len(lignes) + 1, column=1, value="Onglets 10 : ratios prudentiels, classement des comptes, marge de solvabilité, excédent par risque, contrôle du PCMS, adossement par échéance ; onglet 10_tableau_de_bord mis en forme.")
 
+if FORMULES:
+    import sys as _s
+    import os as _o
+    _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__)))
+    from formules_fppn import COLONNES
+    reg = json.load(open(FORMULES, encoding="utf-8"))
+    fo = wb.create_sheet("11_formules", 1)
+    entete(fo, [t for _, t, _ in COLONNES], [w for _, _, w in COLONNES])
+    for i, x in enumerate(reg, 2):
+        for j, (k, _, _) in enumerate(COLONNES, 1):
+            c = fo.cell(row=i, column=j, value=x.get(k, ""))
+            c.alignment = Alignment(vertical="top", wrap_text=True)
+            if str(c.value).startswith("Non communiquée"):
+                c.font = Font(color="C00000", bold=True)
+    fo.auto_filter.ref = f"A1:{openpyxl.utils.get_column_letter(len(COLONNES))}{len(reg) + 1}"
+    fo.freeze_panes = "D2"
+    lm.cell(row=len(lignes) + 2, column=1, value="Onglet 11_formules : registre complet des formules (méthode du FPPN, méthode réglementaire, écart, risques, source). Onglets 12_ : provisions et variantes de sinistralité (version 5).")
 wb.save(SORTIE)
 print(f"{len(wb.sheetnames)} onglets ; {ok}/{len(trace)} chiffres retrouvés")
