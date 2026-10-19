@@ -26,6 +26,8 @@ PROV = sys.argv[6] if len(sys.argv) > 6 else None
 FORMULES = sys.argv[7] if len(sys.argv) > 7 else None
 SENSIB = sys.argv[8] if len(sys.argv) > 8 else None
 ENTETE = PatternFill("solid", fgColor="112A40")
+_v = __import__("re").search(r"_v(\d+)\.xlsx$", SORTIE)
+VER = _v.group(1) if _v else "2"
 
 
 def copier(src, dst):
@@ -63,10 +65,10 @@ idx = json.load(open(INDEX, encoding="utf-8"))
 trace = idx["trace"]
 ok = sum(t["retrouve"] for t in trace)
 lignes = [
-    "Classeur des calculs du rapport actuariel et statistique du FPPN, version 2 (rapport d'étape au 15/10/2026).",
+    f"Classeur des calculs du rapport actuariel et statistique du FPPN, version {VER} (rapport d'étape au 15/10/2026).",
     "Onglets 1 à 7 : calculs de la version 1 (données, effectifs, sinistralité, bilan, Grenier, annexes, placements).",
     "Onglets 8 : compléments v2 (inflation et valeurs réelles, TCAM, tendances, sensibilités, provisions, tables de mortalité).",
-    "Onglet 9_tracabilite : chaque chiffre écrit dans le PowerPoint v2, avec sa diapositive et sa valeur exacte.",
+    f"Onglet 9_tracabilite : chaque chiffre écrit dans le PowerPoint v{VER}, avec sa diapositive et sa valeur exacte.",
     f"Contrôle automatique : {ok} chiffres retrouvés sur {len(trace)} enregistrés, {idx['diapositives']} diapositives.",
     "Formats : pourcentages à deux décimales, montants exacts en FCFA sans décimales.",
     "Sources : fichiers reçus du FPPN le 15/10/2026, Banque mondiale (FP.CPI.TOTL.ZG), tables CIMA validées le 18/10/2026.",
@@ -158,8 +160,12 @@ if SENSIB:
     for ws in src.worksheets:
         copier(ws, wb.create_sheet(ws.title))
     wb.calculation.fullCalcOnLoad = True
+    sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+    import charte_excel_fppn
+    charte_excel_fppn.appliquer(wb)
+    lm.cell(row=len(lignes) + 4, column=1, value="Charte graphique Adenka : Helvetica, titre au-dessus et source sous chaque tableau, en-tête noir, première colonne grise, lignes alternées, cellules modifiables en orange, statuts conformes en bleu nuit et non conformes en rouge.")
     lm.cell(row=len(lignes) + 3, column=1, value="Onglets 13 (version 8) : analyses de sensibilité et leviers de conformité, à formules vivantes. Méthode et références (13a), "
-            "paramètres modifiables en jaune (13b), données (13c), statuts et montants à combler (13d), facteurs récurrents (13e), montants d'équilibre des leviers (13f), "
+            "paramètres modifiables en orange (13b), données (13c), statuts et montants à combler (13d), facteurs récurrents (13e), montants d'équilibre des leviers (13f), "
             "inflation médicale ANStat (13g), choc de 100 000 000 FCFA et faisabilité conjointe (13h), rendement et taux du marché (13i). Un commentaire explique chaque cellule clé.")
 wb.save(SORTIE)
 print(f"{len(wb.sheetnames)} onglets ; {ok}/{len(trace)} chiffres retrouvés")

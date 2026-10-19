@@ -16,7 +16,9 @@ Méthode (détaillée dans l'onglet 13a, avec ses références) :
 6. faisabilité conjointe des normes de flux (démonstration algébrique) ;
 7. inflation médicale : sous-indices IHPC de l'ANStat pondérés par les prestations du FPPN.
 
-Utilisation : python sensibilites_fppn.py <ratios.json> <resultats.json> <dossier_csv_ihpc> <sortie.xlsx>
+Utilisation : python sensibilites_fppn.py <ratios.json> <resultats.json> <dossier_csv_ihpc> <sortie.xlsx> [<dossier_csv_investing>]
+Le dossier facultatif contient les rendements quotidiens des obligations de l'État de Côte d'Ivoire à 5 et 10 ans
+exportés d'Investing.com (« Rendement de l'Obligation Cote d'Ivoire 5-Year / 10-Year - Données Historiques »).
 Le classeur produit est recalculé par LibreOffice (contrôle) ; les valeurs relues alimentent le rapport.
 """
 import glob
@@ -31,6 +33,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter as L
 
 RATIOS, RESULTATS, IHPC, SORTIE = sys.argv[1:5]
+INVEST = sys.argv[5] if len(sys.argv) > 5 else None
 RJ = json.load(open(RATIOS, encoding="utf-8"))
 RS = json.load(open(RESULTATS, encoding="utf-8"))
 EX = list(range(2020, 2027))
@@ -106,6 +109,7 @@ REFS = [
     ("R11", "IAS 19 révisée (2011), § 145", "Analyse de sensibilité pour chaque hypothèse significative, aux changements raisonnablement possibles, avec description de la méthode, des hypothèses et de leurs limites.", "Méthode « une hypothèse à la fois », toutes choses égales par ailleurs, et présentation des limites."),
     ("R12", "IFRS 17, § 128 a) et § 129 ; IFRS 7, § 40", "Sensibilité du résultat et des capitaux propres aux variables de risque raisonnablement possibles ; méthode et hypothèses décrites.", "Effet du choc sur le résultat et les fonds propres (écritures en partie double)."),
     ("R13", "ANStat, IHPC par poste de consommation (national), fonction Santé, extraction du 19/10/2026", "Indices mensuels de janvier 2017 à octobre 2024 pour huit postes de la santé.", "Inflation médicale (onglet 13g)."),
+    ("R15", "Investing.com, « Rendement de l'Obligation Cote d'Ivoire 5-Year / 10-Year - Données Historiques », exports du 19/10/2026", "Cotations quotidiennes des obligations de l'État de Côte d'Ivoire à 5 ans (mars 2021 au 15/10/2026) et à 10 ans (mars 2021 au 19/10/2026). Source secondaire (agrégateur du marché secondaire).", "Lecture complémentaire du ratio de rentabilité des placements (onglet 13i)."),
     ("R14", "BCEAO, Rapport sur la Politique Monétaire dans l'UMOA, mars 2026, tableau 12", "Inflation de la santé dans l'UEMOA : -1,3 % (T2 2025), -2,4 % (T3 2025), -1,9 % (T4 2025).", "Repli pour 2025, faute de série ANStat après octobre 2024."),
 ]
 ws = wb.create_sheet("13a_methode")
@@ -218,8 +222,8 @@ NORMES = [  # code, nom, borne basse, borne haute, strict, unité, source
     ("CUP", "Coût par unité monétaire prestée", None, 0.15, False, "%", "Décision 05/2022, tableau 2, ligne 5"),
 ]
 ws = wb.create_sheet("13b_parametres", 1)
-titre(ws, "Paramètres : normes du texte et leviers (cellules modifiables en jaune)",
-      "Borne absente : -1E+15 ou 1E+15 (pas de borne). Les cellules jaunes peuvent être modifiées ; tous les onglets 13 se recalculent.")
+titre(ws, "Paramètres : normes du texte et leviers (cellules modifiables en orange)",
+      "Borne absente : -1E+15 ou 1E+15 (pas de borne). Les cellules orange peuvent être modifiées ; tous les onglets 13 se recalculent.")
 entete(ws, 4, ["Code", "Ratio", "Borne basse", "Borne haute", "Strict", "Unité", "Source"])
 JAUNE = PatternFill("solid", fgColor="FFF2CC")
 NR, P = {}, {}
@@ -228,6 +232,7 @@ for i, (code, nom, lo, hi, st, u, src) in enumerate(NORMES, 5):
     cel(ws, i, 1, code, gras=True)
     cel(ws, i, 2, nom)
     f = FMT_P if u == "%" else FMT_R
+    f = '[>=100000000000000]"pas de borne";[<=-100000000000000]"pas de borne";' + f
     cel(ws, i, 3, -1e15 if lo is None else lo, f)
     cel(ws, i, 4, 1e15 if hi is None else hi, f)
     cel(ws, i, 5, "Oui" if st else "Non")
@@ -886,7 +891,67 @@ cel(ws, r + 6, 1, "Écart entre les obligations à 5 ans (moyenne 2025) et le ta
 cel(ws, r + 6, 2, "%")
 cel(ws, r + 6, 3, f"=L{TX['Obligations à 5 ans (UMOA)']}-C{r + 5}", FMT_P, gras=True)
 RDT = {"TX": TX, "RL6": r + 1, "RL6ST": r + 2, "RL7": r + 3, "GAIN": r + 4, "SERVI": r + 5, "ECART": r + 6}
+if INVEST:
+    import datetime as _dt
+    BLOCS = {}
+    for duree, col0 in (("5", 16), ("10", 20)):
+        f = next(x for x in glob.glob(os.path.join(INVEST, "*.csv")) if f" {duree}-Year" in x)
+        d = pd.read_csv(f, dtype=str, encoding="utf-8-sig")
+        d.columns = [c.strip() for c in d.columns]
+        d["date"] = pd.to_datetime(d["Date"], format="%d/%m/%Y")
+        d["v"] = d["Dernier"].str.replace(",", ".").astype(float) / 100
+        d = d.sort_values("date")
+        for j, t in enumerate(("Année", "Date", f"Rendement {duree} ans")):
+            x = ws.cell(4, col0 + j, t)
+            x.font, x.fill = Font(bold=True, color="FFFFFF"), H
+            x.alignment = Alignment(horizontal="center", wrap_text=True)
+            ws.column_dimensions[L(col0 + j)].width = 12
+        for i, (dt_, v) in enumerate(zip(d["date"], d["v"]), 5):
+            ws.cell(i, col0 + 1, dt_.to_pydatetime()).number_format = "DD/MM/YYYY"
+            ws.cell(i, col0, f"=YEAR({L(col0 + 1)}{i})")
+            ws.cell(i, col0 + 2, v).number_format = "0.000%"
+        BLOCS[duree] = (col0, 4 + len(d), d["date"].max().strftime("%d/%m/%Y"), len(d))
+    r2 = RDT["ECART"] + 2
+    ws.cell(r2, 1, "Rendement des obligations de l'État de Côte d'Ivoire sur le marché secondaire (Investing.com)").font = Font(bold=True, color=BLEU)
+    entete_ = ["Série", "Unité", "2021", "2022", "2023", "2024", "2025", "2026", "Dernière valeur", "Date", "Cotations", "", "Source"]
+    for j, t in enumerate(entete_, 1):
+        x = ws.cell(r2 + 1, j, t if t else None)
+        if t:
+            x.font, x.fill = Font(bold=True, color="FFFFFF"), H
+            x.alignment = Alignment(horizontal="center", wrap_text=True)
+    INV = {}
+    for k, duree in enumerate(("5", "10")):
+        rr = r2 + 2 + k
+        col0, fin, der, n = BLOCS[duree]
+        an_, va_ = f"${L(col0)}$5:${L(col0)}${fin}", f"${L(col0 + 2)}$5:${L(col0 + 2)}${fin}"
+        cel(ws, rr, 1, f"Obligations de l'État de Côte d'Ivoire à {duree} ans (moyenne annuelle des cotations)", wrap=True)
+        cel(ws, rr, 2, "%")
+        for j, a in enumerate(range(2021, 2027), 3):
+            cel(ws, rr, j, f'=IFERROR(AVERAGEIFS({va_},{an_},{a}),"")', FMT_P)
+        cel(ws, rr, 9, f"={L(col0 + 2)}{fin}", FMT_P, gras=True)
+        cel(ws, rr, 10, der)
+        cel(ws, rr, 11, n, "0")
+        cel(ws, rr, 13, f"Investing.com, « Rendement de l'Obligation Cote d'Ivoire {duree}-Year - Données Historiques », export du 19/10/2026 (colonnes {L(col0)} à {L(col0 + 2)})", wrap=True)
+        INV[duree] = rr
+    com(ws.cell(r2 + 2, 1), "Moyenne arithmétique des cotations de clôture de l'année (colonne « Dernier » du fichier). Investing.com est un agrégateur de cotations du marché secondaire : "
+        "source secondaire, utilisée en complément des taux publiés par la BCEAO (source primaire). 2021 : à partir du 25/03/2021 ; 2026 : jusqu'à la dernière cotation. "
+        "Plusieurs cotations identiques d'un jour à l'autre traduisent l'absence de transaction.", 520, 180)
+    rr = r2 + 4
+    cel(ws, rr, 1, "RL6 : taux brut de rentabilité des placements (rappel)")
+    cel(ws, rr, 2, "%")
+    for j, ex in enumerate(range(2021, 2026), 3):
+        cel(ws, rr, j, f"={L(j)}{RDT['RL6']}", FMT_P)
+    cel(ws, rr + 1, 1, "Statut de RL6 face aux obligations de l'État à 5 ans", gras=True)
+    for j, ex in enumerate(range(2021, 2026), 3):
+        cel(ws, rr + 1, j, f'=IF({L(j)}{INV["5"]}="","",IF({L(j)}{rr}>={L(j)}{INV["5"]},"Conforme","Non conforme"))', gras=True)
+    cel(ws, rr + 2, 1, "Écart entre les obligations de l'État à 5 ans (dernière valeur) et le taux servi de 3,5 %", wrap=True)
+    cel(ws, rr + 2, 2, "%")
+    cel(ws, rr + 2, 3, f"=I{INV['5']}-C{RDT['SERVI']}", FMT_P, gras=True)
+    com(ws.cell(rr + 1, 1), "Lecture complémentaire de RL6 : la Décision n° 05/2022 compare le rendement au « taux moyen du marché » sans préciser le marché ; les dépôts à terme (BCEAO) restent la lecture principale, les obligations de l'État une lecture exigeante.")
+    RDT.update({"INV5": INV["5"], "INV10": INV["10"], "RL6B": rr, "RL6INV": rr + 1, "ECARTINV": rr + 2})
 largeurs(ws, [52, 7] + [10] * 8 + [12, 12, 40])
+for j_ in (16, 17, 18, 20, 21, 22):
+    ws.column_dimensions[L(j_)].width = 12
 
 wb.move_sheet("13h_synthese", offset=2)
 wb.save(SORTIE)

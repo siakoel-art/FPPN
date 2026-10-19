@@ -1965,7 +1965,7 @@ contenu({"titre": "Analyses de sensibilité : méthode", "sous_titre": "Huit ét
                             ["5. Facteurs récurrents", "Regroupement des ratios par comptes qui expliquent l'écart chaque année", "Balances du FPPN ; PCMS"],
                             ["6. Leviers", "Montant d'équilibre de chaque levier, et effet d'un choc de 100 000 000 FCFA enregistré en partie double, une hypothèse à la fois", "Statuts, art. 17, 79, 81, 85, 90 et 93 ; " + REX + ", art. 16, 17, 19 et 21 ; IAS 19, § 145"],
                             ["7. Faisabilité conjointe", "Démonstration algébrique : les normes de flux peuvent-elles être respectées ensemble ?", DEC + ", tableau 1, lignes 2 et 5 ; tableau 2, lignes 5 et 10"],
-                            ["8. Inflation et rendement", "Sous-indices de prix de la santé pondérés par les prestations du FPPN ; rendement comparé aux taux du marché", "ANStat (IHPC) ; BCEAO, Rapport sur la Politique Monétaire, mars 2026, tableaux 12, 17 et 22"]]},
+                            ["8. Inflation et rendement", "Sous-indices de prix de la santé pondérés par les prestations du FPPN ; rendement comparé aux taux du marché", "ANStat (IHPC) ; BCEAO, Rapport sur la Politique Monétaire, mars 2026, tableaux 12, 17 et 22 ; Investing.com"]]},
         disposition="dessous",
         analyse=["**La démarche suit la norme internationale de pratique actuarielle ISAP 1 (§ 2.7.7) : l'actuaire examine la sensibilité des résultats aux variations des hypothèses clés.** Les normes IAS 19 (§ 145) et IFRS 17 (§ 128) fixent la présentation : une hypothèse à la fois, changements raisonnablement possibles, méthode et limites décrites."],
         implication="Les normes ISAP 1, IAS 19 et IFRS 17 sont des références de bonne pratique, retenues pour la méthode ; elles ne sont pas opposables au FPPN. Les textes UEMOA et les statuts, eux, le sont.",
@@ -2158,23 +2158,29 @@ contenu({"titre": "Sinistralité face à une hausse des prestations", "sous_titr
 
 _RD = K8["RDT"]
 _tx = lambda nom, col: s13("13i_rendement", _RD["TX"][nom], col)  # noqa: E731
+_ri = lambda cle, col: s13("13i_rendement", _RD[cle], col)  # noqa: E731
 _DAT = "Dépôts à terme, Côte d'Ivoire"
-contenu({"titre": "Rendement des placements et taux du marché", "sous_titre": "Le rendement de 2024 est inférieur au taux des dépôts à terme ; la trésorerie non rémunérée peut être placée",
-         "synthese": f"Rendement 2024 : {pc('S8 RL6 2024', s13('13i_rendement', _RD['RL6'], 6))}, pour des dépôts à terme à {pc('S8 DAT 2024', _tx(_DAT, 11))} en Côte d'Ivoire ; produit possible de {F('S8 gain 2025', s13('13i_rendement', _RD['GAIN'], 7))} par an sur le solde non rémunéré de 2025"},
-        "Le taux brut de rentabilité des placements doit atteindre au moins le taux moyen du marché (Décision n° 05/2022, section II). Taux du marché : moyenne des quatre trimestres publiés par la BCEAO (dépôts à terme en Côte d'Ivoire, tableau 22 ; obligations de l'UMOA, tableau 17, sources UMOA-Titres et AMF-UMOA). Produit possible = solde moyen des comptes courants non rémunérés × taux moyen des dépôts à terme (onglet 13i).",
-        tableau={"titre": tab("Rendement du FPPN et taux du marché"), "entetes": ["Indicateur", "2024", "2025", "Source"], "largeurs": [10.2, 3.6, 3.6, 13.8], "taille": 9,
-                 "lignes": [["Rendement brut des placements du FPPN", pc("S8 RL6 2024 (t)", s13("13i_rendement", _RD["RL6"], 6)), pc("S8 RL6 2025", s13("13i_rendement", _RD["RL6"], 7)), "Partie 10 (ratio de rentabilité des placements)"],
-                            ["Dépôts à terme, Côte d'Ivoire", pc("S8 DAT 2024 (t)", _tx(_DAT, 11)), pc("S8 DAT 2025", _tx(_DAT, 12)), "BCEAO, Rapport sur la Politique Monétaire, mars 2026, tableau 22"],
-                            ["Obligations à 5 ans (UMOA)", pc("S8 O5 2024", _tx("Obligations à 5 ans (UMOA)", 11)), pc("S8 O5 2025", _tx("Obligations à 5 ans (UMOA)", 12)), "Idem, tableau 17"],
-                            ["Obligations à 10 ans (UMOA)", pc("S8 O10 2024", _tx("Obligations à 10 ans (UMOA)", 11)), pc("S8 O10 2025", _tx("Obligations à 10 ans (UMOA)", 12)), "Idem, tableau 17"],
-                            ["Rendement conforme au taux des dépôts à terme ?", {"Conforme": "Oui", "Non conforme": "Non"}[s13("13i_rendement", _RD["RL6ST"], 6)], {"Conforme": "Oui", "Non conforme": "Non"}[s13("13i_rendement", _RD["RL6ST"], 7)], "Onglet 13i"],
-                            ["Solde moyen non rémunéré", F("S8 RL7 2024", s13("13i_rendement", _RD["RL7"], 6)), F("S8 RL7 2025", s13("13i_rendement", _RD["RL7"], 7)), "Partie 10 (comptes courants non rémunérés)"],
-                            ["Produit possible au taux des dépôts à terme", F("S8 gain 2024", s13("13i_rendement", _RD["GAIN"], 6)), F("S8 gain 2025 (t)", s13("13i_rendement", _RD["GAIN"], 7)), "Onglet 13i"]]},
+_OK = {"Conforme": "Oui", "Non conforme": "Non", None: "-", "": "-"}
+_A5 = list(range(2021, 2026))
+SRC_INV = "Investing.com, « Rendement de l'Obligation Cote d'Ivoire 5-Year / 10-Year - Données Historiques », export du 19/10/2026"
+contenu({"titre": "Rendement des placements et taux du marché", "sous_titre": "Le rendement du FPPN est inférieur aux taux du marché de 2022 à 2024",
+         "synthese": f"Obligations de l'État de Côte d'Ivoire : {pc('S8 inv5 der', _ri('INV5', 9))} à 5 ans ({_ri('INV5', 10)}), {pc('S8 inv10 der', _ri('INV10', 9))} à 10 ans ({_ri('INV10', 10)}) ; taux servi sur l'épargne : 3,50 %"},
+        "Le taux brut de rentabilité des placements doit atteindre au moins le taux moyen du marché (Décision n° 05/2022, section II), sans que le texte précise le marché. Deux lectures : dépôts à terme en Côte d'Ivoire (BCEAO, tableau 22, lecture principale, 2024 et 2025) et obligations de l'État de Côte d'Ivoire à 5 ans (Investing.com, moyenne annuelle des cotations quotidiennes, lecture exigeante). Investing.com est un agrégateur de cotations du marché secondaire : source secondaire, en complément de la BCEAO. Produit possible = solde moyen non rémunéré × taux moyen des dépôts à terme (onglet 13i).",
+        tableau={"titre": tab("Rendement du FPPN et taux du marché, 2021 à 2025"), "entetes": ["Indicateur"] + [str(a) for a in _A5] + ["Source"], "largeurs": [8.8] + [2.9] * 5 + [7.9], "taille": 8,
+                 "lignes": [["Rendement brut des placements du FPPN"] + [pc(f"S8 RL6 {a}", _ri("RL6", 3 + j)) for j, a in enumerate(_A5)] + ["Partie 10"],
+                            ["Dépôts à terme, Côte d'Ivoire", "-", "-", "-", pc("S8 DAT 2024", _tx(_DAT, 11)), pc("S8 DAT 2025", _tx(_DAT, 12)), "BCEAO, tableau 22"],
+                            ["État de Côte d'Ivoire, 5 ans"] + [pc(f"S8 inv5 {a}", _ri("INV5", 3 + j)) for j, a in enumerate(_A5)] + ["Investing.com"],
+                            ["État de Côte d'Ivoire, 10 ans"] + [pc(f"S8 inv10 {a}", _ri("INV10", 3 + j)) for j, a in enumerate(_A5)] + ["Investing.com"],
+                            ["Obligations de l'UMOA, 5 ans", "-", "-", "-", pc("S8 O5 2024", _tx("Obligations à 5 ans (UMOA)", 11)), pc("S8 O5 2025", _tx("Obligations à 5 ans (UMOA)", 12)), "BCEAO, tableau 17"],
+                            ["Conforme face aux dépôts à terme ?", "-", "-", "-", _OK[_ri("RL6ST", 6)], _OK[_ri("RL6ST", 7)], "Onglet 13i"],
+                            ["Conforme face à l'État à 5 ans ?"] + [_OK[_ri("RL6INV", 3 + j)] for j in range(5)] + ["Onglet 13i"],
+                            ["Solde moyen non rémunéré"] + [F(f"S8 RL7 {a}", _ri("RL7", 3 + j)) for j, a in enumerate(_A5)] + ["Partie 10"],
+                            ["Produit possible au taux des dépôts à terme", "-", "-", "-", F("S8 gain 2024", _ri("GAIN", 6)), F("S8 gain 2025", _ri("GAIN", 7)), "Onglet 13i"]]},
         disposition="dessous",
-        analyse=["**Le rendement de 2025 dépasse le marché seulement parce que les intérêts d'un dépôt à terme sont comptabilisés à sa clôture** ; celui de 2024 est inférieur au taux des dépôts à terme.",
-                 f"**Le taux servi de 3,5 % sur l'épargne est inférieur de {pc('S8 écart O5', s13('13i_rendement', _RD['ECART'], 3))} au rendement des obligations à 5 ans de 2025** : un adossement en titres publics couvrirait le taux servi."],
-        implication="Placer le solde non rémunéré améliore le résultat sans réduire la liquidité au sens du texte, car un dépôt à terme reste en classe 5. Les échéances doivent suivre l'échéancier de l'épargne, à établir.",
-        source="Source : BCEAO, Rapport sur la Politique Monétaire dans l'UMOA, mars 2026, tableaux 17 et 22 ; classeur v8, onglet 13i ; entretien du 19/10/2026 (taux servi)")
+        analyse=["**De 2022 à 2024, le rendement des placements est inférieur à toutes les références de marché disponibles.** Celui de 2025 les dépasse seulement parce que les intérêts d'un dépôt à terme sont comptabilisés à sa clôture.",
+                 f"**Le taux servi de 3,5 % sur l'épargne est inférieur de {pc('S8 écart inv5', _ri('ECARTINV', 3))} au rendement actuel des obligations de l'État à 5 ans** : un adossement de l'épargne en titres publics couvrirait le taux servi avec une marge."],
+        implication=f"Placer le solde non rémunéré rapporterait {F('S8 gain 2025 (i)', _ri('GAIN', 7))} par an au taux des dépôts à terme de 2025, sans réduire la liquidité au sens du texte, car un dépôt à terme reste en classe 5. Les échéances doivent suivre l'échéancier de l'épargne, à établir.",
+        source="Source : BCEAO, Rapport sur la Politique Monétaire dans l'UMOA, mars 2026, tableaux 17 et 22 ; " + SRC_INV + " ; classeur v8, onglet 13i ; entretien du 19/10/2026 (taux servi)")
 
 retenir("leviers de conformité", ("Les écarts sont structurels ; seuls des leviers combinés peuvent rendre le FPPN conforme", f"{N_STRUCT} ratios non conformes toutes les années, cinq facteurs récurrents, des leviers parfois contradictoires",
                                   "Les écarts de bilan (épargne, fonds propres) dépassent les moyens annuels du FPPN ; les écarts de compte de résultat (frais, réserve) peuvent être corrigés en quelques exercices."),
@@ -2512,6 +2518,7 @@ SL.append({"type": "annexe", "titre": "Références et sources", "notes": "", "t
                       ["Statuts et règlement intérieur du FPPN (15/06/2023)", "Barème, provisions, réserves, produits, personnel", "Textes fournis le 19/10/2026"],
                       ["BCEAO, Rapport sur la Politique Monétaire dans l'UMOA, mars 2026", "Inflation de la santé (tableau 12), taux des titres publics (17) et des dépôts à terme (22)", "bceao.int"],
                       ["ANStat, IHPC par poste de consommation (national)", "Inflation médicale de la Côte d'Ivoire", "Extraction du 19/10/2026"],
+                      ["Investing.com, rendements des obligations de l'État de Côte d'Ivoire à 5 et 10 ans", "Référence de marché du rendement des placements (source secondaire)", "Exports du 19/10/2026, cotations de mars 2021 à octobre 2026"],
                       ["Classeur des calculs v8", "Tableaux, ratios, provisions, formules (onglet 11_formules), sensibilités (onglets 13), traçabilité", "FPPN_Calculs_rapport_20261015_v8.xlsx"]]},
            "source": None})
 SL.append({"type": "merci", "notes": ""})
