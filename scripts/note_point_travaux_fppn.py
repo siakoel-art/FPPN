@@ -149,6 +149,63 @@ r.tableau(["Tâche", "Ce qui est établi", "Ce qui ne l'est pas", "Pourquoi", "S
           source="Rapport v8, réponse aux quatre questions de la mission (diapositive 5) et partie 14 ; PBC pointée.",
           largeurs_cm=[3.6, 3.8, 3.9, 4.6, 2.5], taille=8)
 
+r.h2("2.2. EXPLICATION SIMPLE DE CHAQUE TÂCHE")
+r.para("Cette section explique chaque ligne du tableau 2 sans vocabulaire technique : ce que veut dire la tâche, ce qui a été trouvé, ce qui manque et pourquoi.", gras_auto=False)
+
+r.h3("Tâche 1. Engagements envers les adhérents et leurs ayants droit")
+r.para("**Un engagement est une somme que le FPPN devra payer plus tard à un policier ou à sa famille.** Il y en a quatre sortes : l'épargne que les policiers ont versée "
+       "et qu'il faudra leur rendre (PEP et EFC), les allocations décès dues aux familles, les soins déjà reçus mais pas encore payés aux cliniques, et les soins des "
+       "retraités si le FPPN les a promis à vie.")
+r.para("**Une seule de ces sommes est connue avec certitude : l'épargne due, soit 15 743 516 391 FCFA au 31/08/2026.** Elle se compose de 5 229 245 425 FCFA pour le PEP "
+       "et de 10 514 270 966 FCFA pour l'EFC, lus dans la comptabilité.")
+r.para("**Les trois autres ne peuvent pas être chiffrées aujourd'hui.** Pour les calculer, il faut la liste des dossiers de prestations, l'âge de chaque policier et les "
+       "règles écrites de chaque produit, qui fixent ce qui est promis. Ces documents n'ont pas été transmis.")
+r.para("**Le total réel des engagements est donc supérieur au chiffre connu.** C'est comme un ménage qui connaît le montant de son prêt bancaire mais pas celui de ses "
+       "factures en attente : sa dette réelle est forcément plus grande.")
+
+r.h3("Tâche 2. Suffisance des provisions")
+r.para("**Une provision est une somme mise de côté dans les comptes pour payer des prestations déjà dues mais pas encore réglées.** Exemple : un policier hospitalisé en "
+       "décembre dont la facture n'arrive qu'en février. La dépense appartient à l'année où il a été soigné : le FPPN doit donc réserver l'argent dès décembre. "
+       "« Suffisante » veut dire que la somme réservée couvre bien tout ce qui reste à payer.")
+r.para("**Au FPPN, la provision vaut 4 829 298 290 FCFA, au franc près, chaque année de 2020 au 31/08/2026.** Selon le chef comptable, ce montant date d'environ 2004 et n'a "
+       "jamais été recalculé. Pendant ce temps, les prestations maladie sont passées de 101 453 171 FCFA en 2021 à 1 771 635 361 FCFA en 2025.")
+r.para("**Il n'est pas possible de dire aujourd'hui si cette somme est trop faible ou trop forte.** Le calcul demande la liste de chaque dossier avec trois dates : celle du "
+       "soin ou du décès, celle de la déclaration au FPPN et celle du paiement. La méthode est fixée par les textes : un calcul dossier par dossier, plus une estimation "
+       "des dossiers pas encore déclarés (circulaire CIMA n° 00230/2005). Un montant figé depuis plus de vingt ans ne peut pas, sauf hasard, être le bon.")
+
+r.h3("Tâche 3. Adossement actif-passif")
+r.para("**L'actif, c'est ce que le FPPN possède. Le passif, c'est ce qu'il doit.** L'actif comprend l'argent en banque, les placements, les terrains, les prêts consentis "
+       "aux policiers et les sommes qu'on lui doit. Le passif comprend l'épargne des policiers, les factures à payer et les provisions.")
+r.para("**Adosser, c'est vérifier que chaque dette est couverte par un bien disponible au bon moment et pour le bon montant.** Exemple : une personne qui doit rembourser "
+       "10 millions le mois prochain doit avoir 10 millions en banque le mois prochain. Un terrain qui demandera un an pour être vendu ne l'aide pas à payer à temps.")
+r.para("**Le FPPN n'est pas adossé.** Les dettes connues atteignent 22 761 252 888 FCFA. En comptant tous les biens à leur valeur dans les comptes, ils couvrent 96,33 % de "
+       "ces dettes. Sans les biens dont la valeur n'est pas démontrée (créance sur l'hôpital de la Police, clinique, terrains), ils n'en couvrent que 27,19 %. Sur un "
+       "an, l'argent disponible couvre 49,27 % des dettes à payer dans l'année.")
+r.para("**Ce constat est un minimum : la situation réelle ne peut être que moins bonne.** Toutes les informations manquantes ajouteraient des dettes (provisions à recalculer) "
+       "ou retireraient de la valeur aux biens (terrains et clinique non évalués). Ce qui manque pour mesurer l'écart exact : les dates auxquelles les policiers "
+       "retireront leur épargne, et une évaluation des terrains, de la clinique et de la créance sur l'hôpital.")
+
+r.h3("Tâche 4. Adéquation des placements")
+r.para("**Un placement est l'endroit où le FPPN met son argent pour qu'il rapporte, par exemple un dépôt à terme en banque ou un fonds de placement.** Les textes de l'UEMOA "
+       "exigent quatre qualités : sécurité (ne pas perdre l'argent), rendement (qu'il rapporte), liquidité (pouvoir le récupérer quand il faut payer) et "
+       "diversification (ne pas tout mettre au même endroit). C'est l'article 17 du règlement d'exécution n° 004/2022.")
+r.para("**Deux qualités manquent clairement : la liquidité et la diversification.** Les biens réservés à l'épargne ne couvrent que 16,28 % de l'épargne due. Le dépôt à terme "
+       "principal est vidé chaque fin d'année, et l'argent est concentré sur une banque et un fonds.")
+r.para("**Le rendement est faible : 1,30 % en 2022, 1,28 % en 2023 et 1,73 % en 2024.** Sur les mêmes années, les obligations de l'État de Côte d'Ivoire à 5 ans rapportaient "
+       "5,19 %, 6,86 % et 7,73 %. Or le FPPN promet 3,5 % par an sur l'épargne des policiers.")
+r.para("**La sécurité ne peut pas encore être jugée.** Il manque la décision du ministre qui fixe, en Côte d'Ivoire, les placements autorisés, les relevés du dépôt à terme et "
+       "du fonds, et les décisions du Conseil d'administration qui ont autorisé ces placements.")
+
+r.h3("Analyses statistiques, provision du personnel et réserve générale")
+r.para("**Les analyses statistiques complémentaires décrivent le comportement de la population couverte.** Exemples : combien de policiers décèdent chaque année, combien "
+       "coûte une année de soins selon l'année où ils ont eu lieu, en combien de temps une facture est payée. Elles demandent les dates de naissance et les dossiers de "
+       "prestations, non transmis.")
+r.para("**La provision du personnel est la somme que le FPPN doit réserver pour l'indemnité de départ à la retraite de ses propres salariés.** Le barème est connu : 30 % à "
+       "40 % d'un mois de salaire par année d'ancienneté (décret n° 2017-210). Elle ne vise que le personnel civil. Le calcul attend le fichier du personnel qui "
+       "distingue civils et policiers.")
+r.para("**Enfin, les chiffres du 31/08/2026 sont provisoires.** La comptabilité de 2026 couvre huit mois et n'est pas arrêtée, et les fichiers de précomptes de 2020 à 2022 "
+       "manquent. Les conclusions pourront être affinées à la clôture et à réception de ces fichiers.")
+
 r.partie(3, "Documents prioritaires", introduction="Les documents à obtenir du FPPN, par ordre de priorité, avec la tâche qu'ils débloquent.")
 r.h2("3.1. DOCUMENTS NÉCESSAIRES")
 LIGNES3 = [
