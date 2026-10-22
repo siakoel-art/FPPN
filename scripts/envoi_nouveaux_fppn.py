@@ -5,14 +5,14 @@ FPPN - Préparation de l'envoi des nouveaux fichiers reçus le 22/10/2026, par l
 Copie les fichiers tels quels (aucune conversion, aucune modification) dans des archives ZIP découpées en parties
 de 20 Mo, une archive par lot, avec un journal (chemin, taille, empreinte SHA-256) pour contrôler la réception.
 Lot 1 : documents actuariels prioritaires (environ 45 Mo). Lot 2 : états financiers, rapports de gestion,
-conventions et titres (environ 85 Mo). Lot 3 réduit : budgets, organigrammes, courrier de nomination.
+conventions et titres (environ 85 Mo). Lot 3 réduit : budgets, organigrammes, courrier de nomination. Lot 4 : dossier « 08-Nouveaux Dossiers Compta ».
 Utilisation : python envoi_nouveaux_fppn.py   (choisir les lots dans LOTS_A_PREPARER)
 """
 # ============================================================================= PARAMÈTRES
 RACINE = r"C:\Dev\Missions\05-FPPN\04-Documents reçus du client"
 SORTIE = r"C:\Dev\Missions\05-FPPN\05-Analyses\envoi_20261022"
 TAILLE_PARTIE_MO = 20
-LOTS_A_PREPARER = [2, 3]       # lot 1 reçu le 22/10/2026 ; lot 3 réduit
+LOTS_A_PREPARER = [4]          # lots 1 à 3 reçus le 22/10/2026 ; lot 4 : dossiers compta
 LOTS = {
     1: [  # (dossier relatif, motif contenu dans le nom du fichier) ; motif vide = tout le dossier
         (r"03-Nouveaux Juridiques", "CAHIER DE CHARGE"), (r"03-Nouveaux Juridiques", "MANUEL DE PRODUIT D'EPARGNE"),
@@ -35,6 +35,9 @@ LOTS = {
         # lot 3 réduit : PV de caisse PDF et bulletins de paie PDF exclus (sans utilité pour les quatre tâches ou en double des .xls)
         (r"06-Nouveaux Revue Budgétaire", ""),
         (r"03-Nouveaux Juridiques", "Organigramme"), (".", "COURRIER DE NOMINATION"), (".", "ORGANIGRAMME FPPN 2021"),
+    ],
+    4: [  # envoi complémentaire : provisions des allocations décès 2021 à 2025, arrêté du CMP, désignation du DG, dérogation d'urbanisme
+        (r"08-Nouveaux Dossiers Compta", ""),
     ],
 }
 # =============================================================================
