@@ -1,0 +1,16 @@
+# ---- v9 : convention IPS-CGRAE (partie 8)
+contenu({"titre": "Convention IPS-CGRAE : santé des policiers retraités", "sous_titre": "Le FPPN assure la santé des retraités souscripteurs, même si la CGRAE reverse en retard",
+         "synthese": "La convention organise le précompte des cotisations sur les pensions ; elle confirme une garantie santé des retraités, donc un risque long"},
+        "La convention de partenariat entre l'IPS-CGRAE et le FPPN fixe les conditions du précompte, sur la pension de retraite, des cotisations de prise en charge médicale des policiers retraités. Le montant de la cotisation ne figure pas dans la convention : il relève du bulletin de souscription (annexe 2), non transmis.",
+        tableau={"titre": tab("Clauses de la convention IPS-CGRAE utiles à la mission"), "entetes": ["Article", "Clause", "Effet sur la mission"], "largeurs": [3.0, 15.2, 13.0], "taille": 8.5,
+                 "lignes": [["Art. 3", "Précompte, sur la pension, des cotisations de prise en charge médicale du policier retraité qui l'autorise", "Les retraités deviennent des cotisants à part entière (partie 8 : " + N("Retraités CGRAE (conv)", CG[-1]["retraites"]) + " en " + CG[-1]["libelle"] + ")"],
+                            ["Art. 4.1 e)", "Le FPPN ne suspend aucune prestation pour cause de retard de reversement par l'IPS-CGRAE", "Le FPPN porte le risque de trésorerie entre le soin et l'encaissement"],
+                            ["Art. 4.2 a)", "Précompte dans la limite de la quotité cessible ; seuls les retraités qui en disposent sont précomptés", "Une partie des retraités souscripteurs peut ne pas être précomptée"],
+                            ["Art. 5", "Aucun frais de gestion facturé par l'IPS-CGRAE", "Pas de charge de gestion à prévoir"],
+                            ["Art. 7", "En cas de décès, le FPPN reverse les précomptes perçus après le décès", "Dette envers la CGRAE à suivre"]]},
+        disposition="dessous",
+        analyse=["**La convention confirme que le FPPN assure la santé des policiers retraités qui y souscrivent.** Les statuts (art. 7 et 80) laissaient la question ouverte.",
+                 "**La garantie santé des retraités relève des risques longs** : sa tarification et sa provision demandent les âges des retraités, leurs consommations et la cotisation appliquée."],
+        implication="L'engagement santé des retraités doit être évalué séparément de celui des actifs, avec ses propres cotisations (PBC, items 108 et 114).",
+        valable="texte de la convention reçu le 22/10/2026 ; son application (nombre de retraités, montants précomptés) est mesurée en partie 8 de février 2024 à septembre 2026",
+        source="Source : CONVENTION DE PARTENARIAT ENTRE IPS-CGRAE ET LE FPPN.pdf (scan lu par reconnaissance de caractères, articles 3 à 7) ; " + SRC_PREC[9:])

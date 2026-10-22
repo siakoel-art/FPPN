@@ -11,6 +11,9 @@ Version 5 : arguments facultatifs <calculs_provisions.xlsx> <formules.json> : on
 « 11_formules » (registre complet des formules, « Non communiquée » en rouge).
 Version 8 : argument facultatif <calculs_sensibilites.xlsx> : onglets « 13 » à formules vivantes (sensibilités et leviers),
 copiés avec leurs formules, commentaires, cellules fusionnées et hauteurs de lignes ; recalcul complet à l'ouverture.
+Version 9 : argument facultatif <calculs_v9.xlsx> : onglets 14 à 17 à formules (provision du personnel agent par agent,
+mortalité brute et sinistralité du FPPN, EFC, contrôles croisés) ; onglet « 00_validite » (périmètre et validité de
+chaque analyse) et colonne « Valable pour » dans l'onglet 9_figures_tableaux.
 """
 import json
 import sys
@@ -25,6 +28,7 @@ RATIOS = sys.argv[5] if len(sys.argv) > 5 else None
 PROV = sys.argv[6] if len(sys.argv) > 6 else None
 FORMULES = sys.argv[7] if len(sys.argv) > 7 else None
 SENSIB = sys.argv[8] if len(sys.argv) > 8 else None
+V9X = sys.argv[9] if len(sys.argv) > 9 else None
 ENTETE = PatternFill("solid", fgColor="112A40")
 _v = __import__("re").search(r"_v(\d+)\.xlsx$", SORTIE)
 VER = _v.group(1) if _v else "2"
@@ -93,13 +97,21 @@ for i, t in enumerate(trace, 2):
     tr.cell(row=i, column=5, value="Oui" if t["retrouve"] else "Non").alignment = Alignment(horizontal="center")
 
 fg = wb.create_sheet("9_figures_tableaux")
-entete(fg, ["Type", "Numéro", "Titre", "Diapositive"], [10, 10, 80, 12])
+entete(fg, ["Type", "Numéro", "Titre", "Diapositive", "Valable pour"], [10, 10, 70, 12, 90])
 r = 2
 for typ, liste in (("Figure", idx["figures"]), ("Tableau", idx["tableaux"])):
-    for n, titre, dia in liste:
-        for j, v in enumerate((typ, n, titre, dia), 1):
-            fg.cell(row=r, column=j, value=v)
+    for l_ in liste:
+        n, titre, dia = l_[:3]
+        for j, v in enumerate((typ, n, titre, dia, l_[3] if len(l_) > 3 else ""), 1):
+            fg.cell(row=r, column=j, value=v).alignment = Alignment(vertical="top", wrap_text=j in (3, 5))
         r += 1
+if idx.get("validite"):
+    va = wb.create_sheet("00_validite", 1)
+    entete(va, ["Partie", "Analyse ou diapositive", "Diapositive", "Valable pour"], [12, 60, 14, 110])
+    for i, l_ in enumerate(idx["validite"], 2):
+        for j, v in enumerate(l_, 1):
+            va.cell(row=i, column=j, value=v).alignment = Alignment(vertical="top", wrap_text=True)
+    va.freeze_panes = "A2"
 
 if RATIOS:
     src = openpyxl.load_workbook(RATIOS)["10_ratios"]
@@ -155,6 +167,12 @@ if FORMULES:
     fo.auto_filter.ref = f"A1:{openpyxl.utils.get_column_letter(len(COLONNES))}{len(reg) + 1}"
     fo.freeze_panes = "D2"
     lm.cell(row=len(lignes) + 2, column=1, value="Onglet 11_formules : registre complet des formules (méthode du FPPN, méthode réglementaire, écart, risques, source). Onglets 12_ : provisions et variantes de sinistralité (version 5).")
+if V9X:
+    src = openpyxl.load_workbook(V9X)
+    for ws in src.worksheets:
+        copier(ws, wb.create_sheet(ws.title))
+    lm.cell(row=len(lignes) + 5, column=1, value="Onglets 14 à 17 (version 9) : provision du personnel agent par agent à partir des DISA, paramètres modifiables en orange (14a), calcul par agent avec formules (14b), synthèse par entité DG, CMP, Grenier (14c), table CIMA F (14t) ; "
+            "mortalité brute et sinistralité du FPPN (15) ; intérêts de l'EFC selon le taux servi (16) ; contrôles croisés (17). Onglet 00_validite : périmètre et validité de chaque analyse.")
 if SENSIB:
     src = openpyxl.load_workbook(SENSIB)
     for ws in src.worksheets:

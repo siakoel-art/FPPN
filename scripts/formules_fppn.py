@@ -22,6 +22,7 @@ BAL = "Balances des comptes (Sage 100), 2020 au 31/08/2026"
 PREC = "Fichiers de précomptes reçus le 15/10/2026"
 GRE = "Balances âgées et production du Grenier reçues le 15/10/2026"
 ATT = "En attente"
+FPPN_SIN = "Communiquée le 22/10/2026 (ETUDE DES RATIO MALADIE DECES 2.xlsx, feuille Notes) : prestations payées / cotisations payées, sans provisions"
 
 
 def _nb(x, dec=0):
@@ -117,19 +118,19 @@ def registre(Q, P, R):
 
     # ------------------------------------------------------------------ Partie 5 : sinistralité
     f("F-05-01", 5, "Taux de sinistralité réglementaire", "Charges de prestations, provisions comprises, divisées par les cotisations acquises, provisions sur cotisations comprises.",
-      "(60 + 6901 - 7901) / (70 + 7906 - 6906)", BAL, NC,
+      "(60 + 6901 - 7901) / (70 + 7906 - 6906)", BAL, FPPN_SIN + " ; taux global : 1 401 506 033 / 1 785 560 424 = 78,49 % au 30/06/2026",
       DEC + ", § 1.2.1.2.5 et tableau 1, ligne 5 : même formule, norme de 70 % à 80 %",
       "Formule du texte appliquée telle quelle. Les comptes 6901, 7901, 7906 et 6906 n'existent pas au FPPN : la variation de provisions vaut zéro.",
       f"Taux 2025 : {_pc(ps[2025]['taux_texte'])}", "Provision figée depuis 2020 : le taux n'intègre aucune variation de provision", "Élevé",
       DEC, "provisions_fppn.py, onglet 12_sinistralite_variantes ; ratios_airms_fppn.py", "Conforme au texte", r"^(SIN |SIN num|SIN den|SIN cot|SIN prest|SIN charges|SIN taux)")
     f("F-05-02", 5, "Sinistralité maladie par garantie", "Prestations maladie comptabilisées divisées par les cotisations maladie comptabilisées de la même année.",
-      "(601 + 6013 + 6018 + 60800007) / 7010", BAL, NC,
+      "(601 + 6013 + 6018 + 60800007) / 7010", BAL, FPPN_SIN + " ; maladie : 1 345 906 033 / 1 356 344 706 = 99,23 % au 30/06/2026 (la note écrit aussi 107 %)",
       DEC + " : taux global seulement ; le suivi par risque découle de l'excédent par risque (§ 1.1.1)",
       "Le texte ne fixe pas de taux par garantie, mais impose de calculer l'excédent de chaque risque : le taux par garantie en découle. La norme de 70 % à 80 % ne s'applique qu'au taux global.",
       f"2025 : {_pc(ps[2025]['taux_maladie'])} par garantie contre {_pc(ps[2025]['taux_texte'])} en global", "Clé de répartition des cotisations non documentée (F-04-04)",
       "Élevé", DEC + ", § 1.1.1", "analyses_fppn.py, onglet 3_sinistralite_resultat", "Divergent, justifié", r"^(S/C maladie|S/C 20|S/C anneau|Mult S/C|Prest mal|Cot mal|Total prest)")
     f("F-05-03", 5, "Sinistralité décès par garantie", "Prestations décès (capitaux, allocations, frais funéraires) divisées par les cotisations décès.",
-      "(6021 + 6024) / 7021 ; en 2020, + 65180000 (prime d'assurance décès)", BAL, NC,
+      "(6021 + 6024) / 7021 ; en 2020, + 65180000 (prime d'assurance décès)", BAL, FPPN_SIN + " ; décès : 55 600 000 / 429 215 718 = 12,95 % au 30/06/2026 (la note écrit aussi 19,66 %) ; montants identiques aux comptes de 2022 à 2025",
       DEC + " : taux global seulement ; suivi par risque exigé par § 1.1.1",
       "Même logique que la maladie. La prime d'assurance décès de 2020 est ajoutée, car un assureur portait alors la garantie.",
       f"2025 : {_pc(ps[2025]['taux_deces'])}", "Garantie largement excédentaire, provision obsèques figée", "Moyen", DEC + ", § 1.1.1",
@@ -214,10 +215,10 @@ def registre(Q, P, R):
       "Non chiffrée", "Faible tant que la cotisation reste mensuelle", "Faible", REX + ", art. 9", "À apprécier", ATT)
     f("F-09-06", 9, "Indemnités de départ à la retraite du personnel", "Somme, pour chaque salarié, de l'indemnité prévue par la convention collective à son départ, pondérée par la probabilité d'être présent et actualisée, au prorata de l'ancienneté acquise.",
       "PIDR = Σ_i IDR_i × p_i × v^(t_i) × ancienneté acquise_i / ancienneté au départ_i ; IDR = salaire × (30 % par année jusqu'à 5 ans, 35 % de 6 à 10, 40 % au-delà) ; charges patronales : fiscales 2,80 %, retraite 7,70 % (plafond 3 375 000 FCFA), prestations familiales 5,75 % et risques professionnels 2 % (plafond 75 000 FCFA)",
-      "Fichier du personnel, convention collective, note de calcul (non reçus)", "Convention collective appliquée à l'ancienneté acquise ; provision reprise et dotée en totalité chaque année (chef comptable, 19/10/2026, à confirmer)",
+      "DISA 2021, 2022, 2023 et 2025 (CNPS) ; récapitulatifs de salaires 2024 (CMP) et 2025 (Grenier) ; décret n° 2017-210 ; convention collective du 19/07/1977, art. 40", "Convention collective appliquée à l'ancienneté acquise ; provision reprise et dotée en totalité chaque année (chef comptable, 19/10/2026) ; proche des droits acquis recalculés",
       "SYSCOHADA révisé (engagements de retraite, méthode actuarielle) ; convention collective interprofessionnelle de Côte d'Ivoire (barème, à confirmer par le texte)",
-      "Montant du FPPN à recalculer selon la méthode des unités de crédit projetées.", "Provision 2025 : " + _f(P["pidr"][5]["provision_196"]), "Méthode et hypothèses inconnues",
-      "Moyen", "SYSCOHADA révisé ; convention collective interprofessionnelle de Côte d'Ivoire", "provisions_fppn.py, onglet 12_pidr_196", ATT, r"^(PIDR)")
+      "Recalcul agent par agent (unités de crédit projetées) dans les onglets 14a à 14c du classeur v9 ; comparaison au compte 196 et aux droits acquis.", "Provision 2025 du FPPN : " + _f(P["pidr"][5]["provision_196"]), "Âge de départ, dates d'embauche et entités à confirmer",
+      "Moyen", "Décret n° 2017-210, art. 4 et 5 ; convention collective du 19/07/1977, art. 40 ; IAS 19, § 67, 83 et 145 (bonne pratique)", "donnees_v9_fppn.py, onglets 14a à 14c", "Divergent, justifié", r"^(PIDR)")
     f("F-09-10", 9, "Allocations décès restant à payer (méthode du FPPN)", "Décès de l'année dont l'allocation n'est pas payée, valorisés au barème par grade.",
       "Σ dossiers non payés × allocation du grade (sous-officier 1 000 000 FCFA, officier à confirmer, commissaire 2 000 000 FCFA)", "Liste des décès de la direction du personnel ; allocations payées",
       "Liste des décès moins allocations payées, valorisée au barème (chef comptable, 19/10/2026, à confirmer) ; compte de comptabilisation non précisé",
@@ -311,6 +312,20 @@ def registre(Q, P, R):
     f("F-11-03", 11, "Probabilité de décès", "Probabilité de mourir entre x et x + 1 ans.", "q_x = 1 - L_(x+1) / L_x", "Tables CIMA", "Sans objet", "Code CIMA, art. 338",
       "Base de la mortalité observée (A/E).", "Valeurs publiées en partie 11", "A/E en attente des âges", "Faible", "Code CIMA, art. 338",
       "analyses_complements_fppn.py, onglet 8_mortalite", "Conforme au texte", r"^(q40|q55|H vs TD|F vs TV)")
+    f("F-05-10", 5, "Mortalité brute des membres participants", "Décès de membres de l'année divisés par le nombre d'adhérents retenu par le FPPN.",
+      "Taux brut = décès d'adhérents / adhérents", "ETUDE DES RATIO MALADIE DECES 2.xlsx (feuilles Tableau et Historique 2015-2021)", "Nombre de décès et d'adhérents publiés sans taux",
+      "Aucun texte ; la comparaison à la table CIMA H (rapport A/E) demande les âges", "Taux brut sans âge : ordre de grandeur seulement.", "Trois à cinq décès pour mille de 2021 à 2025",
+      "Pas de rapport A/E sans dates de naissance", "Moyen", "Code CIMA, art. 338 (tables)", "donnees_v9_fppn.py, onglet 15_mortalite_sinistralite", "Sans texte applicable", r"^(Taux brut|Déc adh|Adh 20)")
+    f("F-06-10", 6, "Intérêts d'une année sur l'encours EFC", "Encours EFC de fin d'année multiplié par chaque taux écrit dans les documents du FPPN.",
+      "Intérêts = solde 41195200 × taux (3,5 %, 5,5 %, 14 %)", BAL + " ; cahier des charges EFC et PEP 2021 ; manuel des produits d'épargne ; cartographie des risques",
+      "Taux non arrêté : 3,5 % (chef comptable), 5,5 % (manuel, cartographie), 14 % d'intérêt simple (cahier des charges) ; aucune écriture d'intérêts dans les comptes",
+      "Statuts, art. 79 et 81 ; " + REX + ", art. 17 (adéquation des placements aux engagements)", "Une hypothèse à la fois (IAS 19, § 145) ; 14 % traité comme borne haute annuelle.",
+      "Au taux le plus bas, les intérêts d'une année dépassent les produits financiers de chaque année de 2021 à 2025", "Dette d'épargne inférieure à l'engagement si un taux est dû",
+      "Élevé", "Documents du FPPN reçus le 22/10/2026", "donnees_v9_fppn.py, onglet 16_efc_taux_servi", "Sans texte applicable", r"^(EFC i|EFC enc)")
+    f("F-03-10", 3, "Contrôles croisés entre documents", "Comparaison au franc près des montants d'une même grandeur dans deux documents indépendants.",
+      "Écart = montant (document 1) - montant (document 2)", "États financiers 2020 au 31/08/2026 ; balances ; étude des ratios du FPPN ; fichiers 8Z6 ; rapprochements bancaires",
+      NC, "Aucun texte ; bonne pratique d'audit (seconde source)", "Contrôle de cohérence.", "Concordance des totaux, sauf 2023 (deux versions) et résultat au 31/08/2026",
+      "Version des comptes 2023 à confirmer", "Moyen", "Documents reçus le 22/10/2026", "donnees_v9_fppn.py, onglet 17_controles_croises", "Sans texte applicable", r"^(EF |Adh FPPN|Lignes 8Z6|ERB )")
     return L
 
 

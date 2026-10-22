@@ -1,0 +1,17 @@
+# ---- v9 : points issus des documents du 22/10/2026 (partie 14)
+contenu({"titre": "Points issus des documents du 22/10/2026", "sous_titre": "Sept points demandent une réponse du FPPN, chacun repris dans la PBC",
+         "synthese": "Version des comptes 2023, clé de répartition avant mars 2024, taux servis, épargne présentée en Assemblée générale, personnel, retraités, chèques en suspens"},
+        "Ces points viennent de la lecture des documents reçus le 22/10/2026. Les numéros renvoient à la PBC complète pointée au 22/10/2026.",
+        tableau={"titre": tab("Points à clarifier issus des documents du 22/10/2026"), "entetes": ["N°", "Sujet", "Constat", "Demande (PBC)"], "largeurs": [1.2, 5.0, 14.0, 11.0], "taille": 8.5,
+                 "lignes": [["1", "Comptes 2023 et 31/08/2026", "Deux versions des comptes 2023 ; résultat au 31/08/2026 différent entre états financiers et balance", "Version approuvée et explication des écarts (item 110)"],
+                            ["2", "Clé maladie / décès", "Autre clé que 3,77 / 1,23 en janvier et février 2024 ; dix adhérents d'écart chaque mois de 2026", "Clé appliquée avant mars 2024 et liste des écarts (item 111)"],
+                            ["3", "Taux servi sur l'épargne", "3,5 %, 5,5 % ou 14 % selon le document ; aucune écriture d'intérêts", "Décision fixant le taux et relevés individuels (item 99)"],
+                            ["4", "Épargne en Assemblée générale", "Le rapport de gestion 2025 présente la collecte de l'année comme l'épargne au 31/12/2025", "Rapport rectifié avec le solde dû (item 112)"],
+                            ["5", "Personnel", "Dates d'embauche modifiées dans la DISA 2025 ; agents de plus de 55 ans en poste ; recrues de 2025 sans entité", "Âge de départ, dates, entités, enfants, note de calcul (item 113)"],
+                            ["6", "Retraités", "Cotisation des retraités souscripteurs absente de la convention IPS-CGRAE", "Bulletin de souscription et barème (item 114)"],
+                            ["7", "Chèques en suspens", "Chèques émis depuis 2021 et non encaissés, en hausse chaque année", "Liste et traitement des chèques périmés (item 91)"]]},
+        disposition="dessous",
+        analyse=["**Les points 3 et 4 touchent directement l'évaluation de l'engagement d'épargne**, la principale dette du FPPN envers ses adhérents."],
+        implication="Les réponses permettront de lever les réserves de la version 9 sur l'épargne et la provision du personnel.",
+        valable="documents reçus le 22/10/2026",
+        source="Source : documents reçus le 22/10/2026 ; FPPN_PBC_complete_pointee_20261022.xlsx")

@@ -324,9 +324,9 @@ def appliquer(wb):
             lm.cell(r, 1).alignment = Alignment(wrap_text=True, vertical="top")
         lm.sheet_view.showGridLines = False
         for nom in wb.sheetnames:
-            if nom.startswith("13"):
+            if nom.startswith(("13", "14", "15", "16", "17")):
                 wb[nom].sheet_properties.tabColor = ORANGE
-            elif nom.startswith(("10", "11", "12")):
+            elif nom.startswith(("00", "10", "11", "12")):
                 wb[nom].sheet_properties.tabColor = BLEU
 
 
