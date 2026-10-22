@@ -12,7 +12,7 @@ Utilisation : python envoi_nouveaux_fppn.py   (choisir les lots dans LOTS_A_PREP
 RACINE = r"C:\Dev\Missions\05-FPPN\04-Documents reçus du client"
 SORTIE = r"C:\Dev\Missions\05-FPPN\05-Analyses\envoi_20261022"
 TAILLE_PARTIE_MO = 20
-LOTS_A_PREPARER = [1]          # puis [2], puis [3] après accord
+LOTS_A_PREPARER = [2]          # lot 1 reçu le 22/10/2026 ; lot 3 réduit après accord
 LOTS = {
     1: [  # (dossier relatif, motif contenu dans le nom du fichier) ; motif vide = tout le dossier
         (r"03-Nouveaux Juridiques", "CAHIER DE CHARGE"), (r"03-Nouveaux Juridiques", "MANUEL DE PRODUIT D'EPARGNE"),
