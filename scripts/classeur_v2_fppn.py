@@ -14,6 +14,10 @@ copiés avec leurs formules, commentaires, cellules fusionnées et hauteurs de l
 Version 9 : argument facultatif <calculs_v9.xlsx> : onglets 14 à 17 à formules (provision du personnel agent par agent,
 mortalité brute et sinistralité du FPPN, EFC, contrôles croisés) ; onglet « 00_validite » (périmètre et validité de
 chaque analyse) et colonne « Valable pour » dans l'onglet 9_figures_tableaux.
+Version 10 : argument facultatif <calculs_v10.xlsx> : onglets 18 à 25 de la revue actuarielle (provisions, décès, épargne,
+retraités, Grenier, adossement, projection), chacun ouvert par un bloc d'explication en mots simples ; onglet « 0_guide »
+(mode d'emploi pour un lecteur non technique, explication et lien de chaque onglet) ; bloc d'explication en tête des
+onglets de valeurs ; texte sans numéro de version.
 """
 import json
 import sys
@@ -29,6 +33,7 @@ PROV = sys.argv[6] if len(sys.argv) > 6 else None
 FORMULES = sys.argv[7] if len(sys.argv) > 7 else None
 SENSIB = sys.argv[8] if len(sys.argv) > 8 else None
 V9X = sys.argv[9] if len(sys.argv) > 9 else None
+V10X = sys.argv[10] if len(sys.argv) > 10 else None
 ENTETE = PatternFill("solid", fgColor="112A40")
 _v = __import__("re").search(r"_v(\d+)\.xlsx$", SORTIE)
 VER = _v.group(1) if _v else "2"
@@ -69,10 +74,10 @@ idx = json.load(open(INDEX, encoding="utf-8"))
 trace = idx["trace"]
 ok = sum(t["retrouve"] for t in trace)
 lignes = [
-    f"Classeur des calculs du rapport actuariel et statistique du FPPN, version {VER} (rapport d'étape au 15/10/2026).",
-    "Onglets 1 à 7 : calculs de la version 1 (données, effectifs, sinistralité, bilan, Grenier, annexes, placements).",
-    "Onglets 8 : compléments v2 (inflation et valeurs réelles, TCAM, tendances, sensibilités, provisions, tables de mortalité).",
-    f"Onglet 9_tracabilite : chaque chiffre écrit dans le PowerPoint v{VER}, avec sa diapositive et sa valeur exacte.",
+    "Classeur des calculs du rapport actuariel et statistique du FPPN (mission du 01/09/2020 au 31/08/2026, informations exploitées depuis le 01/01/2020).",
+    "Onglets 1 à 7 : données, effectifs, sinistralité, bilan, Grenier, produits annexes, placements.",
+    "Onglets 8 : inflation et valeurs réelles, taux de croissance, tendances, sensibilités, provisions, tables de mortalité.",
+    "Onglet 9_tracabilite : chaque chiffre écrit dans le rapport, avec sa diapositive et sa valeur exacte.",
     f"Contrôle automatique : {ok} chiffres retrouvés sur {len(trace)} enregistrés, {idx['diapositives']} diapositives.",
     "Formats : pourcentages à deux décimales, montants exacts en FCFA sans décimales.",
     "Sources : fichiers reçus du FPPN le 15/10/2026, Banque mondiale (FP.CPI.TOTL.ZG), tables CIMA validées le 18/10/2026.",
@@ -166,13 +171,18 @@ if FORMULES:
                 c.font = Font(color="C00000", bold=True)
     fo.auto_filter.ref = f"A1:{openpyxl.utils.get_column_letter(len(COLONNES))}{len(reg) + 1}"
     fo.freeze_panes = "D2"
-    lm.cell(row=len(lignes) + 2, column=1, value="Onglet 11_formules : registre complet des formules (méthode du FPPN, méthode réglementaire, écart, risques, source). Onglets 12_ : provisions et variantes de sinistralité (version 5).")
+    lm.cell(row=len(lignes) + 2, column=1, value="Onglet 11_formules : registre complet des formules (méthode du FPPN, méthode réglementaire, écart, risques, source). Onglets 12_ : provisions et variantes de sinistralité.")
 if V9X:
     src = openpyxl.load_workbook(V9X)
     for ws in src.worksheets:
         copier(ws, wb.create_sheet(ws.title))
-    lm.cell(row=len(lignes) + 5, column=1, value="Onglets 14 à 17 (version 9) : provision du personnel agent par agent à partir des DISA, paramètres modifiables en orange (14a), calcul par agent avec formules (14b), synthèse par entité DG, CMP, Grenier (14c), table CIMA F (14t) ; "
+    lm.cell(row=len(lignes) + 5, column=1, value="Onglets 14 à 17 : provision du personnel agent par agent à partir des DISA, paramètres modifiables en orange (14a), calcul par agent avec formules (14b), synthèse par entité DG, CMP, Grenier (14c), table CIMA F (14t) ; "
             "mortalité brute et sinistralité du FPPN (15) ; intérêts de l'EFC selon le taux servi (16) ; contrôles croisés (17). Onglet 00_validite : périmètre et validité de chaque analyse.")
+if V10X:
+    src = openpyxl.load_workbook(V10X)
+    for ws in src.worksheets:
+        copier(ws, wb.create_sheet(ws.title))
+    lm.cell(row=len(lignes) + 6, column=1, value="Onglets 18 à 25 : revue actuarielle complète (provision maladie, allocations décès, risques courts, intérêts d'épargne, santé des retraités, dépréciation du Grenier, adossement actif-passif, projection). Chaque onglet commence par une explication en mots simples ; les cellules orange sont modifiables.")
 if SENSIB:
     src = openpyxl.load_workbook(SENSIB)
     for ws in src.worksheets:
@@ -182,8 +192,53 @@ if SENSIB:
     import charte_excel_fppn
     charte_excel_fppn.appliquer(wb)
     lm.cell(row=len(lignes) + 4, column=1, value="Charte graphique Adenka : Helvetica, titre au-dessus et source sous chaque tableau, en-tête noir, première colonne grise, lignes alternées, cellules modifiables en orange, statuts conformes en bleu nuit et non conformes en rouge.")
-    lm.cell(row=len(lignes) + 3, column=1, value="Onglets 13 (version 8) : analyses de sensibilité et leviers de conformité, à formules vivantes. Méthode et références (13a), "
+    lm.cell(row=len(lignes) + 3, column=1, value="Onglets 13 : analyses de sensibilité et leviers de conformité, à formules vivantes. Méthode et références (13a), "
             "paramètres modifiables en orange (13b), données (13c), statuts et montants à combler (13d), facteurs récurrents (13e), montants d'équilibre des leviers (13f), "
             "inflation médicale ANStat (13g), choc de 100 000 000 FCFA et faisabilité conjointe (13h), rendement et taux du marché (13i). Un commentaire explique chaque cellule clé.")
+# ---- onglet 0_guide : mode d'emploi pour un lecteur non technique, une ligne par onglet avec lien
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+from explications_excel_fppn import EXPLIC, GUIDE  # noqa: E402
+gd = wb.create_sheet("0_guide", 0)
+gd.sheet_view.showGridLines = False
+for col, w in zip("ABCDEFGH", (26, 34, 40, 46, 46, 40, 34, 30)):
+    gd.column_dimensions[col].width = w
+gd["A1"] = "Mode d'emploi du classeur des calculs"
+gd["A1"].font = Font(name="Helvetica", size=14, bold=True)
+aide = ["Ce classeur contient tous les calculs du rapport. Chaque onglet commence par une explication en mots simples ou, pour les onglets à formules, est expliqué ci-dessous.",
+        "Codes couleur : en-tête noir = titres de colonnes ; première colonne grise = libellé de la ligne ; cellule orange = paramètre modifiable (le reste se recalcule) ; « Non conforme » en rouge, « Conforme » en bleu nuit.",
+        "Montants en FCFA exacts sans décimales ; pourcentages à deux décimales. 2026 = du 01/01 au 31/08/2026 (balance provisoire).",
+        "Pour retrouver l'origine d'un chiffre du rapport : onglet 9_tracabilite (chiffre, diapositive, valeur exacte), puis l'onglet cité dans la source de la diapositive.",
+        "Avant de reprendre un chiffre, lire sa ligne « Valable pour » (onglet 00_validite) : elle dit ce que le chiffre couvre et ne couvre pas."]
+for i, t in enumerate(aide, 3):
+    gd.cell(i, 1, t).alignment = Alignment(wrap_text=True, vertical="top")
+    gd.merge_cells(start_row=i, start_column=1, end_row=i, end_column=8)
+    gd.row_dimensions[i].height = 30
+r0 = 3 + len(aide) + 1
+ent = ["Onglet", "À quoi sert cet onglet", "D'où viennent les chiffres", "Comment le calcul est fait", "Comment lire le résultat", "Valable pour", "Limites"]
+for j, t in enumerate(ent, 1):
+    c = gd.cell(r0, j, t)
+    c.font, c.fill = Font(name="Helvetica", bold=True, color="FFFFFF"), PatternFill("solid", fgColor="000000")
+    c.alignment = Alignment(wrap_text=True, vertical="center", horizontal="center")
+rr = r0 + 1
+for nom in wb.sheetnames:
+    if nom == "0_guide":
+        continue
+    c = gd.cell(rr, 1, nom)
+    c.hyperlink = f"#'{nom}'!A1"
+    c.font = Font(name="Helvetica", color="112A40", underline="single", bold=True)
+    if nom in EXPLIC:
+        vals = [EXPLIC[nom].get(k_, "") for k_ in ent[1:]]
+    elif nom in GUIDE:
+        vals = [GUIDE[nom][0], "Voir l'en-tête de l'onglet", "Voir l'en-tête de l'onglet et les commentaires des cellules", GUIDE[nom][1], "Voir l'onglet 00_validite", ""]
+    else:
+        vals = ["", "", "", "", "", ""]
+    for j, v in enumerate(vals, 2):
+        gd.cell(rr, j, v).alignment = Alignment(wrap_text=True, vertical="top")
+    gd.row_dimensions[rr].height = min(160, max(30, 13 * (max(len(str(v)) for v in vals) // 45 + 1)))
+    rr += 1
+gd.freeze_panes = gd.cell(r0 + 1, 2)
+manque = [n for n in wb.sheetnames if n not in EXPLIC and n not in GUIDE and n not in ("0_guide", "0_lisez_moi")]
+if manque:
+    print("ONGLETS SANS EXPLICATION :", manque)
 wb.save(SORTIE)
 print(f"{len(wb.sheetnames)} onglets ; {ok}/{len(trace)} chiffres retrouvés")

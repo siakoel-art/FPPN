@@ -363,8 +363,24 @@ ws, r = onglet(wb, "22_sante_retraites", "Santé des policiers retraités : ce q
     "Valable pour": "Retraités précomptés par la CGRAE, février 2024 à septembre 2026.",
     "Limites": "Sans les âges des retraités ni leurs prestations, aucune provision pour cette garantie ne peut être calculée (voir l'annexe des méthodes non retenues)."},
     [14, 16, 18, 18])
-tableau(ws, r, ["Mois", "Retraités précomptés", "Montant précompté", "Cotisation moyenne"],
+d, f = tableau(ws, r, ["Mois", "Retraités précomptés", "Montant précompté", "Cotisation moyenne"],
         [[c["libelle"], c["retraites"], c["montant"], "=C{r}/B{r}"] for c in R["cgrae"]], [None, ENT, FCFA, FCFA])
+# dates de naissance des retraités : présentes seulement dans les fichiers retour de la CGRAE de février à avril 2024
+_pr = pd.read_parquet(os.path.join(BASE, "precomptes.parquet"), columns=["poste", "sens", "annee", "mois", "matricule_cgrae", "date_naissance"])
+_dn0 = _pr[(_pr.poste == "CGRAE") & (_pr.sens == "retour") & _pr.date_naissance.notna()]
+_dn = _dn0.drop_duplicates("matricule_cgrae").copy()
+_dn["naissance"] = pd.to_datetime(_dn.date_naissance).map(lambda x: x.replace(year=x.year - 100) if x.year > 2026 else x)   # année lue sur deux chiffres
+_dn["age"] = (pd.Timestamp("2026-09-30") - _dn.naissance).dt.days / 365.25
+_mois_dn = sorted({(int(a), int(m)) for a, m in zip(_dn0.annee, _dn0.mois)})
+OUT["retraites_naissance"] = {"nb": int(len(_dn)), "mois": [f"{m:02d}/{a}" for a, m in _mois_dn], "age_moyen": float(_dn.age.mean()), "age_min": float(_dn.age.min()), "age_max": float(_dn.age.max()),
+                              "retraites_fin": int(R["cgrae"][-1]["retraites"])}
+r = f + 3
+r = sous_titre(ws, r, "Retraités dont la date de naissance figure dans les fichiers de la CGRAE", 4)
+r = note(ws, r, "Seuls les fichiers retour de la CGRAE de février à avril 2024 portent la date de naissance. L'année y est écrite sur deux chiffres : une année lue après 2026 est ramenée au siècle précédent (par exemple 2062 devient 1962). Âge calculé au 30/09/2026.", 4)
+d2, f2 = tableau(ws, r, ["Retraité (matricule CGRAE)", "Date de naissance", "Âge au 30/09/2026"], [[str(m), n.to_pydatetime(), '=(DATE(2026,9,30)-B{r})/365.25'] for m, n in zip(_dn.matricule_cgrae, _dn.naissance)], [None, "DD/MM/YYYY", NB1])
+ws.cell(f2 + 1, 1, "Nombre et âge moyen").font = openpyxl.styles.Font(bold=True)
+ws.cell(f2 + 1, 2, f"=COUNTA(A{d2}:A{f2})")
+ws.cell(f2 + 1, 3, f"=AVERAGE(C{d2}:C{f2})").number_format = NB1
 
 # ---------------------------------------------------------------- 23
 ws, r = onglet(wb, "23_grenier_depreciation", "Prêts du Grenier : dépréciation selon sa propre politique de crédit", {
@@ -424,6 +440,32 @@ for i, m in enumerate(mob):
     for nom, taux, choc in (("Central (taux moyen)", MOYS, "0"), ("Résistance (taux maximal)", MAXS, "0"), ("Résistance sévère (taux maximal et pic maladie)", MAXS, f"{PM25}*{PIC}")):
         lig2.append([m["cloture"] + " : " + nom, f"=B{rr}", f"=C{rr}+D{rr}*{taux}+{choc}", "=B{r}-C{r}", "=B{r}/C{r}"])
 tableau(ws, r, ["Scénario", "Actif à moins d'un an", "Besoin de l'année", "Écart", "Couverture"], lig2, [None, FCFA, FCFA, FCFA, PCT])
+
+# ---------------------------------------------------------------- 24c
+ws, r = onglet(wb, "24c_ecarts_par_annee", "Adossement : écarts de liquidité année par année (31/08/2026)", {
+    "À quoi sert cet onglet": "Voir, année après année pendant cinq ans, si l'argent qui devient disponible suffit à payer les dettes et les sorties d'épargne prévues.",
+    "D'où viennent les chiffres": "Bilan au 31/08/2026 classé par délai de mobilisation (onglet 10_actif_mobilisation) ; taux de sortie moyen de l'onglet 24a ; " + SRC_BAL + ".",
+    "Comment le calcul est fait": "Sorties d'épargne de l'année k = épargne × (1 - taux moyen) puissance (k - 1) × taux moyen : chaque année sort la même part de ce qui reste. Actifs disponibles : actifs à moins d'un an en année 1 ; actifs de 1 à 5 ans répartis à parts égales sur les années 2 à 5. Écart de l'année = actifs disponibles - dettes - sorties d'épargne. Écart cumulé = somme des écarts depuis l'année 1. Méthode de l'écart de liquidité statique (Gestion des risques bancaires, diapositives 86 et 87) : aucun nouveau versement n'est compté.",
+    "Comment lire le résultat": "Un écart cumulé négatif est l'argent qui manquerait si le FPPN ne recevait plus de nouveaux versements d'épargne ni d'excédents.",
+    "Valable pour": "Bilan provisoire au 31/08/2026 ; taux de sortie moyen observé de 2021 à 2025.",
+    "Limites": "Les actifs sont classés d'après leur nature comptable, sans échéancier contractuel ; la répartition des actifs de 1 à 5 ans à parts égales est une hypothèse (modifiable en orange)."},
+    [18, 20, 18, 18, 18, 18])
+m26 = next(m for m in mob if m["cloture"] == "31/08/2026")
+r = sous_titre(ws, r, "Paramètres", 6)
+dp, fp = tableau(ws, r, ["Paramètre", "Valeur"], [["Actifs à moins d'un an", m26["immediat"] + m26["moins_1_an"]], ["Actifs de 1 à 5 ans", m26["1_a_5_ans"]], ["Actifs à plus de 5 ans ou délai incertain", m26["plus_5_ans_ou_incertain"]],
+                                               ["Dettes à moins d'un an", m26["passif_moins_1_an"]], ["Épargne due", m26["epargne_echeance_a_etablir"]], ["Taux de sortie moyen", "=" + MOYS], ["Part des actifs de 1 à 5 ans disponible chaque année (années 2 à 5)", 0.25]],
+                 [None, FCFA], orange=())
+for k in (dp + 5, dp + 6):
+    ws.cell(k, 2).number_format = PCT
+ws.cell(dp + 6, 2).fill = openpyxl.styles.PatternFill("solid", fgColor="EFAC62")
+A1, A15, A5, DET, EPG, TX, PART = (f"$B${dp + i}" for i in range(7))
+r = fp + 2
+lg = []
+for k in range(1, 6):
+    act = f"={A1}" if k == 1 else f"={A15}*{PART}"
+    lg.append([f"Année {k}", act, f"={DET}" if k == 1 else 0, f"={EPG}*(1-{TX})^({k}-1)*{TX}", "=B{r}-C{r}-D{r}", "=E{r}" if k == 1 else "=F{p}+E{r}".replace("{p}", str(r + k - 1))])
+lg.append(["Au-delà de 5 ans", f"={A5}", 0, f"={EPG}*(1-{TX})^5", "=B{r}-C{r}-D{r}", "=F{p}+E{r}".replace("{p}", str(r + 5))])
+tableau(ws, r, ["Échéance", "Actifs disponibles", "Dettes à payer", "Sorties d'épargne", "Écart de l'année", "Écart cumulé"], lg, [None, FCFA, FCFA, FCFA, FCFA, FCFA])
 
 # ---------------------------------------------------------------- 25
 ws, r = onglet(wb, "25_projection_equilibre", "Projection agrégée de l'équilibre technique (2026 à 2030)", {

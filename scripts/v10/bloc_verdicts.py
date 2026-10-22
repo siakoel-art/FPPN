@@ -26,13 +26,13 @@ contenu({"titre": "Demande 1 : engagements envers les adhérents", "sous_titre":
                             ["Décès connus après la clôture (états 2021 et 2023)", F("V1 décès tardifs", TARD_DEC), "Ordre de grandeur de ce qui manque chaque 31 décembre", ref("Allocations décès : décès connus après la clôture")],
                             ["Soins facturés l'année suivante (clôture 2024, estimation élargie)", F("V1 maladie tardive", psap_m_elargie(2024)), "Dette maladie non encore facturée à la clôture", ref("Provision maladie : montant nécessaire")],
                             ["Provision du personnel recalculée au 31/12/2025", F("V1 PIDR", PIDR25["dbo"]), f"Compte 196 du FPPN : {F('V1 PIDR 196', PIDR25['provision_196'])}", ref("Provision du personnel par entité de 2021 à 2025")],
-                            ["Santé des policiers retraités", N("V1 retraités", CG[-1]["retraites"]) + " retraités cotisants (" + CG[-1]["libelle"] + ")", "Engagement non mesurable : âges et prestations des retraités absents", ref("Santé des retraités : ce que l'on peut mesurer")]]},
+                            ["Santé des policiers retraités", N("V1 retraités", CG[-1]["retraites"]) + " retraités cotisants (" + CG[-1]["libelle"] + ")", f"Non mesurable : soins des retraités non isolés ; date de naissance connue pour {N('V1 ret dn', RDN['nb'])} retraités seulement", ref("Santé des retraités : ce que l'on peut mesurer")]]},
         disposition="dessous",
         analyse=[f"**Le premier engagement est l'épargne : {F('V1 épargne (a)', EP_DUE26)} au 31/08/2026, plus {F('V1 intérêts (a)', INT55)} d'intérêts dus non comptabilisés au taux du manuel.** Les autres engagements mesurés sont des dettes de court terme."],
         implication="Le verdict deviendra « Démontré » quand le FPPN aura arrêté le taux servi, transmis les relevés individuels d'épargne et les âges des retraités (PBC, items 17, 99 et 114).",
         valable="épargne et dettes au 31/08/2026 (balance provisoire) ; intérêts dus calculés du 01/01/2020 au 31/08/2026 seulement ; provision du personnel au 31/12/2025",
         source=SRC_DEM)
-contenu({"titre": "Demande 2 : suffisance des provisions", "sous_titre": f"Verdict : {V_PROV}. Provisions maladie et décès bien supérieures aux besoins mesurés, mais sans calcul",
+contenu({"titre": "Demande 2 : suffisance des provisions", "sous_titre": f"Verdict : {V_PROV}. Provisions maladie et décès supérieures aux besoins, mais non calculées",
          "synthese": f"Provisions maladie et obsèques : {F('V2 prov tech', PROV_MAL + PROV_OBS)} au bilan, inchangées depuis 2020 ; intérêts d'épargne dus non provisionnés : {F('V2 intérêts', INT55)}"},
         "Une provision est suffisante si elle couvre ce que le FPPN devra payer pour des prestations déjà nées. Le tableau compare chaque provision du bilan au besoin mesuré sur les documents reçus.",
         tableau={"titre": tab("Provisions du bilan et besoins mesurés : chiffres qui fondent le verdict"), "entetes": ["Provision", "Au bilan", "Besoin mesuré", "Ce que le chiffre montre", "Détail"], "largeurs": [6.0, 4.8, 4.8, 10.8, 4.8], "taille": 8,
@@ -44,7 +44,7 @@ contenu({"titre": "Demande 2 : suffisance des provisions", "sous_titre": f"Verdi
                             ["Pertes probables sur les prêts du Grenier", "Aucune", F("V2 Grenier", GRD["2026-08-31"]), "Taux de la politique de crédit du Grenier (40 %, 80 %, 100 %)", ref("Prêts du Grenier : dépréciation selon la politique de crédit")],
                             ["Départ à la retraite du personnel (196)", F("V2 PIDR 196", PIDR25["provision_196"]), F("V2 PIDR", PIDR25["dbo"]), "Compte 196 supérieur au recalcul au 31/12/2025", ref("Provision du personnel par entité de 2021 à 2025")]]},
         disposition="dessous",
-        analyse=[f"**Les provisions maladie et obsèques dépassent les besoins mesurés d'environ {F('V2 excédent', PROV_MAL + PROV_OBS - psap_m_elargie(2024) - DETTE_DEC26)}, alors que les intérêts d'épargne ({F('V2 int (a)', INT55)}) et les pertes sur prêts ne sont pas provisionnés.** Les provisions ne sont pas insuffisantes en montant global ; elles sont mal affectées et non calculées, contrairement à l'article 89 des statuts."],
+        analyse=[f"**Les provisions maladie et obsèques dépassent les besoins mesurés de {F('V2 excédent', PROV_MAL + PROV_OBS - psap_m_elargie(2024) - DETTE_DEC26)}, alors que les intérêts d'épargne ({F('V2 int (a)', INT55)}) et les pertes sur prêts ne sont pas provisionnés.** Les provisions ne sont pas insuffisantes en montant global ; elles sont mal affectées et non calculées, contrairement à l'article 89 des statuts."],
         implication="Les provisions maladie et obsèques doivent être recalculées chaque année (statuts, art. 89) ; l'excédent ne peut être réaffecté à l'épargne qu'après décision des organes et avis de l'AIRMS.",
         valable="provisions au bilan du 31/08/2026 ; besoin maladie mesuré au 31/12/2024 sur les factures de cliniques du journal SIN ; dette décès au 31/08/2026",
         source=SRC_DEM)
@@ -56,8 +56,8 @@ contenu({"titre": "Demande 3 : adossement actif-passif", "sous_titre": f"Verdict
         tableau={"titre": tab("Adossement actif-passif : chiffres qui fondent le verdict"), "entetes": ["Mesure", "Valeur", "Ce que le chiffre montre", "Détail"], "largeurs": [8.4, 5.2, 12.8, 4.8], "taille": 8,
                  "lignes": [["Épargne couverte par les actifs qui lui sont réservés (31/08/2026)", pc("V3 RL1", b[2026]["couverture_epargne"]), "Banques et DAT de l'épargne et FCP rapportés à l'épargne due", ref("Adossement de l'épargne")],
                             ["Taux de sortie annuel de l'épargne, moyenne 2021 à 2025", pc("V3 taux moyen", T_MOY), f"Maximum observé : {pc('V3 taux max', T_MAX)}", ref("Adossement : à quel rythme l'épargne sort-elle ?")],
-                            ["Couverture des paiements de l'année, scénario central", pc("V3 couv (t)", _c26), "Actif à moins d'un an / (dettes à moins d'un an + sorties d'épargne prévues)", ref("Adossement : écarts de liquidité et tests de résistance")],
-                            ["Couverture, test de résistance sévère", pc("V3 couv sévère", _c26s), "Sorties au taux maximal et hausse des prestations maladie la plus forte de 2024 et 2025", ref("Adossement : écarts de liquidité et tests de résistance")],
+                            ["Couverture des paiements de l'année, scénario central", pc("V3 couv (t)", _c26), "Actif à moins d'un an / (dettes à moins d'un an + sorties d'épargne prévues)", ref("Adossement : tests de résistance")],
+                            ["Couverture, test de résistance sévère", pc("V3 couv sévère", _c26s), "Sorties au taux maximal et hausse des prestations maladie la plus forte de 2024 et 2025", ref("Adossement : tests de résistance")],
                             ["Ratio de liquidité au 31/08/2026 (norme au moins 1)", N("V3 LIQ", RT["LIQ"]["valeurs"][2026], 2), "Trésorerie / dettes à court terme", ref("Calcul pas à pas : liquidité 2025")],
                             ["Ratio d'équilibre stable au 31/08/2026 (norme au plus 1)", N("V3 EQS", RT["EQS"]["valeurs"][2026], 2), "Emplois longs / ressources longues", ref("Calcul pas à pas : équilibre stable 2025")],
                             ["Réserve de trésorerie des risques longs (norme un trimestre)", N("V3 RL4", RT["RL4"]["valeurs"][2026], 2), "Aucune réserve constituée", ref("Calcul pas à pas : réserves des risques longs 2025")]]},
@@ -68,7 +68,7 @@ contenu({"titre": "Demande 3 : adossement actif-passif", "sous_titre": f"Verdict
         source=SRC_DEM)
 _pf25 = next(x["produits_financiers"] for x in R["rendement_placements"] if x["exercice"] == 2025)
 _pm25 = next(x["placements_moyens"] for x in R["rendement_placements"] if x["exercice"] == 2025)
-contenu({"titre": "Demande 4 : adéquation des placements", "sous_titre": f"Verdict : {V_PLA}. Placements financiers moyens de {F('V4 placements', _pm25)} en 2025 pour {F('V4 épargne', EP_DUE25)} d'épargne due",
+contenu({"titre": "Demande 4 : adéquation des placements", "sous_titre": f"Verdict : {V_PLA}. Placements financiers de {pc('V4 part st', _pm25 / EP_DUE25)} de l'épargne due en 2025",
          "synthese": f"Rendement apparent moyen de 2021 à 2025 : {pc('V4 RDM', RDM)} ; produits financiers 2025 : {F('V4 pf 2025', _pf25)}, inférieurs aux intérêts d'une année sur l'EFC au taux le plus bas"},
         "Un portefeuille est adéquat s'il permet de payer les engagements à leur échéance, avec sécurité, liquidité, rendement et diversification (règlement d'exécution n° 004/2022, art. 17).",
         tableau={"titre": tab("Adéquation des placements : chiffres qui fondent le verdict"), "entetes": ["Mesure", "Valeur", "Ce que le chiffre montre", "Détail"], "largeurs": [8.4, 5.2, 12.8, 4.8], "taille": 8,

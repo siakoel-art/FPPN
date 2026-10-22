@@ -31,6 +31,8 @@ PARAMS = {"00FFF2CC", "FFFFF2CC", "00EFAC62", "FFEFAC62"}
 SECTIONS = {"00F2F2F2", "FFF2F2F2", "00CCCCCC", "FFCCCCCC"}
 FIN = Side(style="thin", color="000000")
 BORD = Border(left=FIN, right=FIN, top=FIN, bottom=FIN)
+RUBRIQUES_EXPLIC = ("À quoi sert cet onglet", "D'où viennent les chiffres", "Comment le calcul est fait", "Comment lire le résultat", "Valable pour", "Limites")
+GRIS_RUB = "53565A"
 
 SRC_PREC = "Source : fichiers de précomptes de la Solde, de la CGRAE et du FPPN reçus le 15/10/2026 ; traitements Adenka"
 SRC_BAL = "Source : balances des comptes du FPPN (Sage 100), 2020 au 31/08/2026 (2026 provisoire) ; traitements Adenka"
@@ -152,44 +154,64 @@ def _format_colonne(nom, valeurs):
 
 
 def preparer_brut(ws):
-    """Onglet issu de pandas (en-tête en ligne 1) : titre et source, en-têtes lisibles, formats imposés."""
+    """Onglet issu de pandas (en-tête en ligne 1) : titre, bloc d'explication en mots simples, en-têtes lisibles, formats imposés."""
     titre, source = TITRES.get(ws.title, (ws.title.split("_", 1)[-1].replace("_", " ").capitalize(), "Source : traitements Adenka"))
+    try:
+        from explications_excel_fppn import EXPLIC
+    except ImportError:
+        EXPLIC = {}
+    rubs = [(r_, EXPLIC[ws.title][r_]) for r_ in RUBRIQUES_EXPLIC if EXPLIC.get(ws.title, {}).get(r_)]
+    o = len(rubs) + 1 if rubs else 0
     ncol, nlig = ws.max_column, ws.max_row
     filtre = ws.auto_filter.ref
     gel = ws.freeze_panes
-    ws.insert_rows(1, 2)
+    ws.insert_rows(1, 2 + o)
     for j in range(1, ncol + 1):
-        c = ws.cell(3, j)
+        c = ws.cell(3 + o, j)
         nom = c.value
         if ws.title not in SANS_FORMAT:
-            fmt = _format_colonne(nom, [ws.cell(i, j).value for i in range(4, nlig + 3)])
+            fmt = _format_colonne(nom, [ws.cell(i, j).value for i in range(4 + o, nlig + 3 + o)])
             if fmt:
-                for i in range(4, nlig + 3):
+                for i in range(4 + o, nlig + 3 + o):
                     if isinstance(ws.cell(i, j).value, (int, float)):
                         ws.cell(i, j).number_format = fmt
         c.value = lisible(nom)
         c.fill = PatternFill("solid", fgColor=F_ENTETE)
     ws.cell(1, 1, f"Tableau : {titre}")
     ws.cell(1, 1).font = Font(name=POLICE, size=12, bold=True, color=NOIR)
-    s = ws.cell(nlig + 4, 1, source)
+    derniere = openpyxl.utils.get_column_letter(max(ncol, 6))
+    for k, (rub, texte) in enumerate(rubs):
+        r = 2 + k
+        a = ws.cell(r, 1, rub)
+        a.font = Font(name=POLICE, size=9, bold=True, color="FFFFFF")
+        a.fill = PatternFill("solid", fgColor=GRIS_RUB)
+        a.alignment = Alignment(vertical="top", wrap_text=True)
+        ws.merge_cells(f"B{r}:{derniere}{r}")
+        b = ws.cell(r, 2, texte)
+        b.font = Font(name=POLICE, size=9, color=NOIR)
+        b.alignment = Alignment(vertical="top", wrap_text=True)
+        ws.row_dimensions[r].height = max(15, 12.5 * (len(texte) // 110 + 1))
+    s = ws.cell(nlig + 4 + o, 1, source)
     s.font = Font(name=POLICE, size=8, italic=True, color=GRIS_TXT)
     if filtre:
         a, b = filtre.split(":")
         ca, cb = re.sub(r"\d", "", a), re.sub(r"\d", "", b)
-        ws.auto_filter.ref = f"{ca}3:{cb}{int(re.sub(r'[^0-9]', '', b)) + 2}"
+        ws.auto_filter.ref = f"{ca}{3 + o}:{cb}{int(re.sub(r'[^0-9]', '', b)) + 2 + o}"
     if gel:
         col = re.sub(r"\d", "", gel) or "A"
-        ws.freeze_panes = f"{col}4"
+        ws.freeze_panes = f"{col}{4 + o}"
     else:
-        ws.freeze_panes = "B4"
+        ws.freeze_panes = f"B{4 + o}"
     for j in range(1, ncol + 1):
         lettre = openpyxl.utils.get_column_letter(j)
-        entete_ = len(str(ws.cell(3, j).value or ""))
-        long_ = max([_long_affiche(ws.cell(i, j).value, ws.cell(i, j).number_format) for i in range(4, min(nlig + 3, 400))] + [0])
+        entete_ = len(str(ws.cell(3 + o, j).value or ""))
+        long_ = max([_long_affiche(ws.cell(i, j).value, ws.cell(i, j).number_format) for i in range(4 + o, min(nlig + 3 + o, 400))] + [0])
         actuelle = ws.column_dimensions[lettre].width or 0
         voulue = min(50, max(10, long_ * 1.15 + 3, min(entete_, 22) * 1.05 + 2))
         ws.column_dimensions[lettre].width = max(actuelle, voulue) if ws.title in SANS_FORMAT else voulue
-    ws.row_dimensions[3].height = 30
+    if rubs:
+        ws.column_dimensions["A"].width = max(ws.column_dimensions["A"].width or 0, 24)
+    ws.row_dimensions[3 + o].height = 30
 
 
 def styliser_tableaux(ws):
@@ -257,9 +279,10 @@ def formats_ratios(wb):
     if "10_ratios" not in wb.sheetnames:
         return
     ws = wb["10_ratios"]
-    ent = {ws.cell(3, j).value: j for j in range(1, ws.max_column + 1)}
+    h = next(r for r in range(1, 40) if "Code" in [ws.cell(r, j).value for j in range(1, 4)])
+    ent = {ws.cell(h, j).value: j for j in range(1, ws.max_column + 1)}
     unite = {}
-    for i in range(4, ws.max_row + 1):
+    for i in range(h + 1, ws.max_row + 1):
         code, norme = ws.cell(i, ent["Code"]).value, str(ws.cell(i, ent["Norme"]).value or "")
         if not code:
             continue
@@ -271,8 +294,9 @@ def formats_ratios(wb):
                 ws.cell(i, j).number_format = "0.00%" if pct else ("#,##0" if abs(v) >= 1000 else "0.00")
     if "10_ratios_detail" in wb.sheetnames:
         wd = wb["10_ratios_detail"]
-        e = {wd.cell(3, j).value: j for j in range(1, wd.max_column + 1)}
-        for i in range(4, wd.max_row + 1):
+        hd = next(r for r in range(1, 40) if wd.cell(r, 1).value == "Code")
+        e = {wd.cell(hd, j).value: j for j in range(1, wd.max_column + 1)}
+        for i in range(hd + 1, wd.max_row + 1):
             code = wd.cell(i, e["Code"]).value
             for nom in ("Numérateur", "Dénominateur"):
                 if isinstance(wd.cell(i, e[nom]).value, (int, float)):
@@ -324,7 +348,7 @@ def appliquer(wb):
             lm.cell(r, 1).alignment = Alignment(wrap_text=True, vertical="top")
         lm.sheet_view.showGridLines = False
         for nom in wb.sheetnames:
-            if nom.startswith(("13", "14", "15", "16", "17")):
+            if nom.startswith(("13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25")):
                 wb[nom].sheet_properties.tabColor = ORANGE
             elif nom.startswith(("00", "10", "11", "12")):
                 wb[nom].sheet_properties.tabColor = BLEU

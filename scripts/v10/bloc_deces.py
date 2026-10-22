@@ -12,7 +12,7 @@ contenu({"titre": "Allocations décès : états de fin d'année et compte 415910
                  "**En 2022 et 2023, les écarts restent à expliquer ; en 2021, le premier crédit reprend aussi des dossiers antérieurs à l'ouverture du compte.** Le fichier 2024 porte la mention « BILAN NON EXHAUSTIF » et la somme de ses lignes dépasse son total de 1 400 000 FCFA."],
         implication="La méthode du FPPN est bien une évaluation dossier par dossier (statuts, art. 89). Elle est comptabilisée comme une dette, non comme une provision : la provision obsèques ne doit pas la reprendre une seconde fois.",
         valable="états de fin d'année 2021 à 2025 tels que reçus le 22/10/2026 ; crédits du compte 41591000 des balances 2021 à 2025",
-        source="Source : " + SRC_LOT4 + " ; « GRAND LIVRE FPPN 2024.xlsx » (compte 41591000) ; « CARTOGRAPHIE DES RISQUES COUVERTS ET DES PRESTATIONS OFFERTES.docx » ; " + SRC_COMPTA[9:] + " ; onglet 19a du classeur des calculs")
+        source="Source : " + SRC_LOT4C + " ; « GRAND LIVRE FPPN 2024.xlsx » (compte 41591000) ; « CARTOGRAPHIE DES RISQUES COUVERTS ET DES PRESTATIONS OFFERTES.docx » ; balances 2021 à 2025 ; onglet 19a du classeur des calculs")
 _DS = [x for x in V10["deces_stock"] if x["exercice"] >= 2021]
 
 
@@ -57,13 +57,13 @@ contenu({"titre": "Provision pour risques courts", "sous_titre": "Aucune provisi
         implication="Le FPPN n'a pas de provision pour risques courts à constituer ; il doit le justifier par écrit dans sa note de calcul annuelle des provisions.",
         valable="cotisations maladie et décès précomptées par la Solde (postes 936 et 8Z6, janvier 2024 à septembre 2026) et par la CGRAE (février 2024 à septembre 2026)",
         source="Source : " + SRC_ST + ", art. 88 ; Code CIMA, art. 334-10 (référence technique) ; " + SRC_PREC[9:] + " ; onglet 20 du classeur des calculs")
-_GR = V10["grenier_depreciation"]
+_GRD10 = V10["grenier_depreciation"]
 contenu({"titre": "Prêts du Grenier : dépréciation selon la politique de crédit", "sous_titre": f"La politique du Grenier conduit à déprécier {F('GD 2026', GRD['2026-08-31'])} au 31/08/2026 ; les comptes n'en portent aucune",
          "synthese": "Taux de la politique de crédit (chapitre XI.3) : 40 % de 3 à 6 mois de retard, 80 % de 6 à 12 mois, 100 % de 12 à 24 mois"},
         "Dépréciation = encours de la tranche de retard × taux de la politique de crédit du Grenier. Les tranches du logiciel de prêts (91 à 180 jours, 181 à 365 jours, plus de 365 jours) correspondent aux trois paliers.",
         tableau={"titre": tab("Dépréciation des prêts du Grenier selon sa politique de crédit"), "entetes": ["Arrêté", "Tranche de retard", "Prêts", "Encours", "Taux", "Dépréciation"], "largeurs": [3.6, 5.6, 2.8, 5.6, 3.0, 5.4], "taille": 8.5,
                  "lignes": [[x["arrete"][8:10] + "/" + x["arrete"][5:7] + "/" + x["arrete"][:4], x["tranche"], N(f"GD prêts {x['arrete']} {x['tranche']}", x["prets"]), F(f"GD enc {x['arrete']} {x['tranche']}", x["encours"]),
-                             pc(f"GD taux {x['arrete']} {x['tranche']}", x["taux"]), F(f"GD dep {x['arrete']} {x['tranche']}", x["encours"] * x["taux"])] for x in _GR if x["taux"] > 0]},
+                             pc(f"GD taux {x['arrete']} {x['tranche']}", x["taux"]), F(f"GD dep {x['arrete']} {x['tranche']}", x["encours"] * x["taux"])] for x in _GRD10 if x["taux"] > 0]},
         disposition="dessous",
         analyse=[f"**La dépréciation passe de {F('GD 2025', GRD['2025-12-31'])} au 31/12/2025 à {F('GD 2026 (a)', GRD['2026-08-31'])} au 31/08/2026.** Le montant reste faible au regard de l'encours, mais il doit être comptabilisé."],
         implication="Le risque principal du Grenier reste l'immobilisation de l'épargne dans les prêts, non la perte sur prêts.",

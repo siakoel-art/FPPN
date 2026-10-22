@@ -33,7 +33,7 @@ def onglet(wb, nom, titre, textes, largeurs):
             continue
         a = ws.cell(r, 1, rub)
         a.font = Font(name=POLICE, size=9, bold=True, color="FFFFFF")
-        a.fill = PatternFill("solid", fgColor=BLEU)
+        a.fill = PatternFill("solid", fgColor=GRIS_TXT)
         a.alignment = Alignment(vertical="top", wrap_text=True)
         ws.merge_cells(f"B{r}:{derniere}{r}")
         b = ws.cell(r, 2, textes[rub])

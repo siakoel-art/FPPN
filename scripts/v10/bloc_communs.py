@@ -42,9 +42,9 @@ DELAI = {a: _PM[a]["dettes_cliniques"] / (_PM[a]["factures_enregistrees"] / _PM[
 GRD = {}
 for _g in V10["grenier_depreciation"]:
     GRD[_g["arrete"]] = GRD.get(_g["arrete"], 0.0) + _g["encours"] * _g["taux"]
-SORT = V10["epargne_sorties"]
-T_MOY = sum(x["total_taux"] for x in SORT) / len(SORT)
-T_MAX = max(x["total_taux"] for x in SORT)
+SORT10 = V10["epargne_sorties"]
+T_MOY = sum(x["total_taux"] for x in SORT10) / len(SORT10)
+T_MAX = max(x["total_taux"] for x in SORT10)
 MOB10 = {m["cloture"]: m for m in V10["mobilisation"]}
 
 
@@ -60,6 +60,8 @@ CHOC_MAL = s[2025]["prest_maladie"] * PIC
 PDV = PV["pidr"]
 PIDR25 = V9["pidr_synthese"][-1]
 SRC_LOT4 = "« PROV ALLOCATION DECES 2021.xlsx », « PROV ALLOCATION DECES 2022.xlsx », « ALLOC DECES 2023 PAYER ET A PROVISIONNER .xlsx », « PROV ALLOCATION DECES 2024.xlsx », « PROV ALLOCATIONS DECES ET FRAIS FUNERAIRES 2025.xlsx »"
-SRC_GLT = "« GRAND LIVRE DES TIERS FPPN 2023.xlsx », « GRAND LIVRE DES TIERS 2024.xlsx », « GRAND LIVRES DES TIERS 2025.xlsx »"
+SRC_LOT4C = "états de fin d'année des allocations décès 2021 à 2025 (« PROV ALLOCATION DECES 2021.xlsx » et suivants, voir l'annexe « Fichiers sources »)"
+SRC_GLT = "grands livres des tiers 2023 à 2025 (« GRAND LIVRE DES TIERS FPPN 2023.xlsx » et suivants)"
 SRC_RI = "règlement intérieur du FPPN édité le 15/06/2023"
 SRC_ST = "statuts du FPPN édités le 15/06/2023"
+RDN = V10["retraites_naissance"]
