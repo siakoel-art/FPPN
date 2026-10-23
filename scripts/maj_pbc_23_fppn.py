@@ -27,11 +27,18 @@ D = dt.datetime(2026, 10, 30)
 ST = {"Reçu": 2, "Partiellement Reçu": 1, "Non Reçu": 0}
 
 FUSION = {  # item conservé : items fusionnés (ancienne numérotation)
-    61: [51], 66: [10], 71: [13, 40], 14: [29], 99: [18], 102: [16, 46], 56: [3, 45], 100: [2, 33],
-    30: [93, 101], 86: [50], 103: [76], 104: [77], 78: [98], 79: [108], 89: [37, 68], 94: [32],
-    57: [60], 119: [88], 72: [6], 7: [48], 17: [19], 82: [20], 54: [24], 35: [8], 53: [5, 106, 107],
+    61: [51], 66: [10], 4: [114], 71: [13, 40], 14: [29], 99: [18], 102: [16, 46], 56: [3, 45, 111], 100: [2, 33],
+    30: [93, 101], 86: [50], 103: [76], 104: [77], 79: [108], 89: [37, 68], 94: [32],
+    57: [60], 119: [88], 113: [78, 98], 72: [6], 7: [48], 17: [19], 82: [20], 54: [24], 35: [8], 53: [5, 106, 107],
 }
 TEXTE = {  # demandes reformulées après fusion ou vérification
+    4: "Convention conclue avec la CGRAE pour la prise en charge des retraités, ses avenants, son annexe 2 (bulletin de souscription), le barème de la cotisation des retraités "
+       "et la liste des retraités souscripteurs non précomptés faute de quotité cessible suffisante.",
+    113: "Personnel : âge de départ à la retraite appliqué, nombre d'enfants à charge de chaque salarié, justification des douze dates d'embauche modifiées dans la DISA 2025, "
+         "rattachement (Direction Générale, CMP, Grenier) des dix-neuf agents recrutés en 2025, note et fichiers de calcul de la provision pour départ à la retraite (compte 196) de 2020 à 2026 : méthode, hypothèses, liste des salariés.",
+    103: "Fichier du personnel de la Direction Générale au 31/12/2025 et au 31/08/2026 : date de naissance, date d'embauche, salaire mensuel, catégorie, statut (personnel civil salarié ou fonctionnaire de police en service, article 31 du règlement intérieur).",
+    104: "Contrat de travail type du personnel civil, convention collective appliquée et tout accord ou avenant fixant l'âge de départ et l'indemnité de départ à la retraite.",
+    57: "Documentation de chaque produit : EFC, PEP, prêts du Grenier, flotte automobile (règlement, conditions de souscription, montants, conditions de sortie et de remboursement). MEDOC est demandé à part.",
     62: "Fichiers retour maladie (936) et décès (8Z6) manquants ou vides : « 122024_effectif_police_936_DECEMBRE 2024.xlsx » et « FPPN_ALLOC_DECES_8Z6_DECEMBRE_2024.xlsx » "
         "(reçus vides, 0 octet) ; retours 8Z6 de mai à octobre 2024 et d'avril 2025 ; retours 936 et 8Z6 de janvier 2020 à décembre 2023.",
     63: "Fichiers manquants des autres produits : retour Grenier 9X4 de décembre 2024, retour EFC 870 de mars 2025, retour CGRAE de janvier et de juin 2024 (le fichier reçu pour juin 2024 "
@@ -112,6 +119,20 @@ for k, (st, com) in POINTAGE.items():
     if st:
         items[k]["v"][13] = st
     items[k]["v"][11] = (items[k]["v"][11] or "") + "\n" + com
+
+# 2 bis. retrait des mentions internes (versions du rapport) dans les intitulés et les commentaires
+def sans_version(t):
+    if not isinstance(t, str):
+        return t
+    t = re.sub(r"\(revue du rapport v\d+, ", "(demande complémentaire du ", t)
+    t = re.sub(r"\(demandes issues du rapport v\d+\)", "(demandes complémentaires)", t)
+    return re.sub(r"(du |le |au )?rapport v\d+", lambda m: (m.group(1) or "") + "rapport", t)
+
+
+for x in rows:
+    x["v"][3] = sans_version(x["v"].get(3))
+    if x["type"] == "item":
+        x["v"][11] = sans_version(x["v"].get(11))
 
 # 3. nouvelle liste
 new_rows = []
@@ -275,6 +296,22 @@ r0 = len(mapping) + 7
 wc.cell(r0, 2, "Code couleur").font = Font(name="Helvetica", size=10, bold=True)
 wc.cell(r0 + 1, 2).fill = PatternFill("solid", fgColor="FFC000")
 wc.cell(r0 + 1, 3, "Item fusionné avec un autre item qui demandait la même pièce")
+for w in wb.worksheets:  # mentions internes retirées de tous les onglets
+    for row in w.iter_rows():
+        for c in row:
+            if isinstance(c.value, str) and not c.value.startswith("="):
+                v = sans_version(c.value)
+                v = re.sub(r"Lot (\d) : (\d+) fichiers reçus, empreintes SHA-256 conformes au journal « [^»]+ »\.", r"\2 fichiers reçus le 22/10/2026, contrôlés à réception.", v)
+                v = re.sub(r"Lot 2 : 26 fichiers, lot 3 : 29 fichiers, empreintes SHA-256 conformes aux journaux[^.]*\.", "55 fichiers reçus le 22/10/2026, contrôlés à réception.", v)
+                v = re.sub(r"Lots? \d( et \d)? lus? le", "Lu le", v)
+                v = v.replace("du lot 1 des nouveaux fichiers", "des nouveaux fichiers (première partie)").replace(" en double des fichiers Excel du lot 1", " en double des fichiers Excel reçus")
+                v = re.sub(r"^Lot \d : ", "", v)
+                v = re.sub(r"Lots? \d( et \d)? ?: ", "", v)
+                v = v.replace("des lots 2 et 3 des nouveaux fichiers", "des nouveaux fichiers (deuxième partie)")
+                c.value = v
+for ancien, nouveau in (("Pointage lot 1 (contenu)", "Pointage 22-10 (partie 1)"), ("Pointage lots 2 et 3 (contenu)", "Pointage 22-10 (partie 2)")):
+    if ancien in wb.sheetnames:
+        wb[ancien].title = nouveau
 wb.save(DST)
 json.dump({"mapping": mapping, "fusionnes": fusionnes, "derniere_ligne": fin, "items": n}, open(MAP_JSON, "w"), indent=1)
 print(DST, "items :", n, "fusionnés :", len(fusionnes), "dernière ligne :", fin)
