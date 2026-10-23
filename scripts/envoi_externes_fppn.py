@@ -5,7 +5,8 @@ FPPN - Préparation de l'envoi des documents externes volumineux (Code CIMA, ré
 Pour chaque PDF, le script produit dans le dossier de sortie :
   1. <nom>_texte.txt : le texte de toutes les pages, page par page (léger, suffit à Adenka si le PDF n'est pas scanné) ;
   2. <nom>_extrait.pdf : les seules pages qui contiennent les mots utiles à la mission (provisions, créances en souffrance…) ;
-  3. si le PDF est scanné (texte absent), des parties <nom>_partie_01.pdf, _02… de 15 Mo au plus, copiées sans modification ;
+  3. si le PDF est scanné ou si son texte est illisible (police mal encodée), des parties <nom>_partie_01.pdf, _02… de 15 Mo
+     au plus, copiées sans modification : Adenka les lit alors par reconnaissance de caractères (OCR) ;
   4. journal_envoi.csv : nom, pages, taille et empreinte SHA-256 de chaque fichier produit, pour contrôler la réception.
 Aucun fichier source n'est modifié.
 
@@ -18,6 +19,7 @@ DOSSIER = r"C:\Dev\Missions\05-FPPN\07-Collecte documentaire\Collecte additionne
 FICHIERS = ["Référentiel comptable spécifique des SFD_1.pdf", "CODE-CIMA-2019.pdf"]
 SORTIE = r"C:\Dev\Missions\05-FPPN\07-Collecte documentaire\Collecte additionnelle_rapport-v10\envoi_adenka"
 TAILLE_PARTIE_MO = 15
+FORCER_DECOUPAGE = True  # True : découpe toujours le PDF complet en parties (texte des deux PDF illisible à l'envoi du 23/10/2026)
 MOTS = {  # pages à extraire, par fichier (mots cherchés sans tenir compte des majuscules)
     "Référentiel comptable spécifique des SFD_1.pdf": ["souffrance", "provision", "dépréciation", "impayé", "29 -", "299", "ancienneté"],
     "CODE-CIMA-2019.pdf": ["article 334", "article 335", "article 336", "article 337", "article 338", "provision mathématique",
@@ -78,9 +80,11 @@ for nom in FICHIERS:
         ecrire(w, ext)
         journal.append((os.path.basename(ext), len(pages), "pages " + ", ".join(str(i + 1) for i in pages)))
 
-    # 3. PDF scanné : découpage en parties de TAILLE_PARTIE_MO
-    if moyenne < 200:
-        print("  texte quasi absent (PDF scanné) : découpage en parties")
+    # 3. PDF scanné ou texte illisible : découpage en parties de TAILLE_PARTIE_MO
+    lisibles = sum(1 for t in textes if " de " in t.lower() and " la " in t.lower()) / max(n, 1)
+    print(f"  pages au texte lisible : {lisibles:.0%}")
+    if FORCER_DECOUPAGE or moyenne < 200 or lisibles < 0.5:
+        print("  texte absent ou illisible : découpage du PDF complet en parties")
         taille_page = os.path.getsize(src) / max(n, 1)
         par_partie = max(1, int(TAILLE_PARTIE_MO * 1e6 / taille_page))
         for k, debut in enumerate(range(0, n, par_partie), 1):

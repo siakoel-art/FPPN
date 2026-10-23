@@ -38,7 +38,8 @@ def ref(*anciens):
 
 RESTE = {  # partie restant à transmettre pour un item partiellement reçu (ancienne numérotation)
     1: "Statuts et règlement intérieur applicables du 01/01/2020 au 30/06/2021 (la version adoptée le 30/06/2021 est reçue).",
-    4: "Avenants à la convention IPS-CGRAE, son annexe 2 (bulletin de souscription), barème de la cotisation des retraités et liste des retraités souscripteurs non précomptés.",
+    4: "Avenants à la convention IPS-CGRAE, son annexe 2 (bulletin de souscription) et liste des retraités souscripteurs non précomptés (le barème de la cotisation des retraités est reçu le 23/10/2026).",
+    41: "Conventions signées avec chaque prestataire de santé conventionné (tarifs, taux de prise en charge, plafonds) et date d'application du barème tarifaire du FPPN (reçu le 23/10/2026, non daté, mention « tarifications proposées »).",
     7: "Toute étude actuarielle ou note de calcul des engagements, dont l'étude des risques longs déposée à l'AIRMS (les rapports de gestion reçus ne contiennent pas de calcul actuariel).",
     9: "Fichier des mutualistes actifs avec date de naissance, sexe, date d'adhésion, statut et date de sortie, au 31/12 de 2019 à 2025 et au 31/08/2026 (extraction du logiciel Easy Money).",
     12: "Cotisations appelées et encaissées par mois et par catégorie de membres, de 2020 à 2023.",
@@ -61,7 +62,7 @@ RESTE = {  # partie restant à transmettre pour un item partiellement reçu (anc
     71: "Base des prestations maladie datée : date des soins, date de dépôt de la facture, date de paiement, pour chaque facture.",
     72: "Pièce d'origine des provisions maladie et obsèques, ou décision qui permettra de les reprendre ou de les justifier.",
     73: "État des impayés du Grenier par tranche de retard et décision fixant les taux de dépréciation.",
-    79: "Durée de la garantie santé des retraités (à vie ou limitée), cotisation et ayants droit couverts, et décision qui la fonde.",
+    79: "Durée de la garantie santé des retraités (à vie ou limitée), ayants droit couverts et décision qui la fonde (le barème de la cotisation est reçu le 23/10/2026).",
     80: "Conventions, taux, échéances et relevés des DAT BOA de 2020 au 31/08/2026.",
     82: "Inventaire et tableau de variation de tous les placements de 2016 au 31/08/2026.",
     83: "Correspondance avec Orabank sur l'arrêt des prélèvements et le remboursement du DAT.",
@@ -77,7 +78,7 @@ RESTE = {  # partie restant à transmettre pour un item partiellement reçu (anc
     109: "Délibération approuvant le cadre organique des emplois et la grille des salaires.",
     119: "Comptabilité séparée de la clinique et résultats annuels de 2020 à 2025.",
 }
-RESTE_N = {}
+RESTE_N = {88: "Procédure écrite pour le Grenier (9X4) et MEDOC (8Z7), et description du rapprochement des fichiers aller et retour (les logigrammes de l'EFC, du PEP, de la flotte, de la CGRAE, de la maladie et du décès sont reçus le 23/10/2026)."}
 for old, txt in RESTE.items():
     RESTE_N.setdefault(M[old], txt)
 
@@ -92,7 +93,7 @@ QUESTIONS = [
     ("Provisions", "Quelle décision permettra de reprendre ou de justifier les provisions maladie (2 867 602 878 FCFA) et obsèques (1 961 695 412 FCFA), passées vers 2004 et inchangées depuis ?", ref(72), "Urgent"),
     ("Provisions", "Pourquoi les sinistres décès 2021 valent-ils 156 020 000 FCFA dans l'étude des ratios et 401 856 666 FCFA dans la balance 2021 (compte 60210000) ?", str(nouveau("Explication de l'écart sur les sinistres décès 2021")), "Moyen"),
     ("Provisions", "À quel grade correspond l'allocation décès de 2 200 000 FCFA des états de fin d'année, et quel texte fonde l'exclusion du suicide ?", ref(116), "Moyen"),
-    ("Retraités", "La garantie santé des policiers retraités est-elle accordée à vie ou pour une durée limitée ? Quelle est leur cotisation ?", ref(79), "Urgent"),
+    ("Retraités", "La garantie santé des policiers retraités est-elle accordée à vie ou pour une durée limitée ? (Le barème de cotisation de la CGRAE a été reçu le 23/10/2026.)", ref(79), "Urgent"),
     ("Personnel", "Quel âge de départ à la retraite le FPPN applique-t-il à son personnel civil ? Cinq agents de 55 ans ou plus sont toujours en poste en 2025, dont un de 60 ans.", ref(113), "Urgent"),
     ("Personnel", "Pourquoi douze dates d'embauche diffèrent-elles entre les DISA 2021 à 2023 et la DISA 2025 ?", ref(113), "Urgent"),
     ("Personnel", "À quelle entité (Direction Générale, clinique, Grenier) sont rattachés les dix-neuf agents recrutés en 2025, et combien d'enfants à charge a chaque agent ?", ref(113), "Urgent"),
