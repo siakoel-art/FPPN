@@ -7,12 +7,12 @@ EXPLIC[onglet] = {rubrique: texte}. Les rubriques sont celles de excel_pedago_fp
 « Valable pour », « Limites ». Les onglets « bruts » (valeurs, sans formule) reçoivent le bloc en tête ; pour les onglets
 à formules, le bloc figure dans l'onglet 0_guide (insérer des lignes casserait leurs formules).
 """
-BAL = "Balances des comptes du FPPN : « BALANCE FORMAT EXCEL DE 09-2020 AU 31-12-2020.xlsx » (à-nouveaux au 01/09/2020 et mouvements jusqu'au 31/12/2020), « BALANCE FPPN FORMAT EXCEL DU 01-01-2021 AU 31-12-2026.xlsx » (exercice 2021), « BALANCE FPPN 2022.xlsx » à « BALANCE FPPN 2025.xlsx », « BALANCE FPPN DU 01-01-2026 AU 31-08-2026.xlsx » (provisoire)."
-PREC = "Fichiers de précomptes reçus le 15/10/2026 : dossiers « FPPN-SOLDE » (postes 936 maladie, 8Z6 décès, 998 PEP, 870 EFC, 9X4 Grenier, 8Z7 MEDOC), « FPPN-CGRAE » (retraités) et « FPPN-GNA » (poste 9W3) ; liste complète dans l'annexe « Fichiers sources » du rapport."
-GRN = "Exports du logiciel de prêts du Grenier reçus le 15/10/2026 : « BalanceAgeeDetaille … .xls » (encours et retards par prêt) et « production_de_la_periode … .xls » (prêts débloqués)."
+BAL = "Onglet D1_balances, via l'onglet 10_agregats. Balances des comptes du FPPN : « BALANCE FORMAT EXCEL DE 09-2020 AU 31-12-2020.xlsx » (à-nouveaux au 01/09/2020 et mouvements jusqu'au 31/12/2020), « BALANCE FPPN FORMAT EXCEL DU 01-01-2021 AU 31-12-2026.xlsx » (exercice 2021), « BALANCE FPPN 2022.xlsx » à « BALANCE FPPN 2025.xlsx », « BALANCE FPPN DU 01-01-2026 AU 31-08-2026.xlsx » (provisoire)."
+PREC = "Onglets D2_fichiers_precomptes et D3_precomptes_mensuels. Fichiers de précomptes reçus le 15/10/2026 : dossiers « FPPN-SOLDE » (postes 936 maladie, 8Z6 décès, 998 PEP, 870 EFC, 9X4 Grenier, 8Z7 MEDOC), « FPPN-CGRAE » (retraités) et « FPPN-GNA » (poste 9W3) ; liste complète dans l'annexe « Fichiers sources » du rapport."
+GRN = "Onglets D4_grenier_prets et D5_grenier_production. Exports du logiciel de prêts du Grenier reçus le 15/10/2026 : « BalanceAgeeDetaille … .xls » (encours et retards par prêt) et « production_de_la_periode … .xls » (prêts débloqués)."
 DEC = "Décision n° 05/2022/COM/UEMOA du 1er juin 2022 (annexe) et règlement d'exécution n° 004/2022/COM/UEMOA, appliqués aux balances du FPPN."
 N22 = "Exercices 2020 à 2025 et du 01/01 au 31/08/2026 (huit mois, provisoire). Pour 2020, le solde de l'année = à-nouveaux au 01/09/2020 (janvier à août) + mouvements du 01/09 au 31/12/2020."
-SANS_FORMULE = "Les valeurs sont calculées par les scripts de la mission et collées ici ; la formule de chaque colonne est donnée dans « Comment le calcul est fait »."
+SANS_FORMULE = "Chaque cellule est une formule : cliquer dessus pour voir le calcul et les cellules utilisées (la barre de navigation en ligne 1 mène aux onglets sources)."
 
 EXPLIC = {
     "1_couverture": {"À quoi sert cet onglet": "Dire, pour chaque fichier de précompte (poste et sens aller ou retour), combien de mois ont été reçus, avec combien de lignes et quel montant.",
@@ -21,7 +21,7 @@ EXPLIC = {
                      "Comment lire le résultat": "Un poste avec peu de mois reçus ne permet pas de conclusion sur toute la période. Le sens « aller » est la demande du FPPN, le sens « retour » ce que la Solde ou la CGRAE a réellement précompté.",
                      "Valable pour": "Fichiers reçus le 15/10/2026, janvier 2020 à août 2026 selon le poste.", "Limites": "Un mois reçu peut être incomplet si le fichier l'est."},
     "1_aller_retour": {"À quoi sert cet onglet": "Comparer ce que le FPPN a demandé (fichier aller) et ce qui a été précompté (fichier retour), poste par poste.",
-                       "D'où viennent les chiffres": PREC,
+                       "D'où viennent les chiffres": "Onglet 1_aller_retour_mois (détail mois par mois), lui-même calculé sur l'onglet D2_fichiers_precomptes.",
                        "Comment le calcul est fait": "Taux de recouvrement = montant retour / montant aller, sur les mois où les deux fichiers existent. Taux minimum et maximum : le plus faible et le plus fort des taux mensuels. " + SANS_FORMULE,
                        "Comment lire le résultat": "Un taux de 97 % veut dire que 3 % de ce qui était demandé n'a pas été précompté.",
                        "Valable pour": "Mois communs aux fichiers aller et retour de chaque poste.", "Limites": "Comparaison des totaux du mois, pas agent par agent."},
@@ -118,8 +118,10 @@ EXPLIC = {
                                "Comment le calcul est fait": "Excédent d'un risque = cotisations - prestations - frais ; frais répartis au prorata des cotisations de chaque risque. " + SANS_FORMULE, "Comment lire le résultat": "Montre quel risque produit l'excédent.", "Valable pour": N22, "Limites": "Clé de répartition des frais choisie par Adenka."},
     "10_actif_mobilisation": {"À quoi sert cet onglet": "Classer l'actif selon le délai pour le transformer en argent, et le passif à payer dans l'année.", "D'où viennent les chiffres": BAL,
                               "Comment le calcul est fait": "Chaque compte d'actif est classé : immédiat (banques), moins d'un an, 1 à 5 ans, plus de 5 ans ou incertain. L'épargne est à part : son échéance n'est pas connue. " + SANS_FORMULE, "Comment lire le résultat": "Base des écarts de liquidité des onglets 24b et 24c.", "Valable pour": "31/12/2025 et 31/08/2026.", "Limites": "Classement par nature comptable, sans échéancier."},
-    "10_agregats": {"À quoi sert cet onglet": "Donner tous les totaux comptables utilisés par les ratios.", "D'où viennent les chiffres": BAL,
-                    "Comment le calcul est fait": "Chaque colonne est la somme des comptes indiqués dans son titre. " + SANS_FORMULE, "Comment lire le résultat": "Permet de vérifier chaque ratio sur les balances.", "Valable pour": N22, "Limites": "Aucune."},
+    "10_agregats": {"À quoi sert cet onglet": "C'est le pont entre les balances et tous les calculs : chaque ligne est un total comptable (cotisations, prestations, frais, réserves, épargne, trésorerie, dettes…) pour chaque exercice. Tous les autres onglets reprennent ces totaux.",
+                    "D'où viennent les chiffres": "Onglet D1_balances (une ligne par compte et par exercice).",
+                    "Comment le calcul est fait": "La colonne « Comptes et calcul » dit en clair quels comptes sont additionnés. Exemple de formule : =-SUMIFS(solde net ; compte ; \"7010*\" ; exercice ; 2025) additionne tous les comptes qui commencent par 7010 pour 2025, avec le signe moins pour présenter un produit en positif. « Comptes débiteurs » : on n'additionne que les comptes dont le solde est débiteur (actifs). Les lignes « Calcul » combinent d'autres lignes de l'onglet.",
+                    "Comment lire le résultat": "Pour vérifier un total, filtrer l'onglet D1_balances sur les mêmes comptes et le même exercice.", "Valable pour": N22, "Limites": "Montants tels que comptabilisés par le FPPN."},
     "10_controle_pcms": {"À quoi sert cet onglet": "Contrôler que les comptes du FPPN sont classés comme le demande le PCMS.", "D'où viennent les chiffres": "PCMS (mai 2012) et balances du FPPN.",
                          "Comment le calcul est fait": "Comparaison point par point. " + SANS_FORMULE, "Comment lire le résultat": "La colonne « Incidence » dit si l'écart change un ratio.", "Valable pour": "Plan de comptes de 2020 à 2026.", "Limites": "Aucune."},
     "12_provisions_inventaire": {"À quoi sert cet onglet": "Lister toutes les provisions et dépréciations du bilan, année par année.", "D'où viennent les chiffres": BAL,
@@ -175,3 +177,88 @@ GUIDE = {
     "24c_ecarts_par_annee": ("Écarts de liquidité année par année sur cinq ans.", "Écart cumulé négatif : argent qui manquerait."),
     "25_projection_equilibre": ("Projection agrégée du résultat technique de 2026 à 2030, deux scénarios.", "Lire l'avertissement : projection sans âges."),
 }
+
+# Onglets à formules : explications complètes reprises dans l'onglet 0_guide (les onglets eux-mêmes gardent leur en-tête)
+SENS = "Classeur des analyses de sensibilité : données des onglets 10 (agrégats et ratios), normes de la Décision n° 05/2022/COM/UEMOA, statuts du FPPN."
+EXPLIC.update({
+    "0_controle": {"À quoi sert cet onglet": "Prouver que chaque formule du classeur redonne exactement le chiffre publié dans le rapport.",
+                   "D'où viennent les chiffres": "Valeur publiée : résultat des scripts de la mission repris dans le rapport. Valeur recalculée : la cellule du classeur indiquée.",
+                   "Comment le calcul est fait": "Écart = valeur recalculée - valeur publiée ; « Identique » si l'écart est au plus de 0,5 FCFA (montants) ou de 0,000001 (taux).",
+                   "Exemple chiffré": "Ligne « 3_sinistralite_resultat, C13 » : prestations maladie 2025 publiées 1 771 635 361 FCFA ; la formule de la cellule redonne 1 771 635 361 FCFA : « Identique ».",
+                   "Comment lire le résultat": "Le compteur « Écarts trouvés » en haut de l'onglet doit valoir 0.",
+                   "Valable pour": "Onglets 1 à 12, 10_agregats, montants comptables des onglets 13c, 14c, 14t, 15, 16, 17 et 18 à 25.",
+                   "Limites": "Les colonnes calculées par Python (fond bleu clair) et les données saisies depuis un document (DISA, états de fin d'année, étude des ratios) sont des données d'entrée, non contrôlées ici."},
+    "00_validite": {"À quoi sert cet onglet": "Dire, pour chaque diapositive du rapport, sur quels fichiers, quelle période et quelle population le résultat repose, et ce qu'il ne couvre pas.",
+                    "D'où viennent les chiffres": "Lignes « Valable pour » du rapport.", "Comment le calcul est fait": "Aucun calcul : texte repris du rapport.",
+                    "Comment lire le résultat": "Ne jamais reprendre un chiffre sans sa ligne « Valable pour ».", "Valable pour": "Toutes les diapositives du rapport.", "Limites": "Aucune."},
+    "10_tableau_de_bord": {"À quoi sert cet onglet": "Voir d'un coup d'œil tous les ratios prudentiels, leur norme et leur statut de 2022 au 31/08/2026.",
+                           "D'où viennent les chiffres": "Onglet 10_ratios (formules) : chaque cellule de valeur et de statut renvoie à la cellule correspondante de 10_ratios.",
+                           "Comment le calcul est fait": "Statut : « Conforme » si la valeur respecte la norme de la Décision n° 05/2022 ; « Non conforme » sinon ; « En attente » si une donnée manque ; « À apprécier » si la norme n'est pas chiffrée.",
+                           "Exemple chiffré": "Taux de sinistralité 2025 : 57,48 % pour une norme de 70 % à 80 % : « Non conforme ».",
+                           "Comment lire le résultat": "Rouge : non conforme ; bleu nuit : conforme. Le statut 2022-2025 est le statut opposable.", "Valable pour": "2020 à 2026 ; 2020, 2021 et 2026 indicatifs.", "Limites": "Ratios « En attente » faute de documents."},
+    "11_formules": {"À quoi sert cet onglet": "Registre de chaque formule du rapport : ce qu'elle calcule, avec quels comptes, la méthode du FPPN, la méthode réglementaire, l'écart et ses risques.",
+                    "D'où viennent les chiffres": "Textes cités dans chaque ligne ; script « formules_fppn.py ».", "Comment le calcul est fait": "Aucun calcul : description des méthodes.",
+                    "Comment lire le résultat": "« Non communiquée » en rouge : le FPPN n'a pas transmis sa méthode.", "Valable pour": "Toutes les formules du rapport.", "Limites": "Aucune."},
+    "9_tracabilite": {"À quoi sert cet onglet": "Retrouver chaque chiffre écrit dans le rapport : sa diapositive, sa valeur exacte et le texte affiché.",
+                      "D'où viennent les chiffres": "Contrôle automatique fait à la construction du rapport.", "Comment le calcul est fait": "Le texte affiché est cherché dans la diapositive : « Oui » s'il y est.",
+                      "Comment lire le résultat": "Tous les chiffres doivent être « Oui ».", "Valable pour": "Rapport livré avec ce classeur.", "Limites": "Aucune."},
+    "9_figures_tableaux": {"À quoi sert cet onglet": "Lister les figures et tableaux du rapport, leur diapositive et leur domaine de validité.", "D'où viennent les chiffres": "Rapport.",
+                           "Comment le calcul est fait": "Aucun calcul.", "Comment lire le résultat": "Le numéro de diapositive renvoie au rapport.", "Valable pour": "Rapport livré avec ce classeur.", "Limites": "Aucune."},
+    "13a_methode": {"À quoi sert cet onglet": "Expliquer la méthode des analyses de sensibilité : comment le statut de chaque ratio change quand une hypothèse ou un montant change.",
+                    "D'où viennent les chiffres": SENS, "Comment le calcul est fait": "Pour chaque ratio : écart à la norme, montant à combler, effet de chaque levier (cotisations, frais, réserves, placements).",
+                    "Comment lire le résultat": "Lire avant les onglets 13b à 13i.", "Valable pour": "Ratios de 2020 au 31/08/2026.", "Limites": "Un levier à la fois, sans effets croisés."},
+    "13b_parametres": {"À quoi sert cet onglet": "Rassembler les normes du texte et les leviers que l'on peut faire varier.", "D'où viennent les chiffres": SENS,
+                       "Comment le calcul est fait": "Cellules orange : valeurs modifiables ; tous les onglets 13 se recalculent.", "Comment lire le résultat": "Changer une cellule orange pour tester une autre hypothèse.",
+                       "Valable pour": "Normes en vigueur au 22/10/2026.", "Limites": "Aucune."},
+    "13c_donnees": {"À quoi sert cet onglet": "Donner, année par année, les montants qui entrent dans les ratios (cotisations, prestations, frais, réserves, fonds propres, trésorerie, dettes).",
+                    "D'où viennent les chiffres": "Formules qui renvoient à l'onglet 10_agregats, lui-même calculé sur l'onglet D1_balances.",
+                    "Comment le calcul est fait": "Chaque ligne indique dans la colonne « Source » le ratio qu'elle alimente.", "Exemple chiffré": "COT 2025 = cotisations acquises = 3 418 141 722 FCFA.",
+                    "Comment lire le résultat": "Ne pas modifier : ce sont les données des onglets 13d à 13h.", "Valable pour": "2020 au 31/08/2026.", "Limites": "Aucune."},
+    "13d_ecarts": {"À quoi sert cet onglet": "Donner le statut de chaque ratio et le montant qui le ramènerait sur sa norme.", "D'où viennent les chiffres": "Onglets 13b et 13c.",
+                   "Comment le calcul est fait": "Montant à combler = montant à ajouter au numérateur (ou à retirer du dénominateur) pour atteindre la borne la plus proche.",
+                   "Comment lire le résultat": "Un montant à combler élevé signale un ratio loin de sa norme.", "Valable pour": "2020 au 31/08/2026.", "Limites": "Calcul ratio par ratio."},
+    "13e_facteurs": {"À quoi sert cet onglet": "Montrer quels comptes expliquent les écarts aux normes chaque année.", "D'où viennent les chiffres": "Onglets 13c et 13d.",
+                     "Comment le calcul est fait": "Une croix indique que le facteur entre dans la formule du ratio non conforme.", "Comment lire le résultat": "Un facteur présent chaque année est une cause récurrente.",
+                     "Valable pour": "2020 au 31/08/2026.", "Limites": "Aucune."},
+    "13f_leviers": {"À quoi sert cet onglet": "Chiffrer, pour chaque levier prévu par les textes, le montant qui ramène chaque ratio sur sa norme.", "D'où viennent les chiffres": "Onglets 13b à 13d ; statuts du FPPN.",
+                    "Comment le calcul est fait": "Montant d'équilibre = montant du levier qui rend le ratio égal à sa borne.", "Comment lire le résultat": "Comparer le montant au budget du FPPN pour juger s'il est réaliste.",
+                    "Valable pour": "2020 au 31/08/2026.", "Limites": "Un levier à la fois."},
+    "13g_inflation": {"À quoi sert cet onglet": "Mesurer la hausse des prix de la santé et son effet sur la sinistralité.", "D'où viennent les chiffres": "ANStat, indice harmonisé des prix à la consommation par poste (extraction du 19/10/2026) ; prestations du FPPN de 2025.",
+                      "Comment le calcul est fait": "Inflation médicale du FPPN = moyenne des hausses de prix des postes de santé, pondérée par le poids de chaque nature de prestation.",
+                      "Comment lire le résultat": "Une inflation médicale supérieure à la hausse des cotisations dégrade la sinistralité.", "Valable pour": "Indices nationaux 2020 à 2025.", "Limites": "Les tarifs des cliniques du FPPN peuvent évoluer autrement que l'indice national."},
+    "13h_synthese": {"À quoi sert cet onglet": "Montrer l'effet d'un même choc de 100 000 000 FCFA sur chaque ratio.", "D'où viennent les chiffres": "Onglets 13b et 13c (exercice de référence).",
+                     "Comment le calcul est fait": "Chaque choc est passé en écritures (partie double), puis tous les ratios sont recalculés.", "Comment lire le résultat": "Le signe dit si le choc améliore ou dégrade le ratio.",
+                     "Valable pour": "Exercice de référence indiqué dans l'onglet.", "Limites": "Effets de premier ordre."},
+    "13i_rendement": {"À quoi sert cet onglet": "Comparer le rendement des placements du FPPN aux taux du marché.", "D'où viennent les chiffres": "BCEAO (rapport sur la politique monétaire, mars 2026) ; Investing.com (obligations de Côte d'Ivoire, export du 19/10/2026) ; onglet 7_rendement_placements.",
+                      "Comment le calcul est fait": "Écart = rendement du FPPN - taux de référence de l'année.", "Comment lire le résultat": "Un écart négatif signifie un placement moins rémunérateur que le marché.",
+                      "Valable pour": "2021 à 2025.", "Limites": "Rendement du FPPN irrégulier (intérêts d'un DAT comptabilisés à l'échéance)."},
+    "14a_pidr_parametres": {"À quoi sert cet onglet": "Rassembler les paramètres de la provision pour départ à la retraite du personnel (barème, âge de départ, taux d'actualisation, hausse des salaires).",
+                            "D'où viennent les chiffres": "Décret n° 2017-210 du 30/03/2017 ; convention collective interprofessionnelle du 19/07/1977, art. 40 ; IAS 19.",
+                            "Comment le calcul est fait": "Cellules orange : modifiables ; les onglets 14b et 14c se recalculent.", "Comment lire le résultat": "Tester un autre âge de départ ou un autre taux.",
+                            "Valable pour": "Évaluation au 31/12 de chaque année.", "Limites": "Âge de départ des agents non confirmé par le FPPN."},
+    "14t_table_cima_f": {"À quoi sert cet onglet": "Table de survie utilisée pour la provision du personnel.", "D'où viennent les chiffres": "Formules qui renvoient à l'onglet D8_tables_mortalite (colonne CIMA F).",
+                         "Comment le calcul est fait": "lx = nombre de survivants à l'âge x sur 1 000 000 de naissances.", "Comment lire le résultat": "Ne pas modifier.", "Valable pour": "Âges 0 à 110 ans.", "Limites": "Aucune."},
+    "14b_pidr_individuel": {"À quoi sert cet onglet": "Calculer la provision du personnel agent par agent.", "D'où viennent les chiffres": "« DISA_256927_2025.xls » (CNPS) : date de naissance, date d'embauche, salaire ; paramètres de l'onglet 14a ; table de l'onglet 14t.",
+                            "Comment le calcul est fait": "Indemnité au départ = salaire projeté × barème × ancienneté au départ ; provision = indemnité × probabilité d'être présent au départ × actualisation × part de l'ancienneté déjà acquise (méthode des unités de crédit projetées, IAS 19).",
+                            "Comment lire le résultat": "Chaque ligne est un agent ; la dernière colonne est sa provision.", "Valable pour": "Agents déclarés dans la DISA 2025, au 31/12/2025.", "Limites": "Policiers détachés non compris."},
+    "14c_pidr_synthese": {"À quoi sert cet onglet": "Additionner la provision du personnel par entité (Direction Générale, CMP, Grenier) et la comparer au compte 196.",
+                          "D'où viennent les chiffres": "Onglet 14b (2025) et calculs des DISA 2021 à 2023 ; compte 196 : formule sur l'onglet 10_agregats.",
+                          "Comment le calcul est fait": "Somme des provisions individuelles par entité.", "Comment lire le résultat": "Un compte 196 supérieur au recalcul signale une provision trop forte.",
+                          "Valable pour": "2021, 2022, 2023 et 2025.", "Limites": "DISA 2024 scannée, non exploitée."},
+    "15_mortalite_sinistralite": {"À quoi sert cet onglet": "Calculer la mortalité brute des membres et comparer la sinistralité décès du FPPN à celle des comptes.",
+                                  "D'où viennent les chiffres": "« ETUDE DES RATIO MALADIE DECES 2.xlsx » (feuilles Tableau et Historique) ; cotisations et prestations décès des comptes : formules sur l'onglet 10_agregats.",
+                                  "Comment le calcul est fait": "Taux brut (pour mille) = décès de membres / adhérents × 1 000 ; S/P = sinistres / cotisations.",
+                                  "Comment lire le résultat": "Trois à cinq décès pour mille adhérents par an depuis 2021.", "Valable pour": "2015 à 2025.", "Limites": "Sans âge : pas de comparaison à la table CIMA H."},
+    "16_efc_taux_servi": {"À quoi sert cet onglet": "Calculer les intérêts d'une année sur l'EFC selon chacun des trois taux trouvés dans les documents.",
+                          "D'où viennent les chiffres": "Encours EFC et produits financiers : formules sur l'onglet 10_agregats ; taux : manuel d'épargne, cartographie des risques, cahier des charges.",
+                          "Comment le calcul est fait": "Intérêts = encours × taux.", "Comment lire le résultat": "Comparer aux produits financiers de la même année.", "Valable pour": "2020 au 31/08/2026.", "Limites": "Une année d'intérêts, sans capitalisation (le cumul est dans l'onglet 21)."},
+    "17_controles_croises": {"À quoi sert cet onglet": "Vérifier les chiffres avec une seconde source : états financiers, fichiers de la Solde, rapprochements bancaires.",
+                             "D'où viennent les chiffres": "« ETATS FINANCIERS 2020.pdf » à « ETATS FINANCIERS AU 31-08-2026.pdf » (saisis depuis les PDF) ; côté balances : formules sur l'onglet 10_agregats ; lignes 8Z6 : formules sur l'onglet D3_precomptes_mensuels ; états de rapprochement bancaire.",
+                             "Comment le calcul est fait": "Écart = source 1 - source 2.", "Comment lire le résultat": "Un écart nul confirme le chiffre.", "Valable pour": "2020 au 31/08/2026.", "Limites": "Les rubriques détaillées des états financiers ne sont pas toutes comparées."},
+})
+
+# Onglets entièrement calculés par Python : la mention « formule » est remplacée
+PYTHON_SEUL = "Ces valeurs sont calculées par Python sur les lignes individuelles des fichiers (voir la rubrique « Calcul Python ») ; elles ne peuvent pas être recalculées dans Excel."
+for _k in ("2_entrees_sorties", "2_taux_936", "2_rapport_8Z6_936", "2_anciennete", "4_poste_998_references"):
+    for _r, _t in list(EXPLIC.get(_k, {}).items()):
+        EXPLIC[_k][_r] = _t.replace(SANS_FORMULE, PYTHON_SEUL)

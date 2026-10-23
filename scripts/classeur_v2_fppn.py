@@ -34,6 +34,10 @@ FORMULES = sys.argv[7] if len(sys.argv) > 7 else None
 SENSIB = sys.argv[8] if len(sys.argv) > 8 else None
 V9X = sys.argv[9] if len(sys.argv) > 9 else None
 V10X = sys.argv[10] if len(sys.argv) > 10 else None
+BASE = sys.argv[11] if len(sys.argv) > 11 else None
+TABLES = sys.argv[12] if len(sys.argv) > 12 else None
+EXCLUS = set()
+CTRL_LIGNES = None
 ENTETE = PatternFill("solid", fgColor="112A40")
 _v = __import__("re").search(r"_v(\d+)\.xlsx$", SORTIE)
 VER = _v.group(1) if _v else "2"
@@ -187,10 +191,33 @@ if SENSIB:
     src = openpyxl.load_workbook(SENSIB)
     for ws in src.worksheets:
         copier(ws, wb.create_sheet(ws.title))
+    if BASE:
+        # onglets 1 à 12 reconstruits en formules sur des onglets de données brutes (D1 à D8) ; onglet 0_controle
+        import os as _os
+        sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+        import classeur_formules_fppn as CF
+        import charte_excel_fppn as _ch
+        from explications_excel_fppn import EXPLIC as _EXPL
+        _C = json.load(open(_os.path.join(_os.path.dirname(RAPPORT), "complements.json"), encoding="utf-8"))
+        _Q = json.load(open(_os.path.join(_os.path.dirname(RAPPORT), "ratios.json"), encoding="utf-8"))
+        _avant = set(wb.sheetnames)
+        from exemples_excel_fppn import exemples as _ex
+        _R = json.load(open(_os.path.join(_os.path.dirname(RAPPORT), "resultats.json"), encoding="utf-8"))
+        for _k, _t in _ex(_R, _C, _Q).items():
+            _EXPL.setdefault(_k, {})["Exemple chiffré"] = _t
+        _P, _ROW, _AGR, _raw = CF.reconstruire(wb, BASE, _os.path.dirname(RAPPORT), _C, TABLES, _EXPL, _ch.lisible)
+        CF.reconstruire_10_12(wb, BASE, _raw, _P, _ROW, _AGR, _Q, _EXPL, _ch.lisible)
+        _v10j = _os.path.join(_os.path.dirname(V10X), "v10.json") if V10X else None
+        if _v10j and _os.path.exists(_v10j):
+            CF.CTRL.extend(tuple(x) for x in json.load(open(_v10j, encoding="utf-8")).get("controles_formules", []))
+        CF.relier_existants(wb, _AGR, _P)
+        CTRL_LIGNES = CF.onglet_controle(wb)
+        EXCLUS = set(CF.CREES)
+        json.dump({"controle": CTRL_LIGNES}, open(SORTIE + ".controle.json", "w"))
     wb.calculation.fullCalcOnLoad = True
     sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
     import charte_excel_fppn
-    charte_excel_fppn.appliquer(wb)
+    charte_excel_fppn.appliquer(wb, EXCLUS)
     lm.cell(row=len(lignes) + 4, column=1, value="Charte graphique Adenka : Helvetica, titre au-dessus et source sous chaque tableau, en-tête noir, première colonne grise, lignes alternées, cellules modifiables en orange, statuts conformes en bleu nuit et non conformes en rouge.")
     lm.cell(row=len(lignes) + 3, column=1, value="Onglets 13 : analyses de sensibilité et leviers de conformité, à formules vivantes. Méthode et références (13a), "
             "paramètres modifiables en orange (13b), données (13c), statuts et montants à combler (13d), facteurs récurrents (13e), montants d'équilibre des leviers (13f), "
@@ -198,23 +225,44 @@ if SENSIB:
 # ---- onglet 0_guide : mode d'emploi pour un lecteur non technique, une ligne par onglet avec lien
 sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 from explications_excel_fppn import EXPLIC, GUIDE  # noqa: E402
+try:
+    import classeur_formules_fppn as _CFm
+    _TXT = _CFm.TEXTES
+except ImportError:
+    _TXT = {}
+_RUB = ["À quoi sert cet onglet", "D'où viennent les chiffres", "Comment le calcul est fait", "Exemple chiffré", "Comment lire le résultat", "Valable pour", "Limites", "Calcul Python"]
+
+
+def _rubriques_onglet(ws):
+    """Rubriques écrites en tête d'un onglet (colonne A = nom de la rubrique, colonne B = texte)."""
+    t = {}
+    for r in range(1, min(ws.max_row, 30) + 1):
+        a = ws.cell(r, 1).value
+        if isinstance(a, str) and a.strip() in _RUB and isinstance(ws.cell(r, 2).value, str):
+            t[a.strip()] = ws.cell(r, 2).value
+    return t
+
+
 gd = wb.create_sheet("0_guide", 0)
 gd.sheet_view.showGridLines = False
-for col, w in zip("ABCDEFGH", (26, 34, 40, 46, 46, 40, 34, 30)):
+for col, w in zip("ABCDEFGHI", (26, 34, 40, 46, 40, 40, 34, 30, 40)):
     gd.column_dimensions[col].width = w
 gd["A1"] = "Mode d'emploi du classeur des calculs"
 gd["A1"].font = Font(name="Helvetica", size=14, bold=True)
-aide = ["Ce classeur contient tous les calculs du rapport. Chaque onglet commence par une explication en mots simples ou, pour les onglets à formules, est expliqué ci-dessous.",
-        "Codes couleur : en-tête noir = titres de colonnes ; première colonne grise = libellé de la ligne ; cellule orange = paramètre modifiable (le reste se recalcule) ; « Non conforme » en rouge, « Conforme » en bleu nuit.",
-        "Montants en FCFA exacts sans décimales ; pourcentages à deux décimales. 2026 = du 01/01 au 31/08/2026 (balance provisoire).",
-        "Pour retrouver l'origine d'un chiffre du rapport : onglet 9_tracabilite (chiffre, diapositive, valeur exacte), puis l'onglet cité dans la source de la diapositive.",
-        "Avant de reprendre un chiffre, lire sa ligne « Valable pour » (onglet 00_validite) : elle dit ce que le chiffre couvre et ne couvre pas."]
+aide = ["Ce classeur contient tous les calculs du rapport actuariel et statistique du FPPN, sous forme de formules : en cliquant sur une cellule, on voit le calcul et les cellules qu'il utilise. Chaque onglet commence par une explication en mots simples.",
+        "Navigation : la ligne 1 de chaque onglet porte des boutons-liens (⌂ Guide, ◀ Précédent, Suivant ▶, ✓ Contrôle) et, sur fond orange, les onglets d'où viennent les chiffres de l'onglet. Ils marchent sans macro. Les titres des tableaux restent visibles en haut de l'écran quand on descend (tableaux Excel).",
+        "Ordre de lecture : onglets de données D1 à D8 (fichiers du FPPN, sans calcul) → 10_agregats (montants comptables, formules sur D1) → onglets 1 à 12 (analyses) → onglets 13 à 25 (sensibilités, provision du personnel, revue actuarielle). L'onglet 0_controle prouve que chaque formule redonne le chiffre du rapport.",
+        "Codes couleur : en-tête noir = titres de colonnes ; première colonne grise = libellé de la ligne ; cellule orange = paramètre modifiable (le reste se recalcule) ; fond bleu clair = valeur calculée par Python ; « Non conforme » en rouge, « Conforme » en bleu nuit.",
+        "Calculs faits en Python : les lignes individuelles des fichiers de précomptes (4 454 416 lignes, une par agent et par mois) dépassent la limite d'Excel (1 048 576 lignes par feuille). Elles sont lues par le script « base_fppn.py » puis résumées par mois par « analyses_fppn.py » (onglets D3 et D3b). Les grandeurs qui exigent ces lignes (nombre d'agents différents, entrées et sorties, médianes, taux ligne par ligne) sont sur fond bleu clair et renvoient au rapport (méthode et résultats).",
+        "Boutons macros (facultatif, 2 minutes) : 1. Alt + F11 ; Fichier > Importer un fichier… ; choisir « FPPN_navigation.bas » livré avec ce classeur ; fermer l'éditeur. 2. Alt + F8 ; choisir « InstallerBoutons » ; Exécuter. 3. Fichier > Enregistrer sous > « Classeur Excel (prenant en charge les macros) (*.xlsm) ». Les boutons Guide, Précédent, Suivant, Tous les onglets et Contrôle apparaissent en haut de chaque onglet.",
+        "Montants en FCFA exacts sans décimales ; pourcentages à deux décimales. 2026 = du 01/01 au 31/08/2026 (balance provisoire). Avant de reprendre un chiffre, lire sa ligne « Valable pour » (onglet 00_validite)."]
 for i, t in enumerate(aide, 3):
     gd.cell(i, 1, t).alignment = Alignment(wrap_text=True, vertical="top")
-    gd.merge_cells(start_row=i, start_column=1, end_row=i, end_column=8)
-    gd.row_dimensions[i].height = 30
+    gd.cell(i, 1).font = Font(name="Helvetica", size=10)
+    gd.merge_cells(start_row=i, start_column=1, end_row=i, end_column=9)
+    gd.row_dimensions[i].height = 44
 r0 = 3 + len(aide) + 1
-ent = ["Onglet", "À quoi sert cet onglet", "D'où viennent les chiffres", "Comment le calcul est fait", "Comment lire le résultat", "Valable pour", "Limites"]
+ent = ["Onglet"] + _RUB
 for j, t in enumerate(ent, 1):
     c = gd.cell(r0, j, t)
     c.font, c.fill = Font(name="Helvetica", bold=True, color="FFFFFF"), PatternFill("solid", fgColor="000000")
@@ -226,19 +274,28 @@ for nom in wb.sheetnames:
     c = gd.cell(rr, 1, nom)
     c.hyperlink = f"#'{nom}'!A1"
     c.font = Font(name="Helvetica", color="112A40", underline="single", bold=True)
-    if nom in EXPLIC:
-        vals = [EXPLIC[nom].get(k_, "") for k_ in ent[1:]]
-    elif nom in GUIDE:
-        vals = [GUIDE[nom][0], "Voir l'en-tête de l'onglet", "Voir l'en-tête de l'onglet et les commentaires des cellules", GUIDE[nom][1], "Voir l'onglet 00_validite", ""]
-    else:
-        vals = ["", "", "", "", "", ""]
+    t = dict(_rubriques_onglet(wb[nom]))
+    t.update(_TXT.get(nom, {}))
+    t.update(EXPLIC.get(nom, {}))
+    if not t and nom in GUIDE:
+        t = {"À quoi sert cet onglet": GUIDE[nom][0], "Comment lire le résultat": GUIDE[nom][1]}
+    vals = [t.get(k_, "") for k_ in _RUB]
     for j, v in enumerate(vals, 2):
         gd.cell(rr, j, v).alignment = Alignment(wrap_text=True, vertical="top")
-    gd.row_dimensions[rr].height = min(160, max(30, 13 * (max(len(str(v)) for v in vals) // 45 + 1)))
+        gd.cell(rr, j).font = Font(name="Helvetica", size=9)
+        if _RUB[j - 2] == "Calcul Python" and v:
+            gd.cell(rr, j).fill = PatternFill("solid", fgColor="DCE6F1")
+    gd.row_dimensions[rr].height = min(300, max(30, 12 * (max(len(str(v)) for v in vals) // 42 + 1)))
     rr += 1
-gd.freeze_panes = gd.cell(r0 + 1, 2)
-manque = [n for n in wb.sheetnames if n not in EXPLIC and n not in GUIDE and n not in ("0_guide", "0_lisez_moi")]
+gd.freeze_panes = None
+manque = [n for n in wb.sheetnames if n not in EXPLIC and n not in GUIDE and n not in _TXT and not _rubriques_onglet(wb[n]) and n not in ("0_guide", "0_lisez_moi")]
 if manque:
     print("ONGLETS SANS EXPLICATION :", manque)
+# ---- barre de navigation (ligne 1), volets figés réduits, tableaux Excel, module VBA facultatif
+import navigation_classeur_fppn as NAV  # noqa: E402
+NAV.finaliser(wb)
+NAV.ecrire_vba(__import__("os").path.join(__import__("os").path.dirname(SORTIE), "FPPN_navigation.bas"))
+if CTRL_LIGNES:
+    json.dump({"controle": [CTRL_LIGNES[0] + 1, CTRL_LIGNES[1] + 1]}, open(SORTIE + ".controle.json", "w"))
 wb.save(SORTIE)
 print(f"{len(wb.sheetnames)} onglets ; {ok}/{len(trace)} chiffres retrouvés")

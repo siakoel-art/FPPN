@@ -308,12 +308,13 @@ def formats_ratios(wb):
                 wd.cell(i, e["Exercice"]).number_format = "0"
 
 
-def appliquer(wb):
+def appliquer(wb, exclus=()):
     for ws in wb.worksheets:
-        brut = ws.title in TITRES and ws.title not in ("10_tableau_de_bord",)
+        brut = ws.title in TITRES and ws.title not in ("10_tableau_de_bord",) and ws.title not in exclus
         if brut:
             preparer_brut(ws)
-        styliser_tableaux(ws)
+        if ws.title not in exclus:
+            styliser_tableaux(ws)
         for row in ws.iter_rows():
             for x in row:
                 if x.value is not None and (x.font is None or x.font.name != POLICE):

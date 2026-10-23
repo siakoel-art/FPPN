@@ -84,6 +84,32 @@ def cpt(an, compte, col):
 SIN = {s["exercice"]: s for s in R["sinistralite"]}
 BIL = {b["exercice"]: b for b in R["bilan"]}
 
+# Formules vers les onglets de données du classeur final (D1_balances, D3, D4, 10_agregats) : aucun montant comptable
+# n'est saisi en dur ; chaque cellule ainsi calculée est contrôlée dans l'onglet 0_controle (valeur publiée).
+D1Q, D3Q, D4Q = "'D1_balances'", "'D3_precomptes_mensuels'", "'D4_grenier_prets'"
+CTRLV = []
+
+
+def FB(compte, an, col):
+    """Montant d'un compte exact de la balance : net_c (crédit - débit), mvt_c, mvt_d, ouv_c (à-nouveaux crédit - débit)."""
+    b = f'{D1Q}!$A:$A,"{compte}",{D1Q}!$C:$C,{an}'
+    return {"net_c": f"-SUMIFS({D1Q}!$L:$L,{b})", "mvt_c": f"SUMIFS({D1Q}!$I:$I,{b})", "mvt_d": f"SUMIFS({D1Q}!$H:$H,{b})",
+            "ouv_c": f"(SUMIFS({D1Q}!$G:$G,{b})-SUMIFS({D1Q}!$F:$F,{b}))"}[col]
+
+
+def AG(cle, an):
+    return f"INDEX('10_agregats'!$D:$J,MATCH(\"{cle}\",'10_agregats'!$A:$A,0),{an - 2019})"
+
+
+def MOB(cloture, col):
+    return f"INDEX('10_actif_mobilisation'!${col}:${col},MATCH(\"{cloture}\",'10_actif_mobilisation'!$A:$A,0))"
+
+
+def ctl(ws, d, col, valeurs):
+    for i, v in enumerate(valeurs):
+        if v is not None:
+            CTRLV.append((ws.title, f"{col}{d + i}", float(v)))
+
 # =====================================================================================================================
 # 18. PSAP maladie : délais de règlement et factures enregistrées tardivement
 # =====================================================================================================================
@@ -199,6 +225,7 @@ OUT["epargne"] = ep
 # =====================================================================================================================
 # 23. Grenier : dépréciation selon la politique de crédit (XI.3)
 # =====================================================================================================================
+BORNES = {"À jour": (-1, 0), "1 à 30 jours": (0, 30), "31 à 90 jours": (30, 90), "91 à 180 jours": (90, 180), "181 à 365 jours": (180, 365), "Plus de 365 jours": (365, 100000)}
 TAUX_GR = {"À jour": 0.0, "1 à 30 jours": 0.0, "31 à 90 jours": 0.0, "91 à 180 jours": 0.40, "181 à 365 jours": 0.80, "Plus de 365 jours": 1.0}
 gr = [dict(t, taux=TAUX_GR.get(t["tranche"])) for t in PV["grenier_tranches"]]
 OUT["grenier_depreciation"] = gr
@@ -237,10 +264,12 @@ ws, r = onglet(wb, "18a_psap_maladie_delais", "Provision maladie : en combien de
     [16, 18, 18, 18, 14, 18, 18, 16, 18])
 d, f = tableau(ws, r, ["Exercice", "Factures enregistrées (crédits 40110000)", "Paiements (débits 40110000)", "Factures non payées en fin de période", "Mois couverts",
                        "Factures moyennes d'un mois", "Délai moyen de paiement (mois)", "Prestations maladie de l'année", "Provision maladie au bilan (en mois de prestations)"],
-               [[LIB[x["exercice"]], x["factures_enregistrees"], x["paiements"], x["dettes_cliniques"], x["mois"], "=B{r}/E{r}", "=D{r}/F{r}", x["prestations_maladie"],
-                 f"={x['provision_maladie']}/(H{{r}}/E{{r}})"] for x in psap_m],
+               [[LIB[x["exercice"]], "=" + FB("40110000", x["exercice"], "mvt_c"), "=" + FB("40110000", x["exercice"], "mvt_d"), "=" + FB("40110000", x["exercice"], "net_c"),
+                 x["mois"], "=B{r}/E{r}", "=D{r}/F{r}", "=" + AG("prest_maladie", x["exercice"]), f"={AG('prov_maladie', x['exercice'])}/(H{{r}}/E{{r}})"] for x in psap_m],
                [None, FCFA, FCFA, FCFA, ENT, FCFA, NB1, FCFA, NB1],
                commentaires={(0, 6): "Exemple de lecture : si la valeur vaut 3, les factures non payées représentent en moyenne trois mois de factures."})
+for col, k in (("B", "factures_enregistrees"), ("C", "paiements"), ("D", "dettes_cliniques"), ("H", "prestations_maladie")):
+    ctl(ws, d, col, [x[k] for x in psap_m])
 note(ws, f + 2, "Lecture : de 2020 à 2022, les factures non payées représentent plusieurs années de factures (arriérés). De 2023 au 31/08/2026, le délai moyen s'approche de la règle des 3 mois sans la respecter chaque année.", 9)
 # ---------------------------------------------------------------- 18b
 ws, r = onglet(wb, "18b_psap_maladie_tardives", "Provision maladie : les factures d'une année arrivent-elles l'année suivante ?", {
@@ -269,13 +298,15 @@ lig = []
 for x in tardives:
     a = x["cloture"]
     pa = next(p for p in psap_m if p["exercice"] == a + 1)
-    lig.append([f"31/12/{a}", next(p["dettes_cliniques"] for p in psap_m if p["exercice"] == a), x["references_annee_precedente"],
-                x["references_identifiees"] / x["factures_sinistres"], pa["prestations_maladie"] / pa["factures_enregistrees"], "=C{r}/D{r}*E{r}",
-                PV["psap_maladie"][str(a)], "=G{r}-F{r}", "=G{r}/F{r}"])
-tableau(ws, r, ["Clôture", "Factures reçues non payées (déjà au passif, 40110000)", "Soins de l'année facturés l'année suivante (18b, années lisibles)", "Part des factures dont l'année est lisible",
+    lig.append([f"31/12/{a}", "=" + FB("40110000", a, "net_c"), x["references_annee_precedente"],
+                x["references_identifiees"] / x["factures_sinistres"], f"={AG('prest_maladie', a + 1)}/{FB('40110000', a + 1, 'mvt_c')}", "=C{r}/D{r}*E{r}",
+                "=" + AG("prov_maladie", a), "=G{r}-F{r}", "=G{r}/F{r}"])
+d18c, _ = tableau(ws, r, ["Clôture", "Factures reçues non payées (déjà au passif, 40110000)", "Soins de l'année facturés l'année suivante (18b, années lisibles)", "Part des factures dont l'année est lisible",
                 "Prestations maladie / factures de cliniques de l'année suivante", "Provision nécessaire estimée (élargie)", "Provision maladie au bilan", "Écart (bilan - nécessaire)", "Bilan / nécessaire (fois)"],
         lig, [None, FCFA, FCFA, PCT, NB2, FCFA, FCFA, FCFA, NB1],
         commentaires={(0, 5): "Estimation élargie : les factures en retard mesurées sont rapportées à la part des factures dont l'année est lisible, puis à l'ensemble des prestations maladie (y compris celles payées hors du compte 40110000). C'est une estimation haute."})
+ctl(ws, d18c, "B", [next(p["dettes_cliniques"] for p in psap_m if p["exercice"] == x["cloture"]) for x in tardives])
+ctl(ws, d18c, "G", [PV["psap_maladie"][str(x["cloture"])] for x in tardives])
 
 # ---------------------------------------------------------------- 19a
 ws, r = onglet(wb, "19a_deces_etats_fin_annee", "Allocations décès : le calcul de fin d'année du FPPN", {
@@ -286,9 +317,10 @@ ws, r = onglet(wb, "19a_deces_etats_fin_annee", "Allocations décès : le calcul
     "Valable pour": "États de fin d'année 2021 à 2025 tels que reçus ; le fichier 2024 porte la mention « BILAN NON EXHAUSTIF ».",
     "Limites": "Le compte 41591000 a été ouvert en 2021 avec un premier crédit qui reprend aussi des dossiers antérieurs : l'écart de 2021 n'est pas une erreur du fichier."},
     [12, 50, 30, 16, 14, 16, 18, 18, 16])
-tableau(ws, r, ["Exercice", "Fichier", "Feuille", "Total imprimé dans le fichier", "Dossiers valorisés", "Somme des lignes", "Crédit de l'année au 41591000", "Écart (crédit - total imprimé)", "Écart lignes - total"],
-        [[x["exercice"], x["fichier"], x["feuille"], x["total_imprime"], x["dossiers_valorises"], x["somme_lignes"], x["credit_41591000"], "=G{r}-D{r}", "=F{r}-D{r}"] for x in etats],
+d19a, _ = tableau(ws, r, ["Exercice", "Fichier", "Feuille", "Total imprimé dans le fichier", "Dossiers valorisés", "Somme des lignes", "Crédit de l'année au 41591000", "Écart (crédit - total imprimé)", "Écart lignes - total"],
+        [[x["exercice"], x["fichier"], x["feuille"], x["total_imprime"], x["dossiers_valorises"], x["somme_lignes"], "=" + FB("41591000", x["exercice"], "mvt_c"), "=G{r}-D{r}", "=F{r}-D{r}"] for x in etats],
         [ENT, None, None, FCFA, ENT, FCFA, FCFA, FCFA, FCFA])
+ctl(ws, d19a, "G", [x["credit_41591000"] for x in etats])
 # ---------------------------------------------------------------- 19b
 ws, r = onglet(wb, "19b_deces_dette_et_provision", "Allocations décès : dette réelle et provision obsèques", {
     "À quoi sert cet onglet": "Suivre la dette des allocations décès et frais funéraires restant à payer, année par année, et la comparer à la provision obsèques du bilan.",
@@ -299,13 +331,26 @@ ws, r = onglet(wb, "19b_deces_dette_et_provision", "Allocations décès : dette 
     "Limites": "La dette du 41591000 repose sur la liste du FPPN : un décès que le FPPN ignore n'y figure pas (voir 19c)."},
     [12, 16, 16, 16, 16, 16, 16, 16, 18, 18])
 d, f = tableau(ws, r, ["Exercice", "Allocations : début", "Allocations ajoutées", "Allocations payées", "Allocations : fin", "Frais funéraires : fin", "Dette décès totale", "Provision obsèques au bilan", "Écart provision - dette", "Provision / dette"],
-               [[LIB[x["exercice"]], x["ouv_41591000"], x["mvt_c_41591000"], x["mvt_d_41591000"], "=B{r}+C{r}-D{r}",
-                 x["ouv_41592000"] + x["mvt_c_41592000"] - x["mvt_d_41592000"], "=E{r}+F{r}", x["provision_obseques"], "=H{r}-G{r}", "=IF(G{r}>0,H{r}/G{r},\"-\")"] for x in stock],
+               [[LIB[x["exercice"]], "=" + FB("41591000", x["exercice"], "ouv_c"), "=" + FB("41591000", x["exercice"], "mvt_c"), "=" + FB("41591000", x["exercice"], "mvt_d"), "=B{r}+C{r}-D{r}",
+                 f"={FB('41592000', x['exercice'], 'ouv_c')}+{FB('41592000', x['exercice'], 'mvt_c')}-{FB('41592000', x['exercice'], 'mvt_d')}", "=E{r}+F{r}",
+                 "=" + AG("prov_obseques", x["exercice"]), "=H{r}-G{r}", "=IF(G{r}>0,H{r}/G{r},\"-\")"] for x in stock],
                [None, FCFA, FCFA, FCFA, FCFA, FCFA, FCFA, FCFA, FCFA, NB1])
+for col, k in (("B", "ouv_41591000"), ("C", "mvt_c_41591000"), ("D", "mvt_d_41591000"), ("H", "provision_obseques")):
+    ctl(ws, d, col, [x[k] for x in stock])
+ctl(ws, d, "F", [x["ouv_41592000"] + x["mvt_c_41592000"] - x["mvt_d_41592000"] for x in stock])
 r = sous_titre(ws, f + 2, "Ancienneté de la dette au 31/08/2026 (règle « premier entré, premier payé »)", 9)
-tableau(ws, r, ["Année d'inscription", "Allocations inscrites", "Payées (premier entré, premier payé)", "Restant dû", "Plus de 3 ans au 31/08/2026 ?"],
-        [[x["millesime"], x["dotation"], x["paye_fifo"], "=B{r}-C{r}", "Oui" if x["millesime"] <= 2022 else "Non"] for x in rest],
+ws.cell(r, 1, "Allocations payées du 01/01/2021 au 31/08/2026 (débits 41591000)")
+ws.cell(r, 2, "=" + "+".join(FB("41591000", a, "mvt_d") for a in range(2021, 2027))).number_format = FCFA
+CTRLV.append((ws.title, f"B{r}", float(paye)))
+PAYE = f"$B${r}"
+r += 2
+d0 = r + 1
+dfi, _ = tableau(ws, r, ["Année d'inscription", "Allocations inscrites", "Payées (premier entré, premier payé)", "Restant dû", "Plus de 3 ans au 31/08/2026 ?"],
+        [[x["millesime"], "=" + FB("41591000", x["millesime"], "mvt_c"), (f"=MAX(0,MIN(B{{r}},{PAYE}))" if k == 0 else f"=MAX(0,MIN(B{{r}},{PAYE}-SUM(B${d0}:B{d0 + k - 1})))"),
+          "=B{r}-C{r}", "Oui" if x["millesime"] <= 2022 else "Non"] for k, x in enumerate(rest)],
         [ENT, FCFA, FCFA, FCFA, None])
+ctl(ws, dfi, "B", [x["dotation"] for x in rest])
+ctl(ws, dfi, "C", [x["paye_fifo"] for x in rest])
 # ---------------------------------------------------------------- 19c
 ws, r = onglet(wb, "19c_deces_declares_tard", "Allocations décès : décès connus après la clôture", {
     "À quoi sert cet onglet": "Mesurer les décès d'une année que le FPPN n'enregistre qu'après le 31 décembre. Ils manquent dans la liste de fin d'année et doivent être ajoutés à la provision (statuts, art. 89).",
@@ -328,8 +373,10 @@ ws, r = onglet(wb, "20_risques_courts", "Provision pour risques courts (statuts,
     "Limites": "Si des cotisations étaient encaissées d'avance pour plusieurs mois, la provision ne serait plus nulle : aucun cas n'a été relevé dans les fichiers de précomptes."},
     [12, 20, 20, 20, 16, 20])
 tableau(ws, r, ["Exercice", "Prestations maladie et décès", "Frais de gestion", "Coût d'un jour", "Jours non couverts", "Provision pour risques courts"],
-        [[LIB[a], SIN[a]["prest_maladie"] + SIN[a]["prest_deces"], SIN[a]["frais_gestion"], f"=(B{{r}}+C{{r}})/{MOIS[a] * 365 // 12}", 0, "=D{r}*E{r}"] for a in ANS],
+        [[LIB[a], f"={AG('prest_maladie', a)}+{AG('prest_deces', a)}", "=" + AG("frais_gestion", a), f"=(B{{r}}+C{{r}})/{MOIS[a] * 365 // 12}", 0, "=D{r}*E{r}"] for a in ANS],
         [None, FCFA, FCFA, FCFA, ENT, FCFA], orange=(4,))
+ctl(ws, r + 1, "B", [SIN[a]["prest_maladie"] + SIN[a]["prest_deces"] for a in ANS])
+ctl(ws, r + 1, "C", [SIN[a]["frais_gestion"] for a in ANS])
 
 # ---------------------------------------------------------------- 21
 ws, r = onglet(wb, "21_epargne_interets", "Épargne : ce que le FPPN doit vraiment, intérêts compris", {
@@ -350,9 +397,13 @@ for rr in (r, r + 1):
 TP, TE = f"$B${r}", f"$B${r + 1}"
 r += 3
 d, f = tableau(ws, r, ["Exercice", "PEP : début", "PEP : fin", "Intérêts PEP de l'année", "EFC : début", "EFC : fin", "Intérêts EFC de l'année", "Intérêts de l'année", "Intérêts cumulés", "Engagement réel (solde + intérêts cumulés)"],
-               [[LIB[e["exercice"]], e["pep_debut"], e["pep_fin"], f"=(B{{r}}+C{{r}})/2*{TP}*{e['mois']}/12", e["efc_debut"], e["efc_fin"], f"=(E{{r}}+F{{r}})/2*{TE}*{e['mois']}/12",
+               [[LIB[e["exercice"]], f"=C{{r}}-{FB('41195100', e['exercice'], 'mvt_c')}+{FB('41195100', e['exercice'], 'mvt_d')}", "=" + FB("41195100", e["exercice"], "net_c"),
+                 f"=(B{{r}}+C{{r}})/2*{TP}*{e['mois']}/12", f"=F{{r}}-{FB('41195200', e['exercice'], 'mvt_c')}+{FB('41195200', e['exercice'], 'mvt_d')}", "=" + FB("41195200", e["exercice"], "net_c"),
+                 f"=(E{{r}}+F{{r}})/2*{TE}*{e['mois']}/12",
                  "=D{r}+G{r}", "=SUM(H$" + str(r + 1) + ":H{r})", "=C{r}+F{r}+I{r}"] for e in ep],
                [None, FCFA, FCFA, FCFA, FCFA, FCFA, FCFA, FCFA, FCFA, FCFA])
+for col, k in (("B", "pep_debut"), ("C", "pep_fin"), ("E", "efc_debut"), ("F", "efc_fin")):
+    ctl(ws, d, col, [e[k] for e in ep])
 
 # ---------------------------------------------------------------- 22
 ws, r = onglet(wb, "22_sante_retraites", "Santé des policiers retraités : ce que l'on peut mesurer", {
@@ -364,7 +415,10 @@ ws, r = onglet(wb, "22_sante_retraites", "Santé des policiers retraités : ce q
     "Limites": "Sans les âges des retraités ni leurs prestations, aucune provision pour cette garantie ne peut être calculée (voir l'annexe des méthodes non retenues)."},
     [14, 16, 18, 18])
 d, f = tableau(ws, r, ["Mois", "Retraités précomptés", "Montant précompté", "Cotisation moyenne"],
-        [[c["libelle"], c["retraites"], c["montant"], "=C{r}/B{r}"] for c in R["cgrae"]], [None, ENT, FCFA, FCFA])
+        [[c["libelle"], f'=SUMIFS({D3Q}!$G:$G,{D3Q}!$A:$A,"CGRAE",{D3Q}!$B:$B,"retour",{D3Q}!$C:$C,{c["annee"]},{D3Q}!$D:$D,{c["mois"]},{D3Q}!$I:$I,"Oui")',
+          f'=SUMIFS({D3Q}!$F:$F,{D3Q}!$A:$A,"CGRAE",{D3Q}!$B:$B,"retour",{D3Q}!$C:$C,{c["annee"]},{D3Q}!$D:$D,{c["mois"]},{D3Q}!$I:$I,"Oui")', "=C{r}/B{r}"] for c in R["cgrae"]], [None, ENT, FCFA, FCFA])
+ctl(ws, d, "B", [c["retraites"] for c in R["cgrae"]])
+ctl(ws, d, "C", [c["montant"] for c in R["cgrae"]])
 # dates de naissance des retraités : présentes seulement dans les fichiers retour de la CGRAE de février à avril 2024
 _pr = pd.read_parquet(os.path.join(BASE, "precomptes.parquet"), columns=["poste", "sens", "annee", "mois", "matricule_cgrae", "date_naissance"])
 _dn0 = _pr[(_pr.poste == "CGRAE") & (_pr.sens == "retour") & _pr.date_naissance.notna()]
@@ -392,7 +446,11 @@ ws, r = onglet(wb, "23_grenier_depreciation", "Prêts du Grenier : dépréciatio
     "Limites": "Les tranches du logiciel sont en jours de retard sur l'échéance la plus ancienne ; la politique parle de créance impayée « de plus de 3 mois », mesure voisine."},
     [14, 22, 12, 18, 12, 18])
 tableau(ws, r, ["Arrêté", "Tranche de retard", "Prêts", "Encours", "Taux de la politique", "Dépréciation"],
-        [[x["arrete"], x["tranche"], x["prets"], x["encours"], x["taux"], "=D{r}*E{r}"] for x in gr], [None, None, ENT, FCFA, PCT, FCFA], orange=(4,))
+        [[x["arrete"], x["tranche"], f'=COUNTIFS({D4Q}!$A:$A,DATE({x["arrete"][:4]},{int(x["arrete"][5:7])},{int(x["arrete"][8:10])}),{D4Q}!$E:$E,">{BORNES[x["tranche"]][0]}",{D4Q}!$E:$E,"<={BORNES[x["tranche"]][1]}")',
+          f'=SUMIFS({D4Q}!$D:$D,{D4Q}!$A:$A,DATE({x["arrete"][:4]},{int(x["arrete"][5:7])},{int(x["arrete"][8:10])}),{D4Q}!$E:$E,">{BORNES[x["tranche"]][0]}",{D4Q}!$E:$E,"<={BORNES[x["tranche"]][1]}")',
+          x["taux"], "=D{r}*E{r}"] for x in gr], [None, None, ENT, FCFA, PCT, FCFA], orange=(4,))
+ctl(ws, r + 1, "C", [x["prets"] for x in gr])
+ctl(ws, r + 1, "D", [x["encours"] for x in gr])
 
 # ---------------------------------------------------------------- 24a
 ws, r = onglet(wb, "24a_ecoulement_epargne", "Adossement : à quel rythme l'épargne sort-elle ?", {
@@ -404,11 +462,18 @@ ws, r = onglet(wb, "24a_ecoulement_epargne", "Adossement : à quel rythme l'épa
     "Limites": "Le passé ne garantit pas l'avenir : une perte de confiance peut accélérer les retraits (Vintzel, diapositives 37 et 38)."},
     [12, 18, 18, 18, 14, 14, 14])
 d, f = tableau(ws, r, ["Exercice", "Épargne du début", "Sorties de l'année", "Épargne de fin", "Taux de sortie PEP", "Taux de sortie EFC", "Taux de sortie total"],
-               [[e["exercice"], e["pep_debut"] + e["efc_debut"], e["pep_sorties"] + e["efc_sorties"], e["pep_fin"] + e["efc_fin"], e["pep_sorties"] / e["pep_debut"],
-                 e["efc_sorties"] / e["efc_debut"], "=C{r}/B{r}"] for e in ep if 2021 <= e["exercice"] <= 2025],
+               [[e["exercice"], f"=D{{r}}-{FB('41195100', e['exercice'], 'mvt_c')}+{FB('41195100', e['exercice'], 'mvt_d')}-{FB('41195200', e['exercice'], 'mvt_c')}+{FB('41195200', e['exercice'], 'mvt_d')}",
+                 f"={FB('41195100', e['exercice'], 'mvt_d')}+{FB('41195200', e['exercice'], 'mvt_d')}", f"={FB('41195100', e['exercice'], 'net_c')}+{FB('41195200', e['exercice'], 'net_c')}",
+                 f"={FB('41195100', e['exercice'], 'mvt_d')}/({FB('41195100', e['exercice'], 'net_c')}-{FB('41195100', e['exercice'], 'mvt_c')}+{FB('41195100', e['exercice'], 'mvt_d')})",
+                 f"={FB('41195200', e['exercice'], 'mvt_d')}/({FB('41195200', e['exercice'], 'net_c')}-{FB('41195200', e['exercice'], 'mvt_c')}+{FB('41195200', e['exercice'], 'mvt_d')})",
+                 "=C{r}/B{r}"] for e in ep if 2021 <= e["exercice"] <= 2025],
                [ENT, FCFA, FCFA, FCFA, PCT, PCT, PCT],
                total=["Moyenne", "", "", "", "=AVERAGE(E{d}:E{f})", "=AVERAGE(F{d}:F{f})", "=AVERAGE(G{d}:G{f})"])
 MOYS, MAXS = f"'24a_ecoulement_epargne'!$G${f + 1}", f"MAX('24a_ecoulement_epargne'!$G${d}:$G${f})"
+_e5 = [e for e in ep if 2021 <= e["exercice"] <= 2025]
+ctl(ws, d, "B", [e["pep_debut"] + e["efc_debut"] for e in _e5])
+ctl(ws, d, "C", [e["pep_sorties"] + e["efc_sorties"] for e in _e5])
+ctl(ws, d, "D", [e["pep_fin"] + e["efc_fin"] for e in _e5])
 
 # ---------------------------------------------------------------- 24b
 ws, r = onglet(wb, "24b_ecarts_liquidite", "Adossement : l'argent disponible couvre-t-il ce qu'il faudra payer dans l'année ?", {
@@ -424,14 +489,19 @@ pic = max(c["prest_maladie"] for c in croiss if c["exercice"] >= 2024)   # anné
 OUT["pic_prestations"] = pic
 lignes = []
 for m in mob:
-    lignes.append([m["cloture"], m["immediat"] + m["moins_1_an"], m["passif_moins_1_an"], m["epargne_echeance_a_etablir"]])
+    lignes.append([m["cloture"], f"={MOB(m['cloture'], 'B')}+{MOB(m['cloture'], 'C')}", "=" + MOB(m["cloture"], "F"), "=" + MOB(m["cloture"], "G")])
 d, f = tableau(ws, r, ["Clôture", "Actif à moins d'un an", "Dettes à moins d'un an", "Épargne due"], lignes, [None, FCFA, FCFA, FCFA])
+ctl(ws, d, "B", [m["immediat"] + m["moins_1_an"] for m in mob])
+ctl(ws, d, "C", [m["passif_moins_1_an"] for m in mob])
+ctl(ws, d, "D", [m["epargne_echeance_a_etablir"] for m in mob])
 r = f + 2
 ws.cell(r, 1, "Hausse maximale observée des prestations maladie (2024 et 2025)")
-ws.cell(r, 2, pic).number_format = PCT
+ws.cell(r, 2, f"=MAX({AG('prest_maladie', 2024)}/{AG('prest_maladie', 2023)}-1,{AG('prest_maladie', 2025)}/{AG('prest_maladie', 2024)}-1)").number_format = PCT
+CTRLV.append((ws.title, f"B{r}", float(pic)))
 PIC = f"$B${r}"
 ws.cell(r + 1, 1, "Prestations maladie 2025")
-ws.cell(r + 1, 2, SIN[2025]["prest_maladie"]).number_format = FCFA
+ws.cell(r + 1, 2, "=" + AG("prest_maladie", 2025)).number_format = FCFA
+CTRLV.append((ws.title, f"B{r + 1}", float(SIN[2025]["prest_maladie"])))
 PM25 = f"$B${r + 1}"
 r += 3
 lig2 = []
@@ -452,13 +522,15 @@ ws, r = onglet(wb, "24c_ecarts_par_annee", "Adossement : écarts de liquidité a
     [18, 20, 18, 18, 18, 18])
 m26 = next(m for m in mob if m["cloture"] == "31/08/2026")
 r = sous_titre(ws, r, "Paramètres", 6)
-dp, fp = tableau(ws, r, ["Paramètre", "Valeur"], [["Actifs à moins d'un an", m26["immediat"] + m26["moins_1_an"]], ["Actifs de 1 à 5 ans", m26["1_a_5_ans"]], ["Actifs à plus de 5 ans ou délai incertain", m26["plus_5_ans_ou_incertain"]],
-                                               ["Dettes à moins d'un an", m26["passif_moins_1_an"]], ["Épargne due", m26["epargne_echeance_a_etablir"]], ["Taux de sortie moyen", "=" + MOYS], ["Part des actifs de 1 à 5 ans disponible chaque année (années 2 à 5)", 0.25]],
+dp, fp = tableau(ws, r, ["Paramètre", "Valeur"], [["Actifs à moins d'un an", f"={MOB('31/08/2026', 'B')}+{MOB('31/08/2026', 'C')}"], ["Actifs de 1 à 5 ans", "=" + MOB("31/08/2026", "D")],
+                                               ["Actifs à plus de 5 ans ou délai incertain", "=" + MOB("31/08/2026", "E")],
+                                               ["Dettes à moins d'un an", "=" + MOB("31/08/2026", "F")], ["Épargne due", "=" + MOB("31/08/2026", "G")], ["Taux de sortie moyen", "=" + MOYS], ["Part des actifs de 1 à 5 ans disponible chaque année (années 2 à 5)", 0.25]],
                  [None, FCFA], orange=())
 for k in (dp + 5, dp + 6):
     ws.cell(k, 2).number_format = PCT
 ws.cell(dp + 6, 2).fill = openpyxl.styles.PatternFill("solid", fgColor="EFAC62")
 A1, A15, A5, DET, EPG, TX, PART = (f"$B${dp + i}" for i in range(7))
+ctl(ws, dp, "B", [m26["immediat"] + m26["moins_1_an"], m26["1_a_5_ans"], m26["plus_5_ans_ou_incertain"], m26["passif_moins_1_an"], m26["epargne_echeance_a_etablir"]])
 r = fp + 2
 lg = []
 for k in range(1, 6):
@@ -488,8 +560,12 @@ fra = {a: SIN[a]["frais_gestion"] for a in range(2021, 2026)}
 OUT["tcam"] = {"cotisations": (cot[2025] / cot[2023]) ** 0.5 - 1, "prestations": (pre[2025] / pre[2023]) ** 0.5 - 1, "frais": (fra[2025] / fra[2023]) ** 0.5 - 1}
 r = sous_titre(ws, r, "Historique 2021 à 2025 et taux de croissance annuels moyens de 2023 à 2025", 5)
 d, f = tableau(ws, r, ["Exercice", "Cotisations", "Prestations", "Frais", "Résultat technique"],
-               [[a, cot[a], pre[a], fra[a], "=B{r}-C{r}-D{r}"] for a in range(2021, 2026)], [ENT, FCFA, FCFA, FCFA, FCFA],
+               [[a, f"={AG('cot_maladie_7010', a)}+{AG('cot_deces_7021', a)}", f"={AG('prest_maladie', a)}+{AG('prest_deces', a)}", "=" + AG("frais_gestion", a), "=B{r}-C{r}-D{r}"] for a in range(2021, 2026)],
+               [ENT, FCFA, FCFA, FCFA, FCFA],
                total=["Croissance annuelle moyenne 2023 à 2025", "=(B{f}/B" + str(r + 3) + ")^(1/2)-1", "=(C{f}/C" + str(r + 3) + ")^(1/2)-1", "=(D{f}/D" + str(r + 3) + ")^(1/2)-1", ""])
+ctl(ws, d, "B", [cot[a] for a in range(2021, 2026)])
+ctl(ws, d, "C", [pre[a] for a in range(2021, 2026)])
+ctl(ws, d, "D", [fra[a] for a in range(2021, 2026)])
 g = f + 1
 for c in "BCD":
     ws[f"{c}{g}"].number_format = PCT
@@ -515,6 +591,7 @@ OUT["projection"] = proj
 
 wb.calculation.fullCalcOnLoad = True
 wb.save(SORTIE_X)
+OUT["controles_formules"] = CTRLV
 json.dump(OUT, open(SORTIE_J, "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
 
 print("PSAP maladie :", [(x["cloture"], round(x["references_annee_precedente"])) for x in tardives])
