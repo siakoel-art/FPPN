@@ -33,7 +33,7 @@ for (po, se), lib in LIB.items():
     OUT["coherence"].append({"base": lib, "controle": "Même matricule plusieurs fois dans le même mois", "lignes": int(n), "anomalies": int(d)})
 
 gb = pd.read_parquet(os.path.join(BASE, "grenier_balances.parquet"))
-g = gb[(gb.portefeuille == "global") & (gb.arrete == "2026-08-31")]
+g = gb[(gb.portefeuille == "global") & (gb.arrete == pd.Timestamp("2026-08-31"))]
 n = len(g)
 lib = "Prêts du Grenier au 31/08/2026"
 for var, mask in (("Date de déblocage", g.date_deblocage.isna()), ("Date de première échéance", g.date_premiere_echeance.isna()), ("Date de dernière échéance", g.date_derniere_echeance.isna()),

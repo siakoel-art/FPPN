@@ -82,7 +82,7 @@ def lire(path, an):
 
 def moyenne_ponderee(ecr, comptes, an, ouverture=0.0):
     """Solde moyen sur l'année, pondéré par le nombre de jours où chaque solde est resté en place."""
-    deb, fin = dt.date(an, 1, 1), dt.date(an, 12, 31)
+    deb, fin = dt.date(an, 1, 1), (dt.date(2026, 8, 31) if an == 2026 else dt.date(an, 12, 31))  # 2026 : arrêté provisoire du 31/08
     mvts = sorted((dt.date.fromisoformat(e["date"]), e["debit"] - e["credit"]) for e in ecr
                   if e["compte"].startswith(comptes) and not e["libelle"].startswith(("A.N", "AN ", "A N")))
     solde, jour, cumul, pic = ouverture, deb, 0.0, ouverture
@@ -111,10 +111,18 @@ for arg in sys.argv[2:]:
         o = sum(v for k, v in ouv.items() if k.startswith(cpts))
         m, s, p = moyenne_ponderee(e, cpts, an, o)
         res[cle] = {"ouverture": round(o), "moyenne": round(m), "cloture": round(s), "pic": round(p)}
+    fm = []
+    for mois in range(1, 13 if an < 2026 else 9):
+        lim = dt.date(an, mois, 28) + dt.timedelta(days=4)
+        lim = lim - dt.timedelta(days=lim.day)          # dernier jour du mois
+        fm.append(round(sum(x["debit"] - x["credit"] for x in e if x["compte"] in ("52210200", "52210201")
+                            and dt.date.fromisoformat(x["date"]) <= lim and not x["libelle"].startswith(("A.N", "AN ", "A N")))))
+    res["dat_efc_fin_de_mois"] = fm
+    res["detail"] = [{"date": x["date"], "compte": x["compte"], "debit": x["debit"], "credit": x["credit"]} for x in sorted(e, key=lambda z: z["date"])]
     res["produits_77"] = round(sum(x["credit"] - x["debit"] for x in e if x["compte"].startswith("77")))
     res["interets_dat_recus"] = round(sum(x["credit"] - x["debit"] for x in e if x["compte"].startswith("77")
                                           and not re.search(r"COURUS", x["libelle"], re.I)))
     res["renouvellements_efc"] = sum(1 for x in e if x["compte"] in ("52210200", "52210201") and "REN" in x["libelle"].upper())
     OUT[an] = res
-    print(an, json.dumps(res, ensure_ascii=False))
+    print(an, json.dumps({k: v for k, v in res.items() if k != "detail"}, ensure_ascii=False))
 json.dump(OUT, open(SORTIE, "w", encoding="utf-8"), ensure_ascii=False, indent=1)

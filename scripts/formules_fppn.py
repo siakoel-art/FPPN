@@ -86,15 +86,15 @@ def registre(Q, P, R):
       "Moyen", DEC, "analyses_fppn.py, onglet 2_flux", "Conforme au texte", r"^(Entrées|Sorties|Fidélisation)")
     f("F-04-03", 4, "Taux de cotisation individuel", "Précompte maladie (ou décès) du mois divisé par le salaire de base du même mois, pour chaque agent.",
       "montant 936 / salaire de base ; montant 8Z6 / salaire de base", "Fichiers 936 détaillés et 8Z6",
-      "Solde : 3,77 % et 1,23 % (fichiers). Barème déclaré : 3,5 % et 1,5 % (entretien du 16/10/2026, à confirmer). Répartition renvoyée à la comptabilité (entretien du 19/10/2026)",
+      "Solde : 3,77 % et 1,23 % (fichiers). Barème déclaré : 3,5 % et 1,5 % (statuts, art. 17). Répartition renvoyée à la comptabilité (entretien du 19/10/2026)",
       "Aucun texte UEMOA ne fixe le taux : le barème relève des statuts ou d'une décision du FPPN (non transmis)",
       "Trois répartitions coexistent pour le même total de 5,00 %.", "Change la sinistralité de chaque garantie (F-04-05)",
-      "Excédent par risque et réserve obligatoire incalculables sans clé unique", "Élevé", "Statuts ou décision du FPPN (à transmettre)",
+      "Excédent par risque et réserve obligatoire incalculables sans clé unique", "Élevé", "Statuts du FPPN, art. 17 (70 % pour la maladie)",
       "analyses_fppn.py, onglet 2_taux_936", ATT, r"^(Taux total|Taux maladie observé|Lignes taux)")
     f("F-04-04", 4, "Clé comptable maladie", "Part des cotisations maladie dans les cotisations maladie et décès, multipliée par 5 %.",
       "7010 / (7010 + 7021) × 5 %", BAL, "Clé propre à la comptabilité, non documentée",
       "Aucun texte : la clé doit découler du barème", "La comptabilité ne suit ni la Solde ni le barème déclaré.", "Écart avec la clé de la Solde mesuré en partie 4",
-      "Résultat par garantie dépendant d'une écriture non documentée", "Élevé", "Statuts ou décision du FPPN (à transmettre)",
+      "Résultat par garantie dépendant d'une écriture non documentée", "Élevé", "Statuts du FPPN, art. 17 (70 % pour la maladie)",
       "analyses_complements_fppn.py, onglet 8_sensibilite_cle", ATT, r"^(Clé comptable maladie)")
     f("F-04-05", 4, "Sinistralité selon la clé de répartition", "Prestations maladie divisées par les cotisations totales multipliées par la part maladie de la clé retenue.",
       "(601 + 6013 + 6018 + 60800007) / [(7010 + 7021) × part maladie]", BAL, NC,
@@ -137,7 +137,7 @@ def registre(Q, P, R):
       "analyses_fppn.py, onglet 3_sinistralite_resultat", "Divergent, justifié", r"^(Min S/C décès|Max S/C décès|Prest dec|Cot dec)")
     f("F-05-04", 5, "Sinistralité sans MEDOC et sans bons de prise en charge", "Variantes du taux réglementaire : cotisations MEDOC retirées du dénominateur, ou bons de prise en charge et bons de caisse retirés du numérateur.",
       "(60 + 6901 - 7901) / (70 - 7022 + 7906 - 6906) ; (60 - 60800007 - 60800008 + 6901 - 7901) / (70 + 7906 - 6906)", BAL, NC,
-      DEC + ", § 1.2.1.2.5 (formule de base)", "Variantes de sensibilité : elles montrent l'effet de comptes dont la nature est à préciser.",
+      DEC + ", § 1.2.1.2.5 (formule de base)", "Variantes de sensibilité : elles montrent l'effet de comptes dont la nature n'est pas documentée.",
       f"2025 : {_pc(ps[2025]['taux_sans_medoc'])} sans MEDOC ; {_pc(ps[2025]['taux_sans_bons'])} sans bons", "Écarts faibles : la conclusion ne dépend pas de ces comptes",
       "Faible", DEC, "provisions_fppn.py, onglet 12_sinistralite_variantes", "Divergent, justifié", r"^(Variante)")
     f("F-05-05", 5, "Taux de frais de gestion", "Frais de gestion (comptes 61 à 66, hors prime d'assurance décès) divisés par les cotisations maladie et décès.",
@@ -154,7 +154,7 @@ def registre(Q, P, R):
     # ------------------------------------------------------------------ Partie 6 : épargne
     f("F-06-01", 6, "Dette d'épargne", "Somme des comptes PEP et EFC dus aux mutualistes.", "41195100 + 41195200 (+ 47120000 depuis 2025)", BAL,
       "Comptes de dettes du FPPN", REX + ", art. 11 (provision mathématique) et art. 12 à 15 (risques longs)",
-      "Le FPPN suit l'épargne en dettes. Si l'EFC promet plus que l'épargne versée, une provision mathématique est due (règlement de l'EFC non reçu).",
+      "Le FPPN suit l'épargne en dettes. Si l'EFC promet plus que l'épargne versée, une provision mathématique est due (cahier des charges EFC et PEP 2021 : capital versé en fin de carrière).",
       "Non mesurable sans règlement de l'EFC", "Engagement sous-estimé si l'EFC garantit un capital", "Élevé", REX, "analyses_fppn.py, onglet 6_bilan",
       ATT, r"^(Épargne|EFC 20|PEP 20|Hausse épargne|Var PEP)")
     f("F-06-02", 6, "Couverture de l'épargne", "Actifs réservés à l'épargne divisés par la dette d'épargne.", "(banques et DAT dédiés + FCP) / (41195100 + 41195200)", BAL, NC,
@@ -171,17 +171,17 @@ def registre(Q, P, R):
       "Σ encours(retard > 30 j) / Σ encours", GRE, NC,
       "Aucun texte de la mutualité. Référence technique : indicateurs de portefeuille à risque des systèmes financiers décentralisés (BCEAO)",
       "Indicateur standard du crédit, faute de texte de la mutualité.", f"PAR30 de {_pc(R['grenier_par']['par30'])} au 31/08/2026", "Retard mesuré sur l'export du logiciel, pas sur les précomptes",
-      "Moyen", "BCEAO, instruction applicable aux SFD (texte à transmettre)", "analyses_fppn.py, onglet 5_grenier_retards", "Sans texte applicable", r"^(PAR30|Prêts retard|Part prêts retard)")
+      "Moyen", "Politique de crédit du Grenier ; pratique des SFD", "analyses_fppn.py, onglet 5_grenier_retards", "Sans texte applicable", r"^(PAR30|Prêts retard|Part prêts retard)")
     f("F-07-02", 7, "Intervalle de Wilson", "Encadrement à 95 % de la proportion de prêts en retard.",
       "(p + z²/2n ± z √(p(1-p)/n + z²/4n²)) / (1 + z²/n), z = 1,96", GRE, "Sans objet", "Aucun texte applicable",
       "Méthode adaptée aux proportions faibles.", "Intervalle publié en partie 7", "Indépendance des prêts supposée", "Faible",
       "Statistique classique (Wilson, 1927)", "analyses_complements_fppn.py, onglet 8_ic_grenier", "Sans texte applicable", r"^(IC bas retard|IC haut retard)")
     f("F-07-03", 7, "Dépréciation des prêts en retard", "Encours de chaque tranche de retard multiplié par le taux de dépréciation de la tranche, puis additionné.",
       "Σ encours(tranche k) × taux(k)", GRE, "Aucune dépréciation passée depuis 2022 (compte 49 non mouvementé)",
-      "PCMS et SYSCOHADA révisé : principe de prudence. Taux par tranche : barème BCEAO des SFD (texte à transmettre)",
+      "PCMS et SYSCOHADA révisé : principe de prudence. Taux par tranche : politique de crédit du Grenier (40 %, 80 %, 100 %)",
       "La dépréciation réduit l'actif ; elle n'est pas une provision technique (" + REX + ", art. 8). Calcul en attente du barème.",
       "Encours de plus de 90 jours connu par tranche (partie 9)", "Actif et fonds propres surévalués sans dépréciation", "Moyen",
-      "PCMS ; BCEAO (instruction SFD, à transmettre)", "provisions_fppn.py, onglet 12_grenier_tranches", ATT, r"^(Encours 180|Encours 90|Perte|Prov180|Prov90|Grenier 90)")
+      "PCMS ; politique de crédit du Grenier", "provisions_fppn.py, onglet 12_grenier_tranches", ATT, r"^(Encours 180|Encours 90|Perte|Prov180|Prov90|Grenier 90)")
     f("F-07-04", 7, "Précomptes rapportés aux échéances", "Montant précompté au poste 9X4 divisé par les échéances dues des prêts en cours.", "précompte 9X4 du mois / Σ échéances du mois",
       PREC + " ; " + GRE, NC, "Aucun texte applicable", "Contrôle de cohérence entre deux sources.", "76 à 85 % des échéances précomptées",
       "Paiements hors précompte non connus", "Moyen", "Rapprochement de sources (pratique d'audit)", "analyses_fppn.py, onglet 5_grenier_echeances",
@@ -189,22 +189,22 @@ def registre(Q, P, R):
 
     # ------------------------------------------------------------------ Partie 9 : bilan et provisions
     f("F-09-01", 9, "PSAP en mois de prestations", "Provision pour sinistres à payer divisée par les prestations mensuelles moyennes de l'année.",
-      "PSAP / (prestations de l'année / nombre de mois)", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026, à confirmer)",
+      "PSAP / (prestations de l'année / nombre de mois)", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026)",
       REX + ", art. 10 : PSAP calculée exercice par exercice, dossier par dossier, plus les sinistres non déclarés",
       "Indicateur de cohérence, pas une norme : une provision figée ne suit pas les prestations.", f"Maladie : {_nb(pr[2025]['psap_en_mois_de_prestations'], 2)} mois de prestations en 2025 ; décès : {_nb(pr[2025]['psap_deces_en_mois'], 2)} mois",
       "Provision ni suffisante ni excessive démontrable sans base de prestations", "Élevé", REX, "provisions_fppn.py, onglet 12_psap_rapprochement",
       ATT, r"^(Mois 20|Prov tot|Prest mens|PSAP)")
     f("F-09-02", 9, "PSAP et dettes envers les cliniques", "Provision maladie comparée aux factures des cliniques déjà enregistrées et non payées.",
-      "PSAP maladie / 40110000", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026, à confirmer)",
+      "PSAP maladie / 40110000", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026)",
       REX + ", art. 10 (dossiers connus + tardifs) ; PCMS (dettes fournisseurs en classe 4)",
       "Une facture enregistrée en dette n'a plus à être provisionnée : la PSAP doit couvrir les soins survenus et non encore facturés.",
       "Rapport mesuré chaque année (partie 9)", "Double compte possible entre dettes et provision", "Élevé", REX + " ; PCMS",
       "provisions_fppn.py, onglet 12_psap_rapprochement", ATT, r"^(Dettes cliniques|Rapport PSAP)")
     f("F-09-03", 9, "Sinistres tardifs (méthode CIMA)", "Coefficients de déclaration tardive observés, multipliés par les sinistres déclarés l'année de survenance et par le coût moyen.",
       "IBNR = Σ_n coef(n) × N_déclarés(n, n) × coût moyen(n) ; coef = Σ_k moyenne[N(n, n+k) / N(n, n)]", "Bases de prestations avec dates de survenance et de déclaration (non reçues)",
-      NC, REX + ", art. 10 (estimation des sinistres non déclarés, sans méthode fixée) ; Code CIMA (méthode de référence, article à citer)",
+      NC, REX + ", art. 10 (estimation des sinistres non déclarés, sans méthode fixée) ; circulaire n° 00230/CIMA/CRCA/PDT/2005 (méthode de référence)",
       "Le texte UEMOA impose l'estimation sans dire comment : la méthode CIMA sert de référence technique.", "Non calculable sans les bases", "Peu d'années d'historique",
-      "Élevé", "Code CIMA (référence technique, texte à transmettre)", "À produire à réception des bases", ATT, r"^(IBNR)")
+      "Élevé", "Circulaire n° 00230/CIMA/CRCA/PDT/2005", "À produire à réception des bases", ATT, r"^(IBNR)")
     f("F-09-04", 9, "Provision mathématique", "Valeur actuelle des prestations promises moins valeur actuelle des cotisations futures.",
       "PM = Σ_t prestation(t) × p(t) × v^t - Σ_t cotisation(t) × p(t) × v^t ; v = 1 / (1 + i)", "Règlements de l'EFC et de la santé des retraités, âges (non reçus)",
       "Aucune provision mathématique au bilan", REX + ", art. 11 : table de mortalité, taux d'intérêt technique, chargements de gestion",
@@ -216,14 +216,14 @@ def registre(Q, P, R):
     f("F-09-06", 9, "Indemnités de départ à la retraite du personnel", "Somme, pour chaque salarié, de l'indemnité prévue par la convention collective à son départ, pondérée par la probabilité d'être présent et actualisée, au prorata de l'ancienneté acquise.",
       "PIDR = Σ_i IDR_i × p_i × v^(t_i) × ancienneté acquise_i / ancienneté au départ_i ; IDR = salaire × (30 % par année jusqu'à 5 ans, 35 % de 6 à 10, 40 % au-delà) ; charges patronales : fiscales 2,80 %, retraite 7,70 % (plafond 3 375 000 FCFA), prestations familiales 5,75 % et risques professionnels 2 % (plafond 75 000 FCFA)",
       "DISA 2021, 2022, 2023 et 2025 (CNPS) ; récapitulatifs de salaires 2024 (CMP) et 2025 (Grenier) ; décret n° 2017-210 ; convention collective du 19/07/1977, art. 40", "Convention collective appliquée à l'ancienneté acquise ; provision reprise et dotée en totalité chaque année (chef comptable, 19/10/2026) ; proche des droits acquis recalculés",
-      "SYSCOHADA révisé (engagements de retraite, méthode actuarielle) ; convention collective interprofessionnelle de Côte d'Ivoire (barème, à confirmer par le texte)",
-      "Recalcul agent par agent (unités de crédit projetées) dans les onglets 14a à 14c du classeur v9 ; comparaison au compte 196 et aux droits acquis.", "Provision 2025 du FPPN : " + _f(P["pidr"][5]["provision_196"]), "Âge de départ, dates d'embauche et entités à confirmer",
+      "SYSCOHADA révisé (engagements de retraite, méthode actuarielle) ; convention collective interprofessionnelle du 19/07/1977, art. 40 (âge de départ, plafond) ; décret n° 2017-210, art. 4 et 5 (barème)",
+      "Recalcul agent par agent (unités de crédit projetées) dans les onglets 14a à 14c du classeur v9 ; comparaison au compte 196 et aux droits acquis.", "Provision 2025 du FPPN : " + _f(P["pidr"][5]["provision_196"]), "Âge de départ, dates d'embauche et entités demandés au FPPN",
       "Moyen", "Décret n° 2017-210, art. 4 et 5 ; convention collective du 19/07/1977, art. 40 ; IAS 19, § 67, 83 et 145 (bonne pratique)", "donnees_v9_fppn.py, onglets 14a à 14c", "Divergent, justifié", r"^(PIDR)")
     f("F-09-10", 9, "Allocations décès restant à payer (méthode du FPPN)", "Décès de l'année dont l'allocation n'est pas payée, valorisés au barème par grade.",
-      "Σ dossiers non payés × allocation du grade (sous-officier 1 000 000 FCFA, officier à confirmer, commissaire 2 000 000 FCFA)", "Liste des décès de la direction du personnel ; allocations payées",
-      "Liste des décès moins allocations payées, valorisée au barème (chef comptable, 19/10/2026, à confirmer) ; compte de comptabilisation non précisé",
+      "Σ dossiers non payés × allocation du grade (cartographie des risques : sous-officier 1 400 000 FCFA, officier 1 600 000 FCFA)", "Liste des décès de la direction du personnel ; allocations payées",
+      "Liste des décès moins allocations payées, valorisée au barème (chef comptable, 19/10/2026), comptabilisée au compte 41591000",
       REX + ", art. 10 : dossier par dossier, plus les sinistres non déclarés",
-      "Méthode proche du dossier par dossier, sans les sinistres tardifs (décès d'ayants droit non déclarés). Le compte utilisé est à préciser : le compte 15802000 ne bouge pas.",
+      "Méthode proche du dossier par dossier, sans les sinistres tardifs (décès d'ayants droit non déclarés). Le calcul est comptabilisé au compte 41591000 ; le compte 15802000 ne bouge pas.",
       "Non mesurable sans les fichiers des décès (PBC, item 92)", "Allocations restant à payer peut-être non comptabilisées", "Élevé", REX + ", art. 10",
       "À produire à réception des fichiers", ATT, r"^(Allocations décès)")
     f("F-09-07", 9, "Adossement par échéance", "Actif mobilisable dans chaque tranche de délai comparé au passif exigible dans la même tranche.",
@@ -234,7 +234,7 @@ def registre(Q, P, R):
       "Couverture(s) = actif retenu(s) / (passif < 1 an + 41195100 + 41195200) ; scénario 2 : actif - 47111100 - 47111105 ; scénario 3 : scénario 2 - 47111104 - 22200000 ; scénario 4 : actif à un an / passif à un an",
       BAL, NC, REX + ", art. 17, 20, 21 et 27 ; " + DEC + ", section II, § 2.1 (actifs admis / engagements réglementés)",
       "Les scénarios appliquent des règles tirées des textes (valeur de marché, actifs admis, activités sanitaires séparées, valeur liquidative), et non des taux de décote. Les engagements non provisionnés ne sont pas au dénominateur : chaque couverture est un maximum.",
-      "Voir la partie 9 (scénarios de couverture)", "Liste officielle des actifs admis non reçue (décision ministérielle, PBC, item 54)", "Élevé",
+      "Voir la partie 9 (scénarios de couverture)", "Actifs admis appréciés selon le règlement d'exécution n° 004/2022 (art. 17, 20 et 21)", "Élevé",
       REX + ", art. 20 ; PCMS", "rapport_v7_fppn.py (scénarios) ; ratios_airms_fppn.py, onglet 10_mobilisation", "Conforme au texte", r"^(Actif sc|Couv sc|Engagements 20|Scénario|Conclusion sc|RE sc)")
     f("F-09-12", 9, "Sorties d'épargne observées", "Débits annuels des comptes d'épargne PEP et EFC, utilisés comme ordre de grandeur des sorties futures.",
       "Sorties(n) = débits 41195100(n) + débits 41195200(n) ; trimestre = max des sorties annuelles / 4", BAL, NC,
@@ -325,7 +325,7 @@ def registre(Q, P, R):
     f("F-03-10", 3, "Contrôles croisés entre documents", "Comparaison au franc près des montants d'une même grandeur dans deux documents indépendants.",
       "Écart = montant (document 1) - montant (document 2)", "États financiers 2020 au 31/08/2026 ; balances ; étude des ratios du FPPN ; fichiers 8Z6 ; rapprochements bancaires",
       NC, "Aucun texte ; bonne pratique d'audit (seconde source)", "Contrôle de cohérence.", "Concordance des totaux, sauf 2023 (deux versions) et résultat au 31/08/2026",
-      "Version des comptes 2023 à confirmer", "Moyen", "Documents reçus le 22/10/2026", "donnees_v9_fppn.py, onglet 17_controles_croises", "Sans texte applicable", r"^(EF |Adh FPPN|Lignes 8Z6|ERB )")
+      "Deux versions des comptes 2023 (version approuvée demandée)", "Moyen", "Documents reçus le 22/10/2026", "donnees_v9_fppn.py, onglet 17_controles_croises", "Sans texte applicable", r"^(EF |Adh FPPN|Lignes 8Z6|ERB )")
     return L
 
 
