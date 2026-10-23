@@ -146,5 +146,6 @@ for sl in prs.slides:
             encadre(sl, 1.4, 3.85, 31.2, 2.0, [lect_], "Comment lire")''')
 
 exec(open(os.path.join(ICI, "etape2.py"), encoding="utf-8").read())
+exec(open(os.path.join(ICI, "etape3.py"), encoding="utf-8").read())
 open(os.path.join(REPO, "rapport_v12_fppn.py"), "w", encoding="utf-8").write(s)
 print("rapport_v12_fppn.py écrit")

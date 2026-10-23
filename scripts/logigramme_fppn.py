@@ -360,3 +360,153 @@ def circuit_facture(slide, y0=4.0):
     lg.lien("f4", "f11", de="bas", vers="haut", pointille=True)
     lg.lien("f6", "f12", de="droite", vers="haut", pointille=True)
     return lg
+
+
+# ---------------------------------------------------------------------------
+# Circuits des cotisations par produit : logigrammes du FPPN (« FLOW_CHART_COTISATION_ET_PRODUITS_DEPARGNE_1.pptx »)
+# redessinés, complétés des contrôles absents relevés par Adenka (cadre rouge)
+# ---------------------------------------------------------------------------
+def _grille(lg, y0, noms, h_couloir):
+    lg.couloirs(noms, y0, h_couloir)
+    return [5.6 + k * 3.85 for k in range(7)], 3.4, 1.45
+
+
+def circuit_epargne(slide, y0=3.9, h_couloir=2.05):
+    """EFC et PEP : souscription, Easy money, fichier aller, prélèvement, retour, comptabilisation."""
+    lg = Logigramme(slide, 8)
+    X, L, H = _grille(lg, y0, ["Policier", "FPPN : service informatique", "Service du personnel", "Trésor (Solde)", "FPPN : service comptable"], h_couloir)
+    c = lg.centre_couloir
+    lg.noeud("e1", "debut", "Adhésion\nfiche d'adhésion", X[0], c(0, H), L, H)
+    lg.noeud("e2", "decision", "Mécano ?", X[0], c(1, 1.9), L, 1.9)
+    lg.noeud("e3", "etape", "Création du mécano\net ajout à la fiche", X[1], c(2, H), L, H)
+    lg.noeud("e4", "etape", "Intégration dans\nEasy money", X[2], c(1, H), L, H)
+    lg.noeud("e5", "document", "Fichier recensant\nles adhérents", X[3], c(1, H), L, H)
+    lg.noeud("e6", "etape", "Fichier de précompte\net calcul des cotisations", X[3], c(2, H), L, H)
+    lg.noeud("e7", "document", "Fichier aller", X[4], c(2, H), L, H)
+    lg.noeud("e8", "etape", "Prélèvement\nsur salaire", X[4], c(3, H), L, H)
+    lg.noeud("e9", "document", "Fichier retour\npapier et numérique", X[5], c(3, H), L, H)
+    lg.noeud("e10", "etape", "Réception du fichier\nretour numérique", X[5], c(1, H), L, H)
+    lg.noeud("e11", "etape", "Affectation des sommes\naux produits (DFC)", X[5], c(4, H), L, H)
+    lg.noeud("e12", "fin", "Comptabilisation\ndes précomptes", X[6], c(4, H), L, H)
+    lg.noeud("a1", "alerte", "Aucun rapprochement\ndes fichiers aller et retour", X[6], c(1, H), L, H)
+    lg.noeud("a2", "alerte", "Aucun intérêt calculé,\naucun relevé individuel", X[6], c(3, H), L, H)
+    lg.lien("e1", "e2")
+    lg.lien("e2", "e3", "non", de="bas", vers="gauche")
+    lg.lien("e2", "e4", "oui")
+    lg.lien("e3", "e4", de="droite", vers="bas")
+    lg.lien("e4", "e5")
+    lg.lien("e5", "e6")
+    lg.lien("e6", "e7")
+    lg.lien("e7", "e8")
+    lg.lien("e8", "e9")
+    lg.lien("e9", "e10", de="haut", vers="bas")
+    lg.lien("e9", "e11", de="bas", vers="haut")
+    lg.lien("e11", "e12")
+    lg.lien("e10", "a1", pointille=True)
+    lg.lien("e12", "a2", de="haut", vers="bas", pointille=True)
+    return lg
+
+
+def circuit_gna(slide, y0=3.9, h_couloir=2.05):
+    """Flotte automobile (GNA) : cotation, plateforme du GNA, collecte, retour, trop-perçu, commission."""
+    lg = Logigramme(slide, 8)
+    X, L, H = _grille(lg, y0, ["Policier", "FPPN : service informatique", "Trésor (Solde)", "GNA", "FPPN : service comptable"], h_couloir)
+    c = lg.centre_couloir
+    lg.noeud("g1", "debut", "Souscription,\nenvoi des documents", X[0], c(0, H), L, H)
+    lg.noeud("g2", "etape", "Calcul des cotations,\nprésentation au policier", X[0], c(1, H), L, H)
+    lg.noeud("g3", "decision", "Accord ?", X[1], c(1, 1.9), L, 1.9)
+    lg.noeud("g4", "etape", "Enregistrement sur la\nplateforme du GNA", X[2], c(1, H), L, H)
+    lg.noeud("g5", "document", "Fichier aller\n(liste des bénéficiaires)", X[3], c(1, H), L, H)
+    lg.noeud("g6", "etape", "Collecte des fonds :\ndirect, précompte, FPPN", X[3], c(2, H), L, H)
+    lg.noeud("g7", "document", "Fichier retour", X[4], c(2, H), L, H)
+    lg.noeud("g8", "etape", "Dépôt du retour sur\nla plateforme du GNA", X[4], c(1, H), L, H)
+    lg.noeud("g9", "etape", "Demande de\ntrop-perçu", X[5], c(0, H), L, H)
+    lg.noeud("g10", "etape", "Remboursement\ndu trop-perçu", X[5], c(3, H), L, H)
+    lg.noeud("g11", "etape", "Virement de la\ncommission (20 %)", X[6], c(3, H), L, H)
+    lg.noeud("g12", "fin", "Comptabilisation\nde la commission", X[6], c(4, H), L, H)
+    lg.noeud("a1", "alerte", "Assiette des 20 %\nnon documentée", X[5], c(4, H), L, H)
+    lg.noeud("a2", "alerte", "Retour de janvier\n2026 manquant", X[4], c(3, H), L, H)
+    lg.lien("g1", "g2")
+    lg.lien("g2", "g3")
+    lg.lien("g3", "g4", "oui")
+    lg.lien("g4", "g5")
+    lg.lien("g5", "g6")
+    lg.lien("g6", "g7")
+    lg.lien("g7", "g8")
+    lg.lien("g9", "g10", de="bas", vers="haut")
+    lg.lien("g10", "g11")
+    lg.lien("g11", "g12")
+    lg.lien("g12", "a1", pointille=True)
+    lg.lien("g7", "a2", de="bas", vers="haut", pointille=True)
+    return lg
+
+
+def circuit_cgrae(slide, y0=3.9, h_couloir=2.55):
+    """Pension de retraite (CGRAE) : adhésion, fichier en ligne, prélèvement sur pension, virement selon le barème."""
+    lg = Logigramme(slide, 8)
+    X, L, H = _grille(lg, y0, ["Policier retraité", "FPPN : service informatique", "CGRAE", "FPPN : service comptable"], h_couloir)
+    c = lg.centre_couloir
+    lg.noeud("c1", "debut", "Adhésion sur\nfiche d'adhésion", X[0], c(0, H), L, H)
+    lg.noeud("c2", "decision", "Mécano ?", X[0], c(1, 1.9), L, 1.9)
+    lg.noeud("c3", "etape", "Création du mécano\net ajout à la fiche", X[1], c(0, H), L, H)
+    lg.noeud("c4", "etape", "Intégration au\nfichier en ligne", X[2], c(1, H), L, H)
+    lg.noeud("c5", "etape", "Fichier de précompte :\n2,5 % de la pension\nnette MUGEFCI + forfait", X[3], c(1, 1.8), L, 1.8)
+    lg.noeud("c6", "document", "Fichier aller", X[4], c(1, H), L, H)
+    lg.noeud("c7", "etape", "Prélèvement sur la\npension (quotité cessible)", X[4], c(2, H), L, H)
+    lg.noeud("c8", "document", "Fichier retour\nnumérique", X[5], c(2, H), L, H)
+    lg.noeud("c9", "etape", "Réception du\nfichier retour", X[5], c(1, H), L, H)
+    lg.noeud("c10", "etape", "Virement des fonds\nselon le barème", X[6], c(2, H), L, H)
+    lg.noeud("c11", "fin", "Comptabilisation\ndu virement", X[6], c(3, H), L, H)
+    lg.noeud("a1", "alerte", "Retraités sans quotité\ncessible non précomptés", X[3], c(2, H), L, H)
+    lg.noeud("a2", "alerte", "Retours de janvier et\njuin 2024 manquants", X[5], c(3, H), L, H)
+    lg.lien("c1", "c2")
+    lg.lien("c2", "c3", "non", de="droite", vers="bas")
+    lg.lien("c2", "c4", "oui")
+    lg.lien("c3", "c4", de="droite", vers="haut")
+    lg.lien("c4", "c5")
+    lg.lien("c5", "c6")
+    lg.lien("c6", "c7")
+    lg.lien("c7", "c8")
+    lg.lien("c8", "c9", de="haut", vers="bas")
+    lg.lien("c8", "c10")
+    lg.lien("c10", "c11")
+    lg.lien("c7", "a1", de="gauche", vers="droite", pointille=True)
+    lg.lien("c8", "a2", de="bas", vers="haut", pointille=True)
+    return lg
+
+
+def circuit_maladie_deces(slide, y0=3.9, h_couloir=2.05):
+    """Maladie et décès : carte de santé, fichier de précompte du service du personnel, prélèvement, retour."""
+    lg = Logigramme(slide, 8)
+    X, L, H = _grille(lg, y0, ["Policier", "FPPN : service informatique", "Service du personnel", "Trésor (Solde)", "FPPN : service comptable"], h_couloir)
+    c = lg.centre_couloir
+    lg.noeud("m1", "debut", "Adhésion\nfiche d'adhésion", X[0], c(0, H), L, H)
+    lg.noeud("m2", "decision", "Carte de santé\nFPPN ?", X[0], c(1, 1.9), L, 1.9)
+    lg.noeud("m3", "etape", "Pas de\nprestation", X[1], c(0, H), L, H)
+    lg.noeud("m4", "etape", "Intégration\naux adhérents", X[2], c(1, H), L, H)
+    lg.noeud("m5", "document", "Fichier recensant\nles adhérents", X[3], c(1, H), L, H)
+    lg.noeud("m6", "etape", "Fichier de précompte\net calcul des cotisations", X[3], c(2, H), L, H)
+    lg.noeud("m7", "document", "Fichier aller\n936 et 8Z6", X[4], c(2, H), L, H)
+    lg.noeud("m8", "etape", "Prélèvement\nsur la solde", X[4], c(3, H), L, H)
+    lg.noeud("m9", "document", "Fichier retour\npapier et numérique", X[5], c(3, H), L, H)
+    lg.noeud("m10", "etape", "Réception du fichier\nretour numérique", X[5], c(1, H), L, H)
+    lg.noeud("m11", "etape", "Affectation des sommes\naux produits (DFC)", X[5], c(4, H), L, H)
+    lg.noeud("m12", "fin", "Comptabilisation\ndes précomptes", X[6], c(4, H), L, H)
+    lg.noeud("a1", "alerte", "Fichier aller non\ntransmis au FPPN", X[4], c(1, H), L, H)
+    lg.noeud("a2", "alerte", "3,77 % et 1,23 % retenus,\nstatuts : 3,5 % et 1,5 %", X[2], c(2, H), L, H)
+    lg.noeud("a3", "alerte", "Décembre 2024 :\nfichiers vides", X[6], c(3, H), L, H)
+    lg.lien("m1", "m2")
+    lg.lien("m2", "m3", "non", de="droite", vers="bas")
+    lg.lien("m2", "m4", "oui")
+    lg.lien("m4", "m5")
+    lg.lien("m5", "m6")
+    lg.lien("m6", "m7")
+    lg.lien("m7", "m8")
+    lg.lien("m8", "m9")
+    lg.lien("m9", "m10", de="haut", vers="bas")
+    lg.lien("m9", "m11", de="bas", vers="haut")
+    lg.lien("m11", "m12")
+    lg.lien("m7", "a1", de="haut", vers="bas", pointille=True)
+    lg.lien("m6", "a2", de="gauche", vers="droite", pointille=True)
+    lg.lien("m9", "a3", pointille=True)
+    return lg

@@ -3,6 +3,10 @@ BOULES = "🔴🟠🟡🟢⚪"
 STATUT_BOULE = {"Conforme": "🟢", "Non conforme": "🔴", "Au-dessus": "🟠", "En attente": "🟡", "À apprécier": "⚪"}
 
 
+LEG_CONF = [("🔴", "Non conforme", "norme non respectée"), ("🟠", "Non démontré", "non démontré par les documents reçus"), ("🟡", "En attente", "document du FPPN attendu"),
+            ("⚪", "À apprécier", "norme non chiffrée"), ("🟢", "Conforme", "norme respectée")]
+
+
 def boule_statut(st):
     """Boule d'un statut de ratio (« Non conforme (indicatif) » compte comme « Non conforme »)."""
     return STATUT_BOULE.get(str(st).split(" (")[0].strip(), "")

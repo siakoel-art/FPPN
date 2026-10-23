@@ -604,6 +604,10 @@ BOULES = "🔴🟠🟡🟢⚪"
 STATUT_BOULE = {"Conforme": "🟢", "Non conforme": "🔴", "Au-dessus": "🟠", "En attente": "🟡", "À apprécier": "⚪"}
 
 
+LEG_CONF = [("🔴", "Non conforme", "norme non respectée"), ("🟠", "Non démontré", "non démontré par les documents reçus"), ("🟡", "En attente", "document du FPPN attendu"),
+            ("⚪", "À apprécier", "norme non chiffrée"), ("🟢", "Conforme", "norme respectée")]
+
+
 def boule_statut(st):
     """Boule d'un statut de ratio (« Non conforme (indicatif) » compte comme « Non conforme »)."""
     return STATUT_BOULE.get(str(st).split(" (")[0].strip(), "")
@@ -823,6 +827,35 @@ _omis(_snap(), {"titre": "Réponse aux quatre questions de la mission", "sous_ti
         implication="La transmission des documents listés conditionne la version définitive du rapport. Les items 57, 71, 72 et 92 sont prioritaires : ils débloquent à la fois les engagements, les provisions et l'adossement.",
         source="Source : dossier de préparation de la mission (13/10/2026) ; analyses Adenka, parties 6 et 9 ; PBC pointée au 19/10/2026")
 
+# ---- v13 : matrice de criticité des constats (criticité × horizon de la recommandation qui y répond)
+ROUGE_M, JAUNE_M, VERT_M, ORANGE_M = "C00000", "FFD966", "70AD47", "EFAC62"
+_CRIT_L = ["Critique", "Élevé", "Moyen", "Faible"]
+_HOR_C = ["Court terme (moins de 6 mois)", "Moyen terme (6 à 18 mois)", "Long terme (plus de 18 mois)"]
+_PLACE = {("Critique", 0): "Provisions maladie et décès (rec. 1)\nÉpargne PEP et EFC (rec. 2)\nConformité prudentielle (rec. 4)",
+          ("Critique", 1): "Adossement actif-passif (rec. 5)",
+          ("Élevé", 0): "Fonds propres (rec. 4)\nDonnées (rec. 3)",
+          ("Élevé", 1): "Sinistralité maladie (rec. 6)\nPlacements (rec. 5)\nGouvernance (rec. 7)",
+          ("Moyen", 1): "Prêts du Grenier (rec. 7)",
+          ("Faible", 2): "Personnel du FPPN (rec. 9)"}
+_ZONES_C = {"Critique": [ROUGE_M, ROUGE_M, ORANGE_M], "Élevé": [ROUGE_M, ORANGE_M, JAUNE_M], "Moyen": [ORANGE_M, JAUNE_M, VERT_M], "Faible": [JAUNE_M, VERT_M, VERT_M]}
+_BOULE_CRIT = {"Critique": "🔴", "Élevé": "🟠", "Moyen": "🟡", "Faible": "🟢"}
+_MAT_C, _FONDS_C = [], {}
+for i_, cr_ in enumerate(_CRIT_L):
+    _MAT_C.append([_BOULE_CRIT[cr_] + " " + cr_] + [_PLACE.get((cr_, k_), "") for k_ in range(3)])
+    for k_ in range(3):
+        _FONDS_C[(i_, k_ + 1)] = _ZONES_C[cr_][k_]
+contenu({"titre": "Matrice de criticité des constats", "sous_titre": "Trois des quatre constats critiques se traitent dans les six mois",
+         "synthese": "Criticité du constat en lignes, horizon de la recommandation qui y répond en colonnes"},
+        "Chaque constat de la synthèse est placé selon sa criticité et l'horizon de la recommandation qui le traite. La couleur de la case donne l'ordre de traitement.",
+        tableau={"titre": tab("Matrice de criticité des constats et horizon des recommandations"), "entetes": ["Criticité \\ Horizon"] + _HOR_C,
+                 "largeurs": [5.2, 8.67, 8.67, 8.66], "taille": 9.5, "sans_code": True, "hauteur_ligne": 1.6, "fonds": _FONDS_C, "centre": True,
+                 "legende": [("🔴", "Priorité 1", "à engager immédiatement"), ("🟠", "Priorité 2", "à engager dans l'année"), ("🟡", "Priorité 3", "à planifier"), ("🟢", "Priorité 4", "à surveiller")],
+                 "lignes": _MAT_C},
+        disposition="dessous",
+        analyse=["**Les provisions, l'épargne et la conformité prudentielle sont critiques et se traitent à court terme : ce sont les recommandations 1, 2 et 4.** L'adossement, critique lui aussi, demande une réserve de liquidité et une politique de placement qui se construisent sur 6 à 18 mois (recommandation 5)."],
+        valable="constats de la synthèse et recommandations du rapport",
+        source="Source : synthèse des constats et recommandations du rapport (analyses Adenka)")
+
 # ---- v12 : indicateurs clés de 2020 au 31/08/2026, valeur et boule dans chaque case
 _RGm = {(x["exercice"], x["garantie"]): x for x in V11["ratios_garantie"]}
 _AN = list(range(2020, 2027))
@@ -993,6 +1026,27 @@ contenu({"titre": "Conformité prudentielle en bref", "sous_titre": "La réserve
         valable="ratios de 2020 au 31/08/2026 (balance provisoire), statut global jugé de 2022 à 2025",
         source=SRC_REG)
 
+# ---- v13 : matrice de conformité (domaines × textes applicables)
+_TXT_C = ["Décision n° 05/2022", "Règlement d'exécution n° 004/2022", "Règlement n° 07/2009", "Statuts du FPPN", "Règlement intérieur"]
+_MAT_CF = [
+    ["Provisions", "—", "🔴 Art. 7 à 10 : provisions calculées dossier par dossier", "—", "🔴 Art. 89 : recalcul à chaque clôture\n🟢 Art. 88 : risques courts, aucune provision nécessaire", "—"],
+    ["Cotisations et recouvrement", "🟢 Recouvrement des retraités CGRAE au moins égal à 90 %", "—", "—", "🔴 Art. 17 : 3,5 % et 1,5 %, la Solde retient 3,77 % et 1,23 %", "—"],
+    ["Prestations", "⚪ Délai de paiement des prestataires", "—", "—", "—", "🟢 Art. 52 : paiement des cliniques en trois mois, 2,62 mois en 2025"],
+    ["Épargne (risques longs)", "🔴 Cinq ratios des risques longs non conformes\n⚪ Deux à apprécier", "🔴 Art. 11 à 14 et 19 : provision mathématique, comptes certifiés, étude actuarielle, réserve de trésorerie", "—", "—", "—"],
+    ["Placements et liquidité", "🔴 Liquidité\n⚪ Rentabilité des placements", "🔴 Art. 17 : placements sûrs, rentables, liquides, diversifiés", "—", "🟠 Art. 85 : délibération du conseil d'administration non reçue", "—"],
+    ["Solvabilité et réserves", "🔴 Réserve obligatoire, fonds propres et assimilés\n🟢 Marge de solvabilité (lecture du FPPN)", "—", "🔴 Art. 84 : non-conformité sur deux exercices", "—", "—"],
+    ["Gestion", "🔴 Trois ratios de frais\n🟢 Charges de personnel, formation", "—", "—", "—", "—"],
+    ["Gouvernance et contrôle", "🟡 Réunions des organes, contrôles a posteriori", "🔴 Art. 27 : comptabilité séparée de la clinique", "🟠 Art. 63 : adhésion au fonds de garantie", "—", "—"],
+]
+contenu({"titre": "Matrice de conformité", "sous_titre": "Les exigences des textes sont surtout non respectées pour les provisions, l'épargne et la solidité financière",
+         "synthese": "Domaines en lignes, textes applicables en colonnes ; « — » : le texte ne fixe pas de règle sur ce domaine"},
+        "Chaque case donne le statut et l'exigence du texte. Les statuts reprennent ceux du corps du rapport : tableaux de bord (partie 10), grille de conformité, provisions (partie 9), cotisations (partie 4).",
+        tableau={"titre": tab("Matrice de conformité : domaines et textes applicables"), "entetes": ["Domaine"] + _TXT_C,
+                 "largeurs": [4.2, 5.6, 6.4, 4.4, 5.6, 5.0], "taille": 7.5, "sans_code": True, "legende": LEG_CONF, "lignes": _MAT_CF},
+        disposition="dessous",
+        valable="textes applicables au 31/08/2026 ; statuts établis sur les documents reçus jusqu'au 23/10/2026",
+        source="Source : " + DEC + " ; " + REX + " ; " + R07 + " ; statuts et règlement intérieur du FPPN édités le 15/06/2023 ; analyses Adenka")
+
 gab(107, {"titre": "Quatre taux à surveiller", "sous_titre": "Une faible part des engagements est couverte par des ressources disponibles",
           "synthese": "Couverture de l'épargne, sinistralité, trésorerie rapportée à l'épargne et prêts en retard de plus de 30 jours"},
     {"anneaux": [(b[2026]["couverture_epargne"], "Épargne couverte par des actifs réservés (31/08/2026)", "Couverture anneau"),
@@ -1010,6 +1064,84 @@ gab(83, {"titre": "Carte des risques", "sous_titre": "Quatre causes identifiées
      "lecture": "Chaque colonne relie une cause (en haut) à l'effet qu'elle produit (en bas). Les quatre causes sont établies par les données. Deux effets sont chiffrés en partie 9 : le manque de liquidités (adossement) et les pertes sur les prêts (dépréciation du Grenier). Les deux autres, le coût réel des sinistres et la mesure des engagements par âge, attendent la base des prestations datée et les dates de naissance des mutualistes."},
     "Lecture : chaque colonne relie une cause (en haut) à son effet (en bas). Les causes sont démontrées par les données. Le manque de liquidité et la dépréciation des prêts sont chiffrés (partie 9). Le coût réel des sinistres et la mesure des engagements par âge attendent la base des prestations et les dates de naissance.",
     source="Source : analyses Adenka")
+
+# ---- v13 : matrices du rapport (risques, criticité des constats, conformité, données et analyses)
+ROUGE_M, JAUNE_M, VERT_M, ORANGE_M = "C00000", "FFD966", "70AD47", "EFAC62"
+
+
+def _grav(montant):
+    """Gravité d'un risque chiffré, selon son impact en FCFA."""
+    m_ = abs(montant)
+    return 1 if m_ < 50e6 else 2 if m_ < 500e6 else 3 if m_ < 2e9 else 4 if m_ <= 5e9 else 5
+
+
+def _zone(p_, g_):
+    sc = p_ * g_
+    return ROUGE_M if sc >= 15 else JAUNE_M if sc >= 8 else VERT_M
+
+
+_INT_AN = (INT55_25 - interets_dus(0.035, 0.055, 2024)) - next(x["produits_financiers"] for x in V11["rendement_gl"] if x["exercice"] == 2025)
+
+
+def _risques():
+    return [  # (code, risque, probabilité, justification, gravité, justification)
+        ("R1", "Manque de liquidités face aux sorties d'épargne", 4, f"Sorties observées de {pc('RQ ts', T_MOY)} de l'épargne par an. L'actif à moins d'un an couvre {pc('RQ couv', couverture('31/08/2026', T_MOY)[2])} des paiements de l'année",
+         _grav(GAP[4][5]), f"Manque cumulé de {F('RQ gap', -GAP[4][5])} à cinq ans"),
+        ("R2", "Retrait d'agrément ou sanctions de l'AIRMS", 4, f"{NB_NC} indicateurs non conformes deux exercices de suite : la condition de l'art. 84 du règlement n° 07/2009 est remplie, la sanction n'est pas automatique",
+         5, "Arrêt de l'activité du FPPN"),
+        ("R3", "Dette d'épargne sous-évaluée", 5, "Constaté : aucun intérêt comptabilisé de 2020 au 31/08/2026",
+         _grav(INT55), f"Intérêts dus non comptabilisés : {F('RQ int', INT55)}"),
+        ("R4", "Provisions sans lien avec les risques", 5, "Constaté : montants identiques depuis le 01/09/2020",
+         _grav(PROV_MAL + PROV_OBS - _BESOIN), f"Provisions supérieures au besoin mesuré de {F('RQ exc', PROV_MAL + PROV_OBS - _BESOIN)}"),
+        ("R5", "Déficit de la garantie maladie", 5, f"Constaté : ratio combiné de {pc('RQ rc25', _RGm[(2025, 'Maladie')]['ratio_combine'])} en 2025 et {pc('RQ rc26', _RGm[(2026, 'Maladie')]['ratio_combine'])} sur huit mois de 2026",
+         _grav(_RGm[(2026, "Maladie")]["resultat_technique"]), f"Résultat technique maladie de {F('RQ rt26', _RGm[(2026, 'Maladie')]['resultat_technique'])} sur huit mois de 2026"),
+        ("R6", "Absence de coussin de fonds propres", 5, "Constaté : fonds propres négatifs à chaque clôture depuis 2020",
+         _grav(b[2026]["fonds_propres"]), f"Fonds propres de {F('RQ fp', b[2026]['fonds_propres'])} au 31/08/2026"),
+        ("R7", "Pertes sur les prêts du Grenier", 5, "Constaté : prêts en retard au 31/08/2026, aucune dépréciation passée",
+         _grav(_GR26), f"Dépréciation nécessaire de {F('RQ dep', _GR26)}"),
+        ("R8", "Produits financiers inférieurs aux intérêts dus", 5, f"Constaté : rendement moyen de {pc('RQ rdm', V11['rendement_moyen_2021_2025'])} par an de 2021 à 2025",
+         _grav(_INT_AN), f"Intérêts dus de 2025 supérieurs aux produits financiers de 2025 de {F('RQ int an', _INT_AN)}"),
+        ("R9", "Engagements impossibles à mesurer faute de données", 5, "Constaté : ni base des prestations datée, ni dates de naissance des mutualistes",
+         3, "Non chiffrable : bloque les provisions dossier par dossier, la mortalité, la santé des retraités et la projection"),
+        ("R10", "Placements décidés sans délibération des organes", 4, "[[Le directeur général décide seul des placements]]. Aucune délibération reçue",
+         _grav(500000000), f"Placement dans le FCP de {F('RQ fcp', 500000000)} en 2025"),
+    ]
+
+
+# les justifications chiffrées s'affichent sur la diapositive qui suit la matrice
+COURANTE = len(SL) + 2
+RISQUES = _risques()
+COURANTE = None
+_ETIQ_P = {5: "5 - Très probable", 4: "4 - Probable", 3: "3 - Possible", 2: "2 - Peu probable", 1: "1 - Très peu probable"}
+_ETIQ_G = ["1 - Négligeable", "2 - Mineure", "3 - Modérée", "4 - Majeure", "5 - Catastrophique"]
+_MAT_R, _FONDS_R = [], {}
+for i_, p_ in enumerate((5, 4, 3, 2, 1)):
+    ligne_ = [_ETIQ_P[p_]]
+    for g_ in range(1, 6):
+        ligne_.append(", ".join(c_ for c_, _, pp_, _, gg_, _ in RISQUES if pp_ == p_ and gg_ == g_))
+        _FONDS_R[(i_, g_)] = _zone(p_, g_)
+    _MAT_R.append(ligne_)
+LEG_RISQ = [("🔴", "Élevé", "score de 15 à 25, traitement immédiat"), ("🟡", "Moyen", "score de 8 à 12, plan d'action"), ("🟢", "Faible", "score de 1 à 6, surveillance")]
+contenu({"titre": "Matrice des risques", "sous_titre": f"{sum(1 for r in RISQUES if r[2] * r[4] >= 15)} risques sur {len(RISQUES)} se situent dans la zone rouge",
+         "synthese": "Probabilité en lignes, gravité en colonnes ; chaque risque est justifié sur la diapositive suivante"},
+        "Score = probabilité × gravité. Zone rouge : score de 15 à 25. Zone jaune : de 8 à 12. Zone verte : de 1 à 6. La gravité d'un risque chiffré suit son impact en FCFA ; la probabilité suit ce qui est constaté dans les comptes et les fichiers.",
+        tableau={"titre": tab("Matrice des risques : probabilité et gravité"), "entetes": ["Probabilité \\ Gravité"] + _ETIQ_G,
+                 "largeurs": [5.2] * 6, "taille": 10, "sans_code": True, "hauteur_ligne": 1.15, "fonds": _FONDS_R, "centre": True, "legende": LEG_RISQ, "lignes": _MAT_R},
+        disposition="dessous",
+        encadre=["**Gravité** (impact en FCFA) : 1 négligeable, moins de 50 000 000 FCFA. 2 mineure, de 50 000 000 à 500 000 000 FCFA. 3 modérée, de 500 000 000 à 2 000 000 000 FCFA. 4 majeure, de 2 000 000 000 à 5 000 000 000 FCFA. 5 catastrophique, plus de 5 000 000 000 FCFA ou arrêt de l'activité.",
+                 "**Probabilité** : 5 très probable, déjà constaté dans les comptes ou les fichiers. 4 probable, conditions réunies mais risque non encore réalisé. 3 possible. 2 peu probable. 1 très peu probable."],
+        encadre_titre="Échelles",
+        valable="comptes et fichiers de 2020 au 31/08/2026 ; impacts chiffrés dans le corps du rapport",
+        source="Source : analyses Adenka, parties 5 à 10 du rapport")
+contenu({"titre": "Matrice des risques : justification", "sous_titre": "Chaque note de probabilité et de gravité repose sur un chiffre du rapport",
+         "synthese": "Les risques constatés sont notés 5 en probabilité ; la gravité suit l'impact chiffré en FCFA"},
+        "Justification de la place de chaque risque dans la matrice. Niveau : 🔴 élevé (score de 15 à 25), 🟡 moyen (8 à 12), 🟢 faible (1 à 6).",
+        tableau={"titre": tab("Risques, probabilité, gravité et score"), "entetes": ["N°", "Risque", "Probabilité et justification", "Gravité et justification", "Score"],
+                 "largeurs": [1.2, 6.4, 10.2, 10.2, 3.2], "taille": 7.5, "sans_code": True, "legende": LEG_RISQ,
+                 "lignes": [[c_, r_, f"{p_}. {jp_}", f"{g_}. {jg_}", bv(str(p_ * g_), "🔴" if p_ * g_ >= 15 else "🟡" if p_ * g_ >= 8 else "🟢")] for c_, r_, p_, jp_, g_, jg_ in RISQUES]},
+        disposition="dessous",
+        valable="comptes et fichiers de 2020 au 31/08/2026",
+        source="Source : analyses Adenka ; chiffres des parties 5 à 10 du rapport")
 
 # ---- v11 : recommandations au format du rapport de diagnostic : recommandation, actions concrètes, priorité et horizon
 REC1 = [
@@ -1166,6 +1298,33 @@ contenu({"titre": "Circuit des fichiers par produit", "sous_titre": "Le FPPN ne 
         analyse=["**Les fichiers aller maladie et décès sont absents de tous les envois reçus.** [[Le FPPN ne les produit pas]] (" + ENT19 + ")."],
         implication="Les fichiers aller maladie et décès sont demandés à la direction du personnel de la Police ou à la Solde (PBC, item 61). Les retours vides ou manquants (décembre 2024, décès de mai à octobre 2024 et d'avril 2025) sont demandés au FPPN (PBC, item 62).",
         source=SRC_ENT19)
+
+# ---- v13 : circuits des cotisations par produit, d'après les logigrammes du FPPN, complétés des contrôles absents (cadre rouge)
+_SRC_FLOW = "Source : « FLOW_CHART_COTISATION_ET_PRODUITS_DEPARGNE_1.pptx » (FPPN, reçu le 23/10/2026) ; contrôles absents : analyses Adenka"
+contenu({"titre": "Circuit EFC et PEP : du bulletin à la comptabilisation", "sous_titre": "Le FPPN produit le fichier de l'épargne, mais ne rapproche pas l'aller et le retour",
+         "synthese": "Logigramme du FPPN redessiné ; les cadres rouges signalent les contrôles absents constatés par Adenka"},
+        "Couloirs repris du logigramme du FPPN. Forme arrondie bleue : début ou fin. Rectangle : étape. Losange : décision. Forme ondulée : document. Cadre rouge : contrôle absent.",
+        logigramme="epargne",
+        analyse=["**Le circuit s'arrête à la comptabilisation des précomptes.** Aucune étape ne rapproche le fichier aller du fichier retour, aucune ne calcule les intérêts dus ni ne produit de relevé par épargnant (" + F("CE int", INT55) + " d'intérêts dus au 31/08/2026)."],
+        source=_SRC_FLOW + " ; " + SRC_ENT19[9:])
+contenu({"titre": "Circuit de la flotte automobile (GNA)", "sous_titre": "Le FPPN encaisse une commission de 20 % dont l'assiette n'est pas documentée",
+         "synthese": "Logigramme du FPPN redessiné ; les cadres rouges signalent les contrôles absents constatés par Adenka"},
+        "Couloirs repris du logigramme du FPPN. Cadre rouge : contrôle absent ou fichier manquant.",
+        logigramme="gna",
+        analyse=["**Le FPPN collecte les primes pour le GNA et gère les trop-perçus, mais la convention d'apporteur d'affaires n'a pas été transmise.** L'assiette de la commission de 20 % ne peut pas être vérifiée, et le fichier retour de janvier 2026 manque."],
+        source=_SRC_FLOW)
+contenu({"titre": "Circuit des retraités (CGRAE)", "sous_titre": "La cotisation suit le barème de la CGRAE, dans la limite de la quotité cessible",
+         "synthese": "Logigramme du FPPN redessiné ; les cadres rouges signalent les contrôles absents constatés par Adenka"},
+        "Couloirs repris du logigramme du FPPN. Barème de la CGRAE : 2,5 % de (pension de base - MUGEFCI) + 5 000 à 15 000 FCFA selon le grade.",
+        logigramme="cgrae",
+        analyse=["**Seuls les retraités qui disposent d'une quotité cessible sont précomptés : la liste des autres souscripteurs n'a pas été transmise.** Les fichiers retour de janvier et de juin 2024 manquent."],
+        source=_SRC_FLOW + " ; « BAREME_CGRAE.xlsx » ; CONVENTION DE PARTENARIAT ENTRE IPS-CGRAE ET LE FPPN.pdf")
+contenu({"titre": "Circuit de la maladie et du décès", "sous_titre": "Le fichier aller est produit hors du FPPN : le recouvrement ne peut pas être mesuré",
+         "synthese": "Logigramme du FPPN redessiné ; les cadres rouges signalent les contrôles absents constatés par Adenka"},
+        "Couloirs repris du logigramme du FPPN. Sans carte de santé FPPN, l'adhérent n'a pas de prestation.",
+        logigramme="maladie_deces",
+        analyse=["**Le service du personnel calcule et transmet le fichier aller sans le communiquer au FPPN.** Le FPPN ne peut ni vérifier les taux retenus (3,77 % et 1,23 % au lieu de 3,5 % et 1,5 %), ni mesurer le taux de recouvrement exigé par la Décision n° 05/2022 (au moins 90 %)."],
+        source=_SRC_FLOW + " ; statuts du FPPN édités le 15/06/2023, art. 17 ; fichiers de précomptes 936 et 8Z6")
 
 contenu({"titre": "Flux financiers 2025", "sous_titre": "Les ressources de l'année couvrent les prestations, les frais et dégagent un excédent",
          "synthese": f"Produits {F('Produits 2025', s[2025]['produits'])}, charges {F('Charges 2025', s[2025]['charges'])}, résultat {F('Résultat 2025', s[2025]['resultat'])}"},
@@ -2826,8 +2985,7 @@ def ligne_bord(x, annees=(2020, 2021, 2022, 2023, 2024, 2025, 2026)):
 
 bord_ent = ["N°", "Ratio", "Norme", "2020", "2021", "2022", "2023", "2024", "2025", "31/08/2026", "Statut"]
 bord_larg = [0.8, 6.3, 4.0, 2.56, 2.56, 2.56, 2.56, 2.56, 2.56, 2.56, 2.18]
-LEG_BORD = [("🔴", "Non conforme", "la valeur ne respecte pas la norme"), ("🟢", "Conforme", "la valeur respecte la norme"),
-            ("⚪", "À apprécier", "norme non chiffrée"), ("🟡", "En attente", "donnée du FPPN attendue")]
+LEG_BORD = LEG_CONF
 # ---- v12 : ratios par garantie, avant les ratios globaux : matrice de 2020 au 31/08/2026, puis détail des montants
 _RGL = V11["ratios_garantie"]
 _RGg = {(x["exercice"], x["garantie"]): x for x in _RGL}
@@ -3277,7 +3435,7 @@ contenu({"titre": "Ratios non conformes de 2020 au 31/08/2026", "sous_titre": f"
          "synthese": "Les écarts ne sont pas accidentels : ils se répètent chaque année, ce qui les rend structurels au sens des textes"},
         "Statut recalculé par formule pour chaque année (onglet 13d) ; il est identique à celui de la partie 10. Chaque case donne la valeur du ratio et une boule : 🔴 non conforme, 🟢 conforme ; « - » : non mesurable (pas d'exercice précédent). 2020 et 2021 sont antérieurs à la Décision du 1er juin 2022 ; 2026 couvre huit mois : ces années sont indicatives. Les ratios conformes chaque année (marge de solvabilité dans la lecture du FPPN, charges de personnel, formation) ne sont pas repris.",
         tableau={"titre": tab("Conformité de chaque ratio, année par année"), "entetes": ["Ratio", "Norme"] + [str(a) if a < 2026 else "31/08/2026" for a in A8] + ["Qualification"], "largeurs": [7.0, 4.4] + [2.3] * 7 + [3.7], "taille": 8.5,
-                 "legende": [("🔴", "Non conforme", "norme non respectée cette année-là"), ("🟢", "Conforme", "norme respectée cette année-là")],
+                 "legende": LEG_CONF,
                  "lignes": [[NOM8[c], NORME8[c]] + [_t96(c, a) for a in A8] + [q13(c, 16)] for c in CODES8]},
         disposition="dessous",
         analyse=[f"**{N_STRUCT} ratios sont non conformes toutes les années mesurées, et la sinistralité l'est de 2020 à 2025.** Seule la sinistralité de 2026 respecte sa norme, sur huit mois.",
@@ -3674,6 +3832,31 @@ separateur(14, "Analyses en attente", "Documents à obtenir, risques, points à 
 def _n(*anciens):
     return ", ".join(str(x) for x in sorted({PBCM[a] for a in anciens}))
 
+
+# ---- v13 : matrice données × analyses (statut de chaque donnée dans la PBC du 23/10/2026)
+_DON = [("Base des prestations datée", 47, "🟠"), ("Dossiers non payés", 7, "🟠"), ("Fichiers des décès", 64, "🟠"), ("Dates de naissance des mutualistes", 4, "🟠"),
+        ("Dates de naissance des retraités", 84, "🔴"), ("Fichier des ayants droit", 43, "🔴"), ("Comptes individuels d'épargne", 9, "🟠"),
+        ("Taux servi arrêté", 69, "🟠"), ("Inventaire des placements", 55, "🟠")]
+_BES = {  # analyse : données nécessaires (indices de _DON)
+    "Provision maladie dossier par dossier": (0, 1),
+    "Provision décès dossier par dossier": (1, 2),
+    "Mortalité observée par âge": (2, 3),
+    "Engagement santé des retraités": (0, 4),
+    "Engagement d'épargne par épargnant": (6, 7),
+    "Adossement par échéance": (6, 8),
+    "Projection par garantie": (0, 3, 5),
+}
+_MAT_D = [[an_] + [_DON[k][2] if k in ks_ else "" for k in range(len(_DON))] for an_, ks_ in _BES.items()]
+contenu({"titre": "Matrice des données et des analyses", "sous_titre": "Aucune analyse actuarielle centrale ne dispose de toutes ses données",
+         "synthese": "Analyses en lignes, données nécessaires en colonnes, avec leur statut dans la PBC du 23/10/2026"},
+        "Une case vide : la donnée n'est pas nécessaire à l'analyse. Une boule : la donnée est nécessaire, et la couleur donne son statut dans la PBC.",
+        tableau={"titre": tab("Données nécessaires à chaque analyse et statut dans la PBC"), "entetes": ["Analyse"] + [f"{n_}\nPBC n° {p_}" for n_, p_, _ in _DON],
+                 "largeurs": [5.6] + [2.84] * 9, "taille": 8, "sans_code": True, "centre": True, "hauteur_ligne": 0.85,
+                 "legende": [("🔴", "Non reçu", "donnée non reçue"), ("🟠", "Partiel", "donnée reçue en partie"), ("🟢", "Reçu", "donnée reçue")], "lignes": _MAT_D},
+        disposition="dessous",
+        analyse=["**La base des prestations datée et les dates de naissance interviennent dans quatre des sept analyses.** Les dates de naissance des retraités et le fichier des ayants droit n'ont pas été reçus du tout."],
+        valable="PBC pointée au 23/10/2026",
+        source="Source : PBC du 23/10/2026 (« FPPN_PBC_complete_pointee_20261023.xlsx ») ; méthodes retenues du rapport")
 
 contenu({"titre": "Analyses en attente", "sous_titre": "Quatre analyses attendent des données du FPPN, toutes avec une méthode déjà choisie",
          "synthese": "Les conclusions du rapport sont établies sur les documents reçus ; ces analyses les préciseront sans en changer le sens"},
@@ -4308,22 +4491,37 @@ def colonnes_codees(spec):
     return cols
 
 
+FAMILLES = [  # échelles complètes : la légende montre toute l'échelle, même si le tableau n'en utilise qu'une partie
+    [("🔴", "Critique", "non-conformité réglementaire, impact stratégique majeur, risque élevé"), ("🟠", "Élevé", "impact opérationnel significatif, risque important"),
+     ("🟡", "Moyen", "amélioration souhaitable, impact ponctuel"), ("🟢", "Faible", "opportunité d'optimisation ou de bonne pratique")],
+    [("🔴", "Urgent", "à traiter en premier"), ("🟠", "Moyenne", "à traiter ensuite"), ("🟢", "Faible", "à traiter en dernier")],
+    [("🔴", "Court terme", "moins de 6 mois"), ("🟠", "Moyen terme", "6 à 18 mois"), ("🟢", "Long terme", "plus de 18 mois")],
+    [("🔴", "Non conforme", "norme non respectée"), ("🟠", "Non démontré", "non démontré par les documents reçus"), ("🟡", "En attente", "document du FPPN attendu"),
+     ("⚪", "À apprécier", "norme non chiffrée"), ("🟢", "Conforme", "norme respectée")],
+    [("🔴", "Non", "réponse négative à la question de la colonne"), ("🟠", "Partiel", "en partie seulement"), ("🟢", "Oui", "réponse positive à la question de la colonne")],
+    [("🔴", "Non reçu", "document non reçu"), ("🟠", "Partiel", "en partie seulement"), ("🟢", "Reçu", "document reçu")],
+    [("🔴", "Non remplie", "condition non remplie"), ("🟠", "Partiel", "en partie seulement"), ("🟢", "Remplie", "condition remplie")],
+]
+
+
 def legende_codes(slide, spec, cols, x0, y, largeur):
-    """Tableau de signification des boules, sous le tableau : boule, libellé, sens. spec["legende"] remplace la légende automatique."""
+    """Tableau de signification des boules, sous le tableau : l'échelle complète de la famille de codes utilisée."""
     vus = [tuple(v) for v in (spec.get("legende") or [])]
-    if vus:  # légende imposée : seules les boules présentes dans le tableau
-        tout_ = " ".join(str(c_) for l_ in spec["lignes"] for c_ in l_)
-        presentes = {cc_[0] for j in cols for l in spec["lignes"] if j < len(l) for cc_ in [code_couleur(spec["entetes"][j], l[j])] if cc_}
-        vus = [v for v in vus if v[0] in tout_ or v[0] in {BOULE.get(f_, "") for f_ in presentes}]
     if not vus:
+        presents = []
         for j in cols:
             for l in spec["lignes"]:
                 cc = code_couleur(spec["entetes"][j], l[j]) if j < len(l) else None
-                if cc and cc[2] not in [v[1] for v in vus]:
-                    vus.append((BOULE.get(cc[0], ""), cc[2], cc[3]))
+                if cc and cc[2] not in [v[1] for v in presents]:
+                    presents.append((BOULE.get(cc[0], ""), cc[2], cc[3]))
+        libs = {v[1] for v in presents}
+        fam = max(FAMILLES, key=lambda f_: sum(1 for v in f_ if v[1] in libs))
+        if not any(v[1] in libs for v in fam):
+            fam = FAMILLES[3]  # échelle de conformité par défaut (tableaux de formules)
+        vus = list(fam) + [v for v in presents if v[1] not in {w[1] for w in fam}]
     if not vus:
         return y
-    par_ligne = max(1, min(len(vus), int(largeur // 7.8)))
+    par_ligne = max(1, min(len(vus), int(largeur // 6.0)))
     lignes_ = [vus[k:k + par_ligne] for k in range(0, len(vus), par_ligne)]
     h = 0.45
     shp = slide.shapes.add_table(len(lignes_), 1 + 2 * par_ligne, Cm(x0), Cm(y), Cm(largeur), Cm(h * len(lignes_)))
@@ -4365,7 +4563,7 @@ def hauteurs_lignes(spec, taille):
         for v, w in zip(vals, spec["largeurs"]):
             cpl = max(1.0, (w - 0.3) / (0.0186 * taille))
             n = sum(max(1, math.ceil(len(_brut(seg)) / cpl)) for seg in str(v).split("\n"))
-            h = max(h, n * taille * 1.2 * 0.03528 + 0.16)
+            h = max(h, n * taille * 1.2 * 0.03528 + 0.16 + (0.22 if any(b_ in str(v) for b_ in BOULES) else 0))
         hs.append(max(h, spec.get("hauteur_ligne") or 0.5))
     return hs
 
@@ -4421,11 +4619,15 @@ def tableau(slide, spec, y0=3.85, x0=1.4, taille=None, hauteur_max=None):
                 if cc:
                     b_, t_ = BOULE.get(cc[0], ""), str(v).strip()
                     v = b_ if (len(t_) <= 32 and ":" not in t_ and "\n" not in t_) else b_ + " " + t_
-            if str(v) in BOULES:
+            if str(v) in BOULES or (spec.get("centre") and j > 0 and i > 0):
                 p.alignment = PP_ALIGN.CENTER
+            if i > 0 and spec.get("fonds") and (i - 1, j) in spec["fonds"]:
+                fond = spec["fonds"][(i - 1, j)]
+                coul, gras_c = ("FFFFFF" if fond == "C00000" else NOIR), True
             for li_, ligne_ in enumerate(str(v).split("\n")):
                 if li_:
                     p = c.text_frame.add_paragraph()
+                    p.alignment = c.text_frame.paragraphs[0].alignment
                 for morceau, gras, surl in morceaux_balises(ligne_):
                     runs_texte(p, morceau, taille, gras_c or gras, coul, surl)
             c.fill.solid()
@@ -4855,6 +5057,12 @@ for i, x in enumerate(SL, 1):
             elif x["logigramme"] == "facture":
                 LG.circuit_facture(sl, 4.0)
                 y_ = 10.6
+            elif x["logigramme"] in ("epargne", "gna", "maladie_deces"):
+                getattr(LG, "circuit_" + x["logigramme"])(sl, 3.9)
+                y_ = 14.4
+            elif x["logigramme"] == "cgrae":
+                LG.circuit_cgrae(sl, 3.9)
+                y_ = 14.3
             else:
                 LG.nouvelles_recrues(sl, 4.0)
                 y_ = 10.6

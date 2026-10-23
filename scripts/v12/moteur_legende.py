@@ -1,19 +1,34 @@
+FAMILLES = [  # échelles complètes : la légende montre toute l'échelle, même si le tableau n'en utilise qu'une partie
+    [("🔴", "Critique", "non-conformité réglementaire, impact stratégique majeur, risque élevé"), ("🟠", "Élevé", "impact opérationnel significatif, risque important"),
+     ("🟡", "Moyen", "amélioration souhaitable, impact ponctuel"), ("🟢", "Faible", "opportunité d'optimisation ou de bonne pratique")],
+    [("🔴", "Urgent", "à traiter en premier"), ("🟠", "Moyenne", "à traiter ensuite"), ("🟢", "Faible", "à traiter en dernier")],
+    [("🔴", "Court terme", "moins de 6 mois"), ("🟠", "Moyen terme", "6 à 18 mois"), ("🟢", "Long terme", "plus de 18 mois")],
+    [("🔴", "Non conforme", "norme non respectée"), ("🟠", "Non démontré", "non démontré par les documents reçus"), ("🟡", "En attente", "document du FPPN attendu"),
+     ("⚪", "À apprécier", "norme non chiffrée"), ("🟢", "Conforme", "norme respectée")],
+    [("🔴", "Non", "réponse négative à la question de la colonne"), ("🟠", "Partiel", "en partie seulement"), ("🟢", "Oui", "réponse positive à la question de la colonne")],
+    [("🔴", "Non reçu", "document non reçu"), ("🟠", "Partiel", "en partie seulement"), ("🟢", "Reçu", "document reçu")],
+    [("🔴", "Non remplie", "condition non remplie"), ("🟠", "Partiel", "en partie seulement"), ("🟢", "Remplie", "condition remplie")],
+]
+
+
 def legende_codes(slide, spec, cols, x0, y, largeur):
-    """Tableau de signification des boules, sous le tableau : boule, libellé, sens. spec["legende"] remplace la légende automatique."""
+    """Tableau de signification des boules, sous le tableau : l'échelle complète de la famille de codes utilisée."""
     vus = [tuple(v) for v in (spec.get("legende") or [])]
-    if vus:  # légende imposée : seules les boules présentes dans le tableau
-        tout_ = " ".join(str(c_) for l_ in spec["lignes"] for c_ in l_)
-        presentes = {cc_[0] for j in cols for l in spec["lignes"] if j < len(l) for cc_ in [code_couleur(spec["entetes"][j], l[j])] if cc_}
-        vus = [v for v in vus if v[0] in tout_ or v[0] in {BOULE.get(f_, "") for f_ in presentes}]
     if not vus:
+        presents = []
         for j in cols:
             for l in spec["lignes"]:
                 cc = code_couleur(spec["entetes"][j], l[j]) if j < len(l) else None
-                if cc and cc[2] not in [v[1] for v in vus]:
-                    vus.append((BOULE.get(cc[0], ""), cc[2], cc[3]))
+                if cc and cc[2] not in [v[1] for v in presents]:
+                    presents.append((BOULE.get(cc[0], ""), cc[2], cc[3]))
+        libs = {v[1] for v in presents}
+        fam = max(FAMILLES, key=lambda f_: sum(1 for v in f_ if v[1] in libs))
+        if not any(v[1] in libs for v in fam):
+            fam = FAMILLES[3]  # échelle de conformité par défaut (tableaux de formules)
+        vus = list(fam) + [v for v in presents if v[1] not in {w[1] for w in fam}]
     if not vus:
         return y
-    par_ligne = max(1, min(len(vus), int(largeur // 7.8)))
+    par_ligne = max(1, min(len(vus), int(largeur // 6.0)))
     lignes_ = [vus[k:k + par_ligne] for k in range(0, len(vus), par_ligne)]
     h = 0.45
     shp = slide.shapes.add_table(len(lignes_), 1 + 2 * par_ligne, Cm(x0), Cm(y), Cm(largeur), Cm(h * len(lignes_)))
