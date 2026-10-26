@@ -5,16 +5,13 @@ Contenu : travaux réalisés, réponses aux quatre questions, 28 constats en fic
 rapport), matrice complexité × priorité, tableau récapitulatif, limites et prochaines étapes, lexique.
 Tous les chiffres sont repris du rapport actuariel et statistique du 23/10/2026.
 
-Usage : python3 resume_executif_fppn.py <dossier des figures> <sortie.docx>
+Usage : python3 resume_executif_fppn.py <sortie.docx>
 """
 import os
 import sys
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import FancyBboxPatch, Rectangle  # noqa: E402
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, "/root/.claude/skills/synced/891d7168-f164-499a-9885-98883788a845_be017d1e-653f-49e6-8fd9-683fb0156b08/adenka-rapport-word/scripts")
 import adenka_docx as AD  # noqa: E402
 from adenka_docx import RapportAdenka  # noqa: E402
@@ -22,137 +19,18 @@ from docx import Document  # noqa: E402
 from docx.enum.table import WD_TABLE_ALIGNMENT  # noqa: E402
 from docx.oxml import OxmlElement  # noqa: E402
 from docx.oxml.ns import qn  # noqa: E402
-from docx.shared import Cm, Pt  # noqa: E402
+from docx.shared import Cm, Pt, RGBColor  # noqa: E402
+from docx_graphique_natif import graphique  # noqa: E402
 
-FIG, SORTIE = sys.argv[1:3]
-os.makedirs(FIG, exist_ok=True)
+SORTIE = sys.argv[1]
 NOIR, ORANGE, BLEU, GRIS = "#060606", "#EFAC62", "#112A40", "#BBBCBC"
 ROUGE_R, JAUNE_R, VERT_R, ORANGE_R = "#E06666", "#FFD966", "#93C47D", "#F6B26B"
-plt.rcParams.update({"font.family": "Liberation Sans", "font.size": 10, "axes.spines.top": False, "axes.spines.right": False})
 ANS = ["2020", "2021", "2022", "2023", "2024", "2025", "31/08/2026"]
 RAP = "Rapport actuariel et statistique du 23/10/2026"
 
 
 def md(x):
     return x / 1e9
-
-
-def enregistrer_fig(nom):
-    chemin = os.path.join(FIG, nom)
-    plt.savefig(chemin, dpi=300, bbox_inches="tight")
-    plt.close()
-    return chemin
-
-
-# ================================================================ FIGURES
-# 1. frise des travaux
-fig, ax = plt.subplots(figsize=(10, 2.6))
-etapes = [("Lancement", "13 et 14/10/2026\nréunions, liste\ndes documents"), ("Collecte", "15 au 23/10/2026\nsept envois\ndu FPPN"),
-          ("Entretiens", "16 et 19/10/2026\nprestations, cotisations,\ncomptabilité"), ("Contrôles", "4 454 416 lignes\nde précomptes\n7 balances"),
-          ("Analyses", "provisions, épargne,\nliquidité, placements,\n36 ratios"), ("Constats", "28 constats\n10 risques notés"), ("Plan d'actions", "actions classées\npar complexité\net priorité")]
-for i, (t, d) in enumerate(etapes):
-    x = i * 1.45
-    ax.add_patch(FancyBboxPatch((x, 0.55), 1.25, 0.5, boxstyle="round,pad=0.02", fc=BLEU if i < 5 else ORANGE, ec="none"))
-    ax.text(x + 0.625, 0.8, t, ha="center", va="center", color="white", fontsize=10, fontweight="bold")
-    ax.text(x + 0.625, 0.25, d, ha="center", va="center", fontsize=8, color=NOIR)
-    if i < len(etapes) - 1:
-        ax.annotate("", xy=(x + 1.43, 0.8), xytext=(x + 1.27, 0.8), arrowprops=dict(arrowstyle="->", color=GRIS, lw=1.5))
-ax.set_xlim(-0.05, len(etapes) * 1.45)
-ax.set_ylim(-0.1, 1.15)
-ax.axis("off")
-F_FRISE = enregistrer_fig("frise_travaux.png")
-
-# 2. épargne due et actifs réservés
-ep = [10828205640, 10147421276, 9364845293, 9121576576, 10785064432, 13814066964, 15743516391]
-res = [714042784, 1957211038, 888844233, 839212069, 699925787, 1608155525, 2562885661]
-cov = ["6,59 %", "19,29 %", "9,49 %", "9,20 %", "6,49 %", "11,64 %", "16,28 %"]
-fig, ax = plt.subplots(figsize=(9, 3.8))
-xs = range(len(ANS))
-ax.bar([x - 0.2 for x in xs], [md(v) for v in ep], 0.4, color=BLEU, label="Épargne due aux policiers")
-ax.bar([x + 0.2 for x in xs], [md(v) for v in res], 0.4, color=ORANGE, label="Argent mis de côté pour cette épargne")
-for x, v, c in zip(xs, res, cov):
-    ax.text(x + 0.2, md(v) + 0.25, c, ha="center", fontsize=8)
-ax.set_xticks(list(xs), ANS)
-ax.set_ylabel("Milliards de FCFA")
-ax.legend(frameon=False, loc="upper left")
-F_EPARGNE = enregistrer_fig("epargne_actifs.png")
-
-# 3. sinistralité
-mal = [12.54, 6.00, 6.47, 26.91, 48.13, 73.53, 97.40]
-dec = [82.23, 55.42, 15.21, 17.05, 21.81, 19.14, 21.76]
-glob = [8.92, 20.77, 9.06, 24.56, 40.34, 57.48, 75.20]
-fig, ax = plt.subplots(figsize=(9, 3.8))
-ax.axhspan(70, 80, color=GRIS, alpha=0.35, label="Fourchette de l'AIRMS (70 % à 80 %)")
-ax.plot(ANS, mal, color=BLEU, marker="o", lw=2, label="Maladie")
-ax.plot(ANS, dec, color=ORANGE, marker="o", lw=2, label="Décès")
-ax.plot(ANS, glob, color=NOIR, marker="s", lw=1.2, ls="--", label="Toutes garanties (taux réglementaire)")
-for x, v in zip(ANS, mal):
-    ax.text(x, v + 3, f"{v:.2f} %".replace(".", ","), ha="center", fontsize=7.5, color=BLEU)
-ax.set_ylabel("% des cotisations")
-ax.set_ylim(0, 110)
-ax.legend(frameon=False, fontsize=8, loc="upper left")
-F_SIN = enregistrer_fig("sinistralite.png")
-
-# 4. fonds propres et résultat
-fp = [-6743081733, -4659173531, -2598840854, -1668211752, -876142111, -438242200, -879498700]
-rs = [1018579699, 2083908202, 2060332677, 930629102, 792069641, 437899911, -441256500]
-fig, ax = plt.subplots(figsize=(9, 3.6))
-ax.bar([x - 0.2 for x in xs], [md(v) for v in fp], 0.4, color=BLEU, label="Fonds propres (réserves moins pertes passées)")
-ax.bar([x + 0.2 for x in xs], [md(v) for v in rs], 0.4, color=ORANGE, label="Résultat de l'année")
-ax.axhline(0, color=NOIR, lw=0.8)
-ax.set_xticks(list(xs), ANS)
-ax.set_ylabel("Milliards de FCFA")
-ax.legend(frameon=False, fontsize=8, loc="lower right")
-F_FP = enregistrer_fig("fonds_propres.png")
-
-# 5. provisions au bilan et besoins mesurés
-fig, ax = plt.subplots(figsize=(9, 3.4))
-lib = ["Maladie", "Décès (obsèques)", "Intérêts dus\nsur l'épargne", "Pertes sur les\nprêts du Grenier"]
-bil = [2867602878, 1961695412, 0, 0]
-bes = [12481392, 7100000, 3278913238, 14016392]
-xs2 = range(len(lib))
-ax.bar([x - 0.2 for x in xs2], [md(v) for v in bil], 0.4, color=BLEU, label="Montant au bilan du FPPN")
-ax.bar([x + 0.2 for x in xs2], [md(v) for v in bes], 0.4, color=ORANGE, label="Besoin mesuré par Adenka")
-for x, v in zip(xs2, bil):
-    ax.text(x - 0.2, md(v) + 0.05, f"{md(v):.2f}".replace(".", ","), ha="center", fontsize=8)
-for x, v in zip(xs2, bes):
-    ax.text(x + 0.2, md(v) + 0.05, f"{md(v):.2f}".replace(".", ","), ha="center", fontsize=8)
-ax.set_xticks(list(xs2), lib)
-ax.set_ylabel("Milliards de FCFA")
-ax.legend(frameon=False, fontsize=8)
-F_PROV = enregistrer_fig("provisions.png")
-
-# 6. écart de liquidité cumulé
-cum = [-6588246233, -8709764501, -10360806802, -11631872515, -12596052822]
-fig, ax = plt.subplots(figsize=(9, 3.2))
-ax.bar(["Année 1", "Année 2", "Année 3", "Année 4", "Année 5"], [md(v) for v in cum], color=BLEU)
-for i, v in enumerate(cum):
-    ax.text(i, md(v) - 0.6, f"{md(v):.2f}".replace(".", ","), ha="center", fontsize=8, color=NOIR)
-ax.axhline(0, color=NOIR, lw=0.8)
-ax.set_ylabel("Manque cumulé (milliards de FCFA)")
-ax.set_ylim(-14.5, 0.5)
-F_LIQ = enregistrer_fig("ecart_liquidite.png")
-
-# 7. matrice des risques (R1 à R10 du rapport, diapositive 23)
-POS = {"R1": (4, 5), "R2": (4, 5), "R3": (5, 4), "R4": (5, 4), "R5": (5, 3), "R6": (5, 3), "R9": (5, 3), "R10": (4, 3), "R7": (5, 1), "R8": (5, 2)}
-fig, ax = plt.subplots(figsize=(7.5, 5.2))
-for p in range(1, 6):
-    for g in range(1, 6):
-        sc = p * g
-        c = ROUGE_R if sc >= 15 else (JAUNE_R if sc >= 8 else VERT_R)
-        ax.add_patch(Rectangle((g - 0.5, p - 0.5), 1, 1, fc=c, ec="white", lw=2))
-        txt = ", ".join(k for k, v in POS.items() if v == (p, g))
-        if txt:
-            ax.text(g, p, txt, ha="center", va="center", fontsize=10, fontweight="bold")
-ax.set_xlim(0.5, 5.5)
-ax.set_ylim(0.5, 5.5)
-ax.set_xticks(range(1, 6), ["1\nNégligeable", "2\nMineure", "3\nModérée", "4\nMajeure", "5\nCatastrophique"], fontsize=8)
-ax.set_yticks(range(1, 6), ["1 Très peu\nprobable", "2 Peu\nprobable", "3 Possible", "4 Probable", "5 Très probable\n(déjà constaté)"], fontsize=8)
-ax.set_xlabel("Gravité (impact en FCFA)")
-ax.set_ylabel("Probabilité")
-for s in ax.spines.values():
-    s.set_visible(False)
-F_RISQ = enregistrer_fig("matrice_risques.png")
 
 
 # ================================================================ CONSTATS
@@ -369,28 +247,6 @@ K = [
 assert [k["num"] for k in K] == list(range(1, 29))
 BOULE = {"P1": "🔴", "P2": "🟠", "P3": "🟡", "P4": "🟢"}
 
-# 8. matrice complexité × priorité
-fig, ax = plt.subplots(figsize=(8, 3.8))
-PR, CX = ["P1", "P2", "P3", "P4"], ["Faible", "Moyenne", "Élevée"]
-for i, cx in enumerate(CX):
-    for j, pr in enumerate(PR):
-        c = {"P1": ROUGE_R, "P2": ORANGE_R, "P3": JAUNE_R, "P4": VERT_R}[pr]
-        ax.add_patch(Rectangle((j, i), 1, 1, fc=c, ec="white", lw=2, alpha=1.0 if cx == "Faible" else 0.75 if cx == "Moyenne" else 0.5))
-        nums = [str(k["num"]) for k in K if k["cplx"] == cx and k["prio"] == pr]
-        lignes_ = [", ".join(nums[a:a + 5]) for a in range(0, len(nums), 5)]
-        ax.text(j + 0.5, i + 0.5, "\n".join(lignes_), ha="center", va="center", fontsize=10, fontweight="bold")
-ax.set_xlim(0, 4)
-ax.set_ylim(0, 3)
-ax.set_xticks([0.5, 1.5, 2.5, 3.5], ["P1\n3 mois", "P2\n6 mois", "P3\n6 à 18 mois", "P4\nau-delà"])
-ax.set_yticks([0.5, 1.5, 2.5], ["Faible", "Moyenne", "Élevée"])
-ax.set_xlabel("Priorité")
-ax.set_ylabel("Complexité")
-ax.text(0.05, -0.75, "En haut à gauche : actions urgentes et simples, à lancer tout de suite.", fontsize=8, transform=ax.transData)
-for s in ax.spines.values():
-    s.set_visible(False)
-F_CP = enregistrer_fig("matrice_complexite_priorite.png")
-
-
 # ================================================================ DOCUMENT
 JAUNE = []
 r = RapportAdenka(titre="Résumé exécutif du volet actuariel", client="FPPN", type_livrable="Rapport provisoire", date="Octobre 2026")
@@ -402,10 +258,12 @@ r.sigles({"AIRMS": "Agence ivoirienne de régulation de la mutualité sociale", 
 r.abreviations({"art.": "Article", "FCFA": "Franc de la Communauté financière africaine", "n°": "Numéro", "P1 à P4": "Niveaux de priorité (voir l'annexe 2)"})
 
 
-def cellule(c, texte, taille=9.5, fond=None, gras_tout=False):
+def cellule(c, texte, taille=9.5, fond=None, gras_tout=False, couleur=None, centre=False):
     if fond:
         AD._fond(c, fond)
     p = c.paragraphs[0]
+    if centre:
+        p.alignment = 1
     p.paragraph_format.space_after = Pt(2)
     p.paragraph_format.space_before = Pt(2)
     p.paragraph_format.line_spacing = 1.05
@@ -419,13 +277,13 @@ def cellule(c, texte, taille=9.5, fond=None, gras_tout=False):
                 for t_, s_ in ((a, True), (b, False)):
                     if t_:
                         run = p.add_run(t_)
-                        AD._police_run(run, taille, gras_tout or kind == "b" or None, italique=(kind == "i") or None)
+                        AD._police_run(run, taille, gras_tout or kind == "b" or None, couleur, italique=(kind == "i") or None)
                         if s_:
                             JAUNE.append(t_)
                 surl = True
             elif morceau:
                 run = p.add_run(morceau)
-                AD._police_run(run, taille, gras_tout or kind == "b" or None, italique=(kind == "i") or None)
+                AD._police_run(run, taille, gras_tout or kind == "b" or None, couleur, italique=(kind == "i") or None)
         del surl
 
 
@@ -452,6 +310,39 @@ def table_brute(lignes, largeurs, fonds=None):
             f = (fonds or {}).get((i, j))
             cellule(c, val, fond=f, gras_tout=(j == 0 and len(largeurs) > 1))
     r.doc.add_paragraph()
+    return t
+
+
+def visuel(titre, source, lignes, largeurs, fonds, blancs=(), taille=9, hauteur=None):
+    """Figure numérotée faite d'un tableau Word coloré (modifiable)."""
+    r.n_fig += 1
+    r._legende("Figure", r.n_fig, titre)
+    t = r.doc.add_table(rows=len(lignes), cols=len(largeurs))
+    t.alignment = WD_TABLE_ALIGNMENT.CENTER
+    bords = OxmlElement("w:tblBorders")
+    for cote in ("top", "left", "bottom", "right", "insideH", "insideV"):
+        b = OxmlElement("w:" + cote)
+        b.set(qn("w:val"), "single")
+        b.set(qn("w:sz"), "12")
+        b.set(qn("w:color"), "FFFFFF")
+        bords.append(b)
+    tblPr = t._tbl.tblPr
+    suivant = next((tblPr.find(qn(tag)) for tag in ("w:shd", "w:tblLayout", "w:tblCellMar", "w:tblLook") if tblPr.find(qn(tag)) is not None), None)
+    if suivant is not None:
+        suivant.addprevious(bords)
+    else:
+        tblPr.append(bords)
+    for i, ligne in enumerate(lignes):
+        if hauteur:
+            tr = t.rows[i]
+            tr.height = Cm(hauteur)
+        for j, val in enumerate(ligne):
+            c = t.rows[i].cells[j]
+            c.width = Cm(largeurs[j])
+            c.vertical_alignment = 1
+            cellule(c, val, taille=taille, fond=fonds.get((i, j)), gras_tout=(i, j) in blancs or i == 0 or j == 0,
+                    couleur=RGBColor(255, 255, 255) if (i, j) in blancs else None, centre=True)
+    r._source(source)
     return t
 
 
@@ -509,7 +400,12 @@ r.para("**Le volet actuariel et statistique vérifie si le FPPN pourra tenir ses
        "et la disponibilité de cet argent au bon moment. La période étudiée va du 01/01/2020 au 31/08/2026.")
 encadre("**Le mot « actuariel ».** L'actuariat est le métier qui mesure aujourd'hui des sommes qui seront payées plus tard, par exemple l'épargne remboursée au départ à la retraite ou les soins des retraités.")
 r.h2("1.2. LES ÉTAPES DES TRAVAUX")
-r.figure(F_FRISE, titre="Les sept étapes des travaux", source="Adenka.", largeur_cm=17)
+_et = [("1. Lancement", "13 et 14/10/2026 : réunions, liste des documents"), ("2. Collecte", "15 au 23/10/2026 : sept envois du FPPN"),
+       ("3. Entretiens", "16 et 19/10/2026 : prestations, cotisations, comptabilité"), ("4. Contrôles", "4 454 416 lignes de précomptes, 7 balances"),
+       ("5. Analyses", "provisions, épargne, liquidité, placements, 36 ratios"), ("6. Constats", "28 constats, 10 risques notés"),
+       ("7. Plan d'actions", "actions classées par complexité et priorité")]
+visuel("Les sept étapes des travaux", "Adenka.", [[e for e, _ in _et], [d for _, d in _et]], [2.62] * 7,
+       {**{(0, j): ("112A40" if j < 5 else "EFAC62") for j in range(7)}, **{(1, j): "F2F2F2" for j in range(7)}}, blancs={(0, j) for j in range(7)}, taille=8.5)
 r.tableau(["Étape", "Ce qui a été fait", "En chiffres"],
           [["Lancement", "Réunions de lancement des 13 et 14/10/2026 et liste des documents demandés au FPPN", "88 documents demandés, sans doublon"],
            ["Collecte", "Sept envois du FPPN du 15/10 au 23/10/2026, vérifiés un par un", "6 reçus, 39 en partie, 43 non reçus"],
@@ -530,20 +426,37 @@ r.partie(2, "Les chiffres clés", introduction="Cette partie montre en images le
 r.h2("2.1. L'ÉPARGNE DES POLICIERS ET L'ARGENT MIS DE CÔTÉ")
 r.para("**L'épargne due augmente beaucoup plus vite que l'argent réservé pour la rembourser.** L'épargne passe d'environ 10,8 milliards de FCFA en 2020 à environ 15,7 milliards de FCFA au 31/08/2026. "
        "L'argent réservé n'en couvre que 16,28 %.")
-r.figure(F_EPARGNE, titre="Épargne due et argent réservé pour la rembourser (milliards de FCFA)", source=RAP + ", diapositives 13 et 90.", largeur_cm=16)
+graphique(r, {"type": "barres", "categories": ANS, "format": "0.00", "titre_axe": "Milliards de FCFA",
+              "series": [{"nom": "Épargne due aux policiers", "valeurs": [round(md(v), 2) for v in [10828205640, 10147421276, 9364845293, 9121576576, 10785064432, 13814066964, 15743516391]], "couleur": "112A40"},
+                         {"nom": "Argent mis de côté pour cette épargne", "valeurs": [round(md(v), 2) for v in [714042784, 1957211038, 888844233, 839212069, 699925787, 1608155525, 2562885661]], "couleur": "EFAC62"}]},
+          "Épargne due et argent réservé pour la rembourser (milliards de FCFA)", RAP + ", diapositives 13 et 90.")
 r.h2("2.2. LA CONSOMMATION DES COTISATIONS PAR LES SOINS ET LES DÉCÈS")
 r.para("**Les soins consomment presque toutes les cotisations maladie en 2026, alors que le décès reste très excédentaire.** "
-       "La bande grise montre la fourchette de 70 % à 80 % fixée par l'AIRMS pour l'ensemble des garanties.")
-r.figure(F_SIN, titre="Part des cotisations consommée par les prestations (%)", source=RAP + ", diapositives 13 et 75.", largeur_cm=16)
+       "Les deux lignes grises montrent la fourchette de 70 % à 80 % fixée par l'AIRMS pour l'ensemble des garanties.")
+graphique(r, {"type": "lignes", "categories": ANS, "format": "0.00", "titre_axe": "% des cotisations", "axe_min": 0, "axe_max": 110,
+              "series": [{"nom": "Maladie", "valeurs": [12.54, 6.00, 6.47, 26.91, 48.13, 73.53, 97.40], "couleur": "112A40"},
+                         {"nom": "Décès", "valeurs": [82.23, 55.42, 15.21, 17.05, 21.81, 19.14, 21.76], "couleur": "EFAC62", "etiquettes": False},
+                         {"nom": "Toutes garanties (taux de l'AIRMS)", "valeurs": [8.92, 20.77, 9.06, 24.56, 40.34, 57.48, 75.20], "couleur": "060606", "tirets": True, "etiquettes": False},
+                         {"nom": "Bas de la fourchette de l'AIRMS (70 %)", "valeurs": [70] * 7, "couleur": "BBBCBC", "sans_marqueur": True, "epaisseur": 1.25, "etiquettes": False},
+                         {"nom": "Haut de la fourchette de l'AIRMS (80 %)", "valeurs": [80] * 7, "couleur": "BBBCBC", "sans_marqueur": True, "epaisseur": 1.25, "etiquettes": False}]},
+          "Part des cotisations consommée par les prestations (%)", RAP + ", diapositives 13 et 75.", hauteur_cm=9)
 r.h2("2.3. LES FONDS PROPRES")
 r.para("**Les excédents de 2020 à 2025 réduisent les pertes passées sans les effacer, et 2026 marque un recul.**")
-r.figure(F_FP, titre="Fonds propres et résultat de l'année (milliards de FCFA)", source=RAP + ", diapositive 161.", largeur_cm=16)
+graphique(r, {"type": "barres", "categories": ANS, "format": "0.00", "titre_axe": "Milliards de FCFA", "etiquettes_axe_bas": True,
+              "series": [{"nom": "Fonds propres (réserves moins pertes passées)", "valeurs": [round(md(v), 2) for v in [-6743081733, -4659173531, -2598840854, -1668211752, -876142111, -438242200, -879498700]], "couleur": "112A40"},
+                         {"nom": "Résultat de l'année", "valeurs": [round(md(v), 2) for v in [1018579699, 2083908202, 2060332677, 930629102, 792069641, 437899911, -441256500]], "couleur": "EFAC62"}]},
+          "Fonds propres et résultat de l'année (milliards de FCFA)", RAP + ", diapositive 161.")
 r.h2("2.4. LES SOMMES MISES DE CÔTÉ FACE AUX BESOINS")
 r.para("**Trop d'argent est mis de côté pour la maladie et le décès, et rien pour les intérêts de l'épargne et les prêts en retard.**")
-r.figure(F_PROV, titre="Montants au bilan et besoins mesurés (milliards de FCFA)", source=RAP + ", diapositives 144 et 145.", largeur_cm=16)
+graphique(r, {"type": "barres", "categories": ["Maladie", "Décès (obsèques)", "Intérêts dus sur l'épargne", "Pertes sur les prêts du Grenier"], "format": "0.00", "titre_axe": "Milliards de FCFA",
+              "series": [{"nom": "Montant au bilan du FPPN", "valeurs": [2.87, 1.96, 0.00, 0.00], "couleur": "112A40"},
+                         {"nom": "Besoin mesuré par Adenka", "valeurs": [0.01, 0.01, 3.28, 0.01], "couleur": "EFAC62"}]},
+          "Montants au bilan et besoins mesurés (milliards de FCFA, arrondis)", RAP + ", diapositives 144 et 145. Montants exacts : maladie 2 867 602 878 FCFA au bilan et 12 481 392 FCFA de besoin, décès 1 961 695 412 FCFA et 7 100 000 FCFA, intérêts 3 278 913 238 FCFA, prêts 14 016 392 FCFA.")
 r.h2("2.5. LE MANQUE D'ARGENT DISPONIBLE")
 r.para("**Si l'épargne continue de sortir au rythme observé, il manquerait environ 12,6 milliards de FCFA en cinq ans**, sans compter les nouvelles cotisations.")
-r.figure(F_LIQ, titre="Manque d'argent disponible cumulé, année par année (milliards de FCFA)", source=RAP + ", diapositive 155.", largeur_cm=15)
+graphique(r, {"type": "barres", "categories": ["Année 1", "Année 2", "Année 3", "Année 4", "Année 5"], "format": "0.00", "titre_axe": "Milliards de FCFA", "legende": False, "etiquettes_axe_bas": True,
+              "series": [{"nom": "Manque cumulé", "valeurs": [round(md(v), 2) for v in [-6588246233, -8709764501, -10360806802, -11631872515, -12596052822]], "couleur": "112A40"}]},
+          "Manque d'argent disponible cumulé, année par année (milliards de FCFA)", RAP + ", diapositive 155.", hauteur_cm=7)
 
 # ---------------------------------------------------------------- partie 3
 r.partie(3, "Les constats et le plan d'actions", introduction="Chaque constat est présenté dans une fiche : ce qui a été constaté, pourquoi c'est important, le commentaire d'Adenka, ce que cela veut dire pour les policiers, et les actions à mener.")
@@ -561,7 +474,18 @@ r.partie(4, "La cartographie des risques", introduction="Cette partie situe les 
 r.h2("4.1. LA MATRICE DES RISQUES")
 r.para("**Sept risques sur dix sont dans la zone rouge, qui demande un traitement immédiat.** Chaque risque est noté de 1 à 5 en probabilité (5 : déjà constaté dans les comptes) "
        "et de 1 à 5 en gravité selon son impact en FCFA. Le score est le produit des deux notes.")
-r.figure(F_RISQ, titre="Matrice des risques : probabilité et gravité", source=RAP + ", diapositives 23 et 24.", largeur_cm=13)
+_POS = {"R1": (4, 5), "R2": (4, 5), "R3": (5, 4), "R4": (5, 4), "R5": (5, 3), "R6": (5, 3), "R9": (5, 3), "R10": (4, 3), "R7": (5, 1), "R8": (5, 2)}
+_lp = ["", "1 Très peu probable", "2 Peu probable", "3 Possible", "4 Probable", "5 Très probable (constaté)"]
+_lig = [["Probabilité \\ Gravité", "1 Négligeable", "2 Mineure", "3 Modérée", "4 Majeure", "5 Catastrophique"]]
+_fd = {(0, j): "060606" for j in range(6)}
+for i_, p_ in enumerate(range(5, 0, -1), 1):
+    _lig.append([_lp[p_]] + [", ".join(k_ for k_, v_ in _POS.items() if v_ == (p_, g_)) for g_ in range(1, 6)])
+    _fd[(i_, 0)] = "F2F2F2"
+    for g_ in range(1, 6):
+        sc_ = p_ * g_
+        _fd[(i_, g_)] = "E06666" if sc_ >= 15 else ("FFD966" if sc_ >= 8 else "93C47D")
+visuel("Matrice des risques : probabilité et gravité", RAP + ", diapositives 23 et 24. Rouge : score de 15 à 25. Jaune : 8 à 12. Vert : 1 à 6.",
+       _lig, [3.8] + [2.9] * 5, _fd, blancs={(0, j) for j in range(6)}, taille=9, hauteur=1.1)
 r.tableau(["N°", "Risque en clair", "Probabilité", "Gravité", "Score", "Constat"],
           [["R1", "Ne pas pouvoir payer les sorties d'épargne à temps", "4", "5 : manque de 12 596 052 822 FCFA à cinq ans", "🔴 20", "11"],
            ["R2", "Perdre l'agrément ou être sanctionné par l'AIRMS", "4", "5 : arrêt de l'activité", "🔴 20", "14"],
@@ -577,7 +501,16 @@ r.tableau(["N°", "Risque en clair", "Probabilité", "Gravité", "Score", "Const
 r.h2("4.2. LES ACTIONS SELON LEUR COMPLEXITÉ ET LEUR PRIORITÉ")
 r.para("**Six actions sont à lancer dans les trois mois, dont une seule est simple.** Le taux d'intérêt de l'épargne (constat 7) ne demande qu'une délibération. "
        "Les autres actions P1 demandent un travail interne ou l'accord d'un tiers : il faut les lancer tout de suite pour qu'elles aboutissent à temps.")
-r.figure(F_CP, titre="Les 28 constats selon la complexité de l'action et sa priorité (numéros des constats)", source="Adenka.", largeur_cm=15)
+_lig = [["Complexité \\ Priorité", "🔴 P1 (3 mois)", "🟠 P2 (6 mois)", "🟡 P3 (6 à 18 mois)", "🟢 P4 (au-delà)"]]
+_fd = {(0, j): "060606" for j in range(5)}
+_cl = {"P1": "F4CCCC", "P2": "FCE5CD", "P3": "FFF2CC", "P4": "D9EAD3"}
+for i_, cx_ in enumerate(["Faible", "Moyenne", "Élevée"], 1):
+    _lig.append([cx_] + [", ".join(str(k_["num"]) for k_ in K if k_["cplx"] == cx_ and k_["prio"] == pr_) for pr_ in ("P1", "P2", "P3", "P4")])
+    _fd[(i_, 0)] = "F2F2F2"
+    for j_, pr_ in enumerate(("P1", "P2", "P3", "P4"), 1):
+        _fd[(i_, j_)] = _cl[pr_]
+visuel("Les 28 constats selon la complexité de l'action et sa priorité (numéros des constats)", "Adenka. En haut à gauche : actions urgentes et simples, à lancer tout de suite.",
+       _lig, [3.6] + [3.7] * 4, _fd, blancs={(0, j) for j in range(5)}, taille=10, hauteur=1.3)
 
 # ---------------------------------------------------------------- partie 5
 r.partie(5, "Récapitulatif, limites et suite", introduction="Cette partie récapitule tous les constats, dit ce qui n'a pas encore pu être vérifié et présente les prochaines étapes.")
@@ -666,5 +599,35 @@ for run in doc.element.body.iter(qn("w:r")):
             min(apres, key=list(rpr).index).addprevious(h)
         else:
             rpr.append(h)
+# boules : emojis remplacés par un rond « ● » coloré (couleur du texte), lisible dans toutes les versions de Word
+import copy as _copy  # noqa: E402
+import re as _re  # noqa: E402
+COUL = {"🔴": "C00000", "🟠": "ED7D31", "🟡": "FFC000", "🟢": "70AD47"}
+for run in list(doc.element.body.iter(qn("w:r"))):
+    ts = run.findall(qn("w:t"))
+    if len(ts) != 1 or not any(e in (ts[0].text or "") for e in COUL):
+        continue
+    morceaux = [m for m in _re.split("(🔴|🟠|🟡|🟢)", ts[0].text) if m]
+    for m in morceaux:
+        nr = _copy.deepcopy(run)
+        t_ = nr.find(qn("w:t"))
+        t_.text = "●" if m in COUL else m
+        t_.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+        if m in COUL:
+            rpr = nr.find(qn("w:rPr"))
+            if rpr is None:
+                rpr = nr.makeelement(qn("w:rPr"), {})
+                nr.insert(0, rpr)
+            for old in rpr.findall(qn("w:color")):
+                rpr.remove(old)
+            col = rpr.makeelement(qn("w:color"), {qn("w:val"): COUL[m]})
+            ordre = ("w:rStyle", "w:rFonts", "w:b", "w:bCs", "w:i", "w:iCs", "w:caps", "w:smallCaps", "w:strike", "w:dstrike", "w:outline", "w:shadow", "w:emboss", "w:imprint", "w:noProof", "w:snapToGrid", "w:vanish", "w:webHidden")
+            prec = [e for e in rpr if e.tag in {qn(o) for o in ordre}]
+            if prec:
+                prec[-1].addnext(col)
+            else:
+                rpr.insert(0, col)
+        run.addprevious(nr)
+    run.getparent().remove(run)
 doc.save(SORTIE)
 print(SORTIE, "constats :", len(K), {p: sum(1 for k in K if k["prio"] == p) for p in ("P1", "P2", "P3", "P4")})
