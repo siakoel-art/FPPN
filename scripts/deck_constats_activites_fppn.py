@@ -263,6 +263,7 @@ def dessin_activites(slide, spec):
     for k, nom in enumerate(toutes):
         actif = nom in actives
         b = boite_txt(slide, xs[k], 4.42, lch, 0.5, NOIR if actif else "F2F2F2", NOIR if actif else "D9D9D9")
+        b.name = f"Nav {nom}"
         b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
         b.text_frame.margin_left = b.text_frame.margin_right = Cm(0.03)
         p = b.text_frame.paragraphs[0]
@@ -276,7 +277,14 @@ def dessin_activites(slide, spec):
         a, items = bloc["act"], bloc["items"]
         n_p1 = sum(1 for it in ACT[a] if it["prio"] == "P1")
         b = boite_txt(slide, x0, y, 31.2, 0.62, NOIR, NOIR)
+        b.name = f"Bloc {a}"
         b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+        r_ = boite_txt(slide, x0 + 26.4, y + 0.1, 4.6, 0.42, "53565A", "53565A")
+        r_.name = "Nav Carte"
+        r_.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+        pr_ = r_.text_frame.paragraphs[0]
+        pr_.alignment = PP_ALIGN.CENTER
+        run(pr_, "↩ Carte des activités", 8.5, True, "FFFFFF")
         p = b.text_frame.paragraphs[0]
         run(p, "● ", 12, True, CRIT[pire(a)][0])
         run(p, ("PRODUITS" if a in PRODUITS else "FONCTIONS TRANSVERSES") + "  ›  ", 10, False, "BBBCBC")
@@ -330,6 +338,7 @@ def dessin_activites(slide, spec):
 def dessin_carte(slide):
     def act_box(x, y, l, a):
         b = boite_txt(slide, x, y, l, 0.72, "FFFFFF", "112A40")
+        b.name = f"Nav {a}"
         b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
         p = b.text_frame.paragraphs[0]
         run(p, "● ", 11, True, CRIT[pire(a)][0])
@@ -411,6 +420,7 @@ def dessin_matrice(slide):
         y = y0 + h0 + i * hl
         x = x0
         b = boite_txt(slide, x, y, l0, hl, "F2F2F2")
+        b.name = f"Nav {a}"
         b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
         run(b.text_frame.paragraphs[0], a, 9, True)
         x += l0
@@ -541,6 +551,26 @@ SL.append({"type": "merci", "notes": ""})
 print("constats :", n_tot, {a: len(v) for a, v in ACT.items()})
 '''
 
-code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + "\nprint(SORTIE, len(SL), 'diapositives')\n"
+LIENS = r'''
+# ---- navigation : boutons cliquables (action « aller à la diapositive »), conservés dans le PDF exporté
+prs = Presentation(SORTIE)
+cible = {}
+for sl in prs.slides:
+    for sh in sl.shapes:
+        if sh.name.startswith("Bloc ") and sh.name[5:] not in cible:
+            cible[sh.name[5:]] = sl
+        if sh.has_text_frame and sh.name == "Adenka_Titre" and sh.text_frame.text == "Carte des activités du FPPN":
+            cible["Carte"] = sl
+n_liens = 0
+for sl in prs.slides:
+    for sh in sl.shapes:
+        if sh.name.startswith("Nav ") and sh.name[4:] in cible and cible[sh.name[4:]] is not sl:
+            sh.click_action.target_slide = cible[sh.name[4:]]
+            n_liens += 1
+prs.save(SORTIE)
+finaliser(SORTIE)
+print("liens de navigation :", n_liens)
+'''
+code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + LIENS + "\nprint(SORTIE, len(SL), 'diapositives')\n"
 g = {"__name__": "__main__", "__file__": os.path.join(ICI, "rapport_v12_fppn.py"), "SKILL": SKILL, "SORTIE": SORTIE}
 exec(compile(code, "deck_constats_activites_fppn (assemblé)", "exec"), g)
