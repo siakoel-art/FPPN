@@ -393,7 +393,7 @@ def dessin_carte(slide):
     tb = slide.shapes.add_textbox(Cm(1.4), Cm(12.15), Cm(31.2), Cm(3.4))
     tb.text_frame.word_wrap = True
     tf = tb.text_frame
-    for j, (b_, t_) in enumerate((("Comment lire. ", "Chaque activité porte une boule de la couleur de son constat le plus grave et, entre parenthèses, son nombre de constats. Les flèches suivent l'argent : il entre par les prélèvements sur la solde et sur la pension, il sort en prestations, en remboursements d'épargne et en services."),
+    for j, (b_, t_) in enumerate((("Comment lire. ", "Cliquez sur une activité pour ouvrir sa fiche, et sur « ↩ Carte des activités » pour revenir ici. Chaque activité porte une boule de la couleur de son constat le plus grave et, entre parenthèses, son nombre de constats. Les flèches suivent l'argent : il entre par les prélèvements sur la solde et sur la pension, il sort en prestations, en remboursements d'épargne et en services."),
                                  ("Ce que montre la carte. ", "Les activités les plus exposées touchent à l'épargne (EFC, PEP, trésorerie et placements) et aux règles de solidité (gouvernance, comptabilité et provisions). Les services aux policiers posent surtout la question de l'épargne qu'ils immobilisent (Grenier, clinique) et de leurs documents."))):
         p = tf.paragraphs[0] if j == 0 else tf.add_paragraph()
         p.space_after = Pt(4)
@@ -567,9 +567,17 @@ for sl in prs.slides:
         if sh.name.startswith("Nav ") and sh.name[4:] in cible and cible[sh.name[4:]] is not sl:
             sh.click_action.target_slide = cible[sh.name[4:]]
             n_liens += 1
+# diapositives d'activité et séparateurs des groupes masqués : en diaporama, on n'y accède que par les boutons
+n_masq = 0
+for sl in prs.slides:
+    noms = {sh.name for sh in sl.shapes}
+    textes = {sh.text_frame.text.strip() for sh in sl.shapes if sh.has_text_frame and sh.name == "Rectangle 9"}
+    if any(n_.startswith("Bloc ") for n_ in noms) or textes & {"Produits", "Fonctions transverses"}:
+        sl._element.set("show", "0")
+        n_masq += 1
 prs.save(SORTIE)
 finaliser(SORTIE)
-print("liens de navigation :", n_liens)
+print("liens de navigation :", n_liens, "| diapositives masquées :", n_masq)
 '''
 code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + LIENS + "\nprint(SORTIE, len(SL), 'diapositives')\n"
 g = {"__name__": "__main__", "__file__": os.path.join(ICI, "rapport_v12_fppn.py"), "SKILL": SKILL, "SORTIE": SORTIE}

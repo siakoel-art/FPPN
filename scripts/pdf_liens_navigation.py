@@ -13,7 +13,7 @@ PPTX, PDF, SORTIE = sys.argv[1:4]
 prs = Presentation(PPTX)
 lecteur = PdfReader(PDF)
 ecrivain = PdfWriter()
-ecrivain.append(lecteur)
+ecrivain.append(lecteur, import_outline=False)
 assert len(ecrivain.pages) == len(prs.slides), "le PDF doit avoir une page par diapositive"
 index = {sl.slide_id: k for k, sl in enumerate(prs.slides)}
 L, H = prs.slide_width, prs.slide_height
@@ -37,5 +37,15 @@ for k, sl in enumerate(prs.slides):
         page.annotations = page.annotations or ArrayObject()
         page.annotations.append(ecrivain._add_object(lien))
         n += 1
+# signets du lecteur PDF : un par diapositive titrée, les activités rangées sous leur groupe
+parent = None
+for k, sl in enumerate(prs.slides):
+    sep = next((sh.text_frame.text.strip() for sh in sl.shapes if sh.has_text_frame and sh.name == "Rectangle 9" and sh.text_frame.text.strip()), None)
+    titre = next((sh.text_frame.text.strip() for sh in sl.shapes if sh.has_text_frame and sh.name == "Adenka_Titre"), None)
+    if sep:
+        parent = ecrivain.add_outline_item(sep, k)
+    elif titre:
+        ecrivain.add_outline_item(titre, k, parent=parent)
+ecrivain.page_mode = "/UseOutlines"
 ecrivain.write(SORTIE)
 print(SORTIE, "liens ajoutés :", n)
