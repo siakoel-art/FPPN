@@ -1,8 +1,8 @@
 """Constats par activité du FPPN, présentation schématique pour le client (langage simple).
 
-Structure validée : vue d'ensemble (carte des activités, matrice activités × types de constat, synthèse chiffrée),
-puis les activités en colonnes sous une arborescence « Activités », avec quatre lignes : constats et commentaires,
-recommandations, complexité, priorité. Les circuits des logigrammes du FPPN sont en annexe.
+Structure : vue d'ensemble (carte des activités, matrice activités × types de constat, synthèse chiffrée), puis une
+activité par diapositive, une ligne par constat lue de gauche à droite : constat et commentaire, recommandation,
+complexité, priorité. L'arborescence des 14 activités sert de repère en haut de chaque diapositive. Les circuits des logigrammes du FPPN sont en annexe.
 Numérotation et classement repris du résumé exécutif du 26/10/2026 (constats 1 à 28, sous-numéros pour les constats
 propres à une activité). Chiffres du rapport actuariel et statistique du 23/10/2026.
 
@@ -196,104 +196,135 @@ def h_ligne(taille):
     return taille * 0.0353 * 1.2
 
 
-def mesurer(acts, larg, taille):
-    """Hauteurs nécessaires des quatre lignes (cm) pour un groupe d'activités."""
-    lc = larg - 0.3
-    hc = max(sum(lignes_est(f"● {it['num']} {it['titre']} {it['texte']}", lc, taille) * h_ligne(taille) + 0.08 for it in ACT[a]) for a in acts) + 0.2
-    hr = max(sum(lignes_est(f"{it['num']} {it['reco']}", lc, taille) * h_ligne(taille) + 0.05 for it in ACT[a]) for a in acts) + 0.2
-    hx = max(lignes_est("     ".join(f"{it["num"]} {it["cplx"]}" for it in ACT[a]), lc, taille) * h_ligne(taille) for a in acts) + 0.25
-    hp = max(lignes_est("     ".join(f"■ {it["num"]} {it["prio"]}" for it in ACT[a]), lc, taille) * h_ligne(taille) for a in acts) + 0.25
-    return hc, hr, hx, hp
+COURT = {"Retraités (CGRAE)": "Retraités", "Flotte automobile": "Flotte auto", "Clinique (CMP)": "Clinique", "Cotisations et précomptes": "Cotisations",
+         "Comptabilité et provisions": "Comptabilité", "Trésorerie et placements": "Trésorerie", "Données et informatique": "Données"}
+LC, LR, LX, LP = 16.6, 9.4, 2.6, 2.6   # colonnes : constat et commentaire, recommandation, complexité, priorité
+Y_TAB, Y_FIN = 6.4, 15.8
 
 
-Y0, Y_LEG = 5.75, 15.75
+def hauteur_item(it, taille):
+    h1 = lignes_est(f"● {it['num']} {it['titre']} {it['texte']}", LC - 0.35, taille) * h_ligne(taille)
+    h2 = lignes_est(f"→ {it['reco']}", LR - 0.35, taille) * h_ligne(taille)
+    return max(h1, h2, 0.55) + 0.22
 
 
-def tient(acts, taille):
-    larg = (31.2 - 3.4) / len(acts)
-    return sum(mesurer(acts, larg, taille)) <= Y_LEG - Y0 - 0.05
+def paquets_activite(a):
+    """Découpe une activité en diapositives : texte entre 10,5 et 9 points, au plus la hauteur du tableau."""
+    dispo = Y_FIN - Y_TAB
+    for t_ in (10.5, 10.0, 9.5, 9.0):
+        if sum(hauteur_item(it, t_) for it in ACT[a]) <= dispo:
+            return [(ACT[a], t_)]
+    t_, res, cour, h = 9.0, [], [], 0.0
+    for it in ACT[a]:
+        hi = hauteur_item(it, t_)
+        if cour and h + hi > dispo:
+            res.append((cour, t_))
+            cour, h = [], 0.0
+        cour.append(it)
+        h += hi
+    res.append((cour, t_))
+    return res
+
+
+def pilule(slide, x, y, l, h, texte, fond, couleur="FFFFFF", taille=9.5):
+    sh = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Cm(x), Cm(y), Cm(l), Cm(h))
+    sh.fill.solid()
+    sh.fill.fore_color.rgb = RGBColor.from_string(fond)
+    sh.line.fill.background()
+    sh.shadow.inherit = False
+    tf = sh.text_frame
+    tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = Cm(0.02)
+    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+    p = tf.paragraphs[0]
+    p.alignment = PP_ALIGN.CENTER
+    run(p, texte, taille, True, couleur)
+    return sh
 
 
 def dessin_activites(slide, spec):
-    acts, groupe, taille = spec["acts"], spec["groupe"], spec["taille"]
-    n = len(acts)
-    x0, lab = 1.4, 3.4
-    larg = (31.2 - lab) / n
-    # arborescence « Activités »
-    cx_racine = x0 + lab + (31.2 - lab) / 2
-    b = boite_txt(slide, cx_racine - 5.0, 3.95, 10.0, 0.5, BLEU, BLEU)
-    b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
-    p = b.text_frame.paragraphs[0]
-    p.alignment = PP_ALIGN.CENTER
-    run(p, f"ACTIVITÉS : {groupe.upper()}", 10, True, "FFFFFF")
-    centres = [x0 + lab + larg * (k + 0.5) for k in range(n)]
-    trait(slide, cx_racine, 4.45, cx_racine, 4.68)
-    if n > 1:
-        trait(slide, centres[0], 4.68, centres[-1], 4.68)
-    for k, a in enumerate(acts):
-        trait(slide, centres[k], 4.68, centres[k], 4.9)
-        b = boite_txt(slide, x0 + lab + larg * k + 0.15, 4.9, larg - 0.3, 0.62, NOIR, NOIR)
+    blocs, taille = spec["blocs"], spec["taille"]
+    actives = {b_["act"] for b_ in blocs}
+    x0 = 1.4
+    # arborescence des activités : repère de navigation, l'activité de la diapositive en noir
+    toutes = PRODUITS + TRANSV
+    lch = (31.2 - 0.15 * (len(toutes) - 1) - 0.5) / len(toutes)
+    xs, x = [], x0
+    for k, nom in enumerate(toutes):
+        if k == len(PRODUITS):
+            x += 0.5
+        xs.append(x)
+        x += lch + 0.15
+    for lib, debut_, fin_ in (("PRODUITS", 0, len(PRODUITS) - 1), ("FONCTIONS TRANSVERSES", len(PRODUITS), len(toutes) - 1)):
+        b = boite_txt(slide, xs[debut_], 3.92, xs[fin_] + lch - xs[debut_], 0.42, BLEU, BLEU)
         b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
         p = b.text_frame.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
-        run(p, "● ", 11, True, CRIT[pire(a)][0])
-        run(p, a.upper(), 10.5, True, "FFFFFF")
-        run(p, f"   {len(ACT[a])} constats", 8.5, False, "FFFFFF")
-    # grille : quatre lignes
-    hc, hr, hx, hp = mesurer(acts, larg, taille)
-    reste = (Y_LEG - Y0 - 0.05) - (hc + hr + hx + hp)
-    hc, hr = hc + reste * 0.6, hr + reste * 0.4
-    y = Y0
-    for nom, h, cle in (("Constats et commentaires", hc, "c"), ("Recommandations", hr, "r"), ("Complexité", hx, "x"), ("Priorité", hp, "p")):
-        b = boite_txt(slide, x0, y, lab - 0.1, h, "F2F2F2")
+        run(p, lib, 8, True, "FFFFFF")
+    for k, nom in enumerate(toutes):
+        actif = nom in actives
+        b = boite_txt(slide, xs[k], 4.42, lch, 0.5, NOIR if actif else "F2F2F2", NOIR if actif else "D9D9D9")
         b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
-        run(b.text_frame.paragraphs[0], nom, 9.5, True, NOIR)
-        for k, a in enumerate(acts):
-            c = boite_txt(slide, x0 + lab + larg * k + 0.05, y, larg - 0.1, h)
-            tf = c.text_frame
-            items = ACT[a]
-            if cle == "c":
-                for j, it in enumerate(items):
-                    p = tf.paragraphs[0] if j == 0 else tf.add_paragraph()
-                    p.space_after = Pt(2)
-                    run(p, "● ", taille + 1, True, CRIT[it["crit"]][0])
-                    run(p, it["num"] + "  ", taille, True, BLEU)
-                    run(p, it["titre"] + " ", taille, True)
-                    texte_balise(p, it["texte"], taille)
-            elif cle == "r":
-                for j, it in enumerate(items):
-                    p = tf.paragraphs[0] if j == 0 else tf.add_paragraph()
-                    p.space_after = Pt(1.5)
-                    run(p, it["num"] + "  ", taille, True, BLEU)
-                    run(p, it["reco"], taille)
-            elif cle == "x":
-                tf.vertical_anchor = MSO_ANCHOR.MIDDLE
-                p = tf.paragraphs[0]
-                for j, it in enumerate(items):
-                    run(p, ("     " if j else "") + it["num"] + " ", taille, True, BLEU)
-                    run(p, it["cplx"], taille, it["cplx"] == "Élevée")
-            else:
-                tf.vertical_anchor = MSO_ANCHOR.MIDDLE
-                p = tf.paragraphs[0]
-                for j, it in enumerate(items):
-                    run(p, ("     " if j else "") + "■ ", taille + 1, True, PRIO[it["prio"]])
-                    run(p, it["num"] + " ", taille, True, BLEU)
-                    run(p, it["prio"], taille, True, PRIO[it["prio"]])
-            gauche(tf)
-        y += h
+        b.text_frame.margin_left = b.text_frame.margin_right = Cm(0.03)
+        p = b.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        run(p, "● ", 7.5, True, CRIT[pire(nom)][0])
+        run(p, COURT.get(nom, nom), 7.5, actif, "FFFFFF" if actif else "53565A")
+    y = 5.1
+    reste_total = max(0.0, (Y_FIN - 5.1) - sum(1.25 + sum(hauteur_item(it, taille) for it in b_["items"]) for b_ in blocs))
+    n_lignes = sum(len(b_["items"]) for b_ in blocs)
+    for bloc in blocs:
+        a, items = bloc["act"], bloc["items"]
+        n_p1 = sum(1 for it in ACT[a] if it["prio"] == "P1")
+        b = boite_txt(slide, x0, y, 31.2, 0.62, NOIR, NOIR)
+        b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+        p = b.text_frame.paragraphs[0]
+        run(p, "● ", 12, True, CRIT[pire(a)][0])
+        run(p, ("PRODUITS" if a in PRODUITS else "FONCTIONS TRANSVERSES") + "  ›  ", 10, False, "BBBCBC")
+        run(p, a.upper(), 12, True, "FFFFFF")
+        run(p, f"     {len(ACT[a])} constats, dont {n_p1} à traiter dans les trois mois" if n_p1 else f"     {len(ACT[a])} constats", 9.5, False, "FFFFFF")
+        if bloc.get("partie"):
+            run(p, f"     ({bloc['partie']})", 9.5, False, "FFFFFF")
+        y += 0.7
+        x = x0
+        for lib, l in (("Constat et commentaire", LC), ("Recommandation", LR), ("Complexité", LX), ("Priorité", LP)):
+            b = boite_txt(slide, x, y, l, 0.5, "D9D9D9", "D9D9D9")
+            b.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+            p = b.text_frame.paragraphs[0]
+            p.alignment = PP_ALIGN.LEFT if l > 5 else PP_ALIGN.CENTER
+            run(p, lib, 9.5, True)
+            x += l
+        y += 0.55
+        for k_, it in enumerate(items):
+            h = hauteur_item(it, taille) + min(reste_total / max(1, n_lignes), 0.5)
+            fond = "FFFFFF" if k_ % 2 == 0 else "F7F7F7"
+            c = boite_txt(slide, x0, y, LC, h, fond, "D9D9D9")
+            c.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+            p = c.text_frame.paragraphs[0]
+            run(p, "● ", taille + 2, True, CRIT[it["crit"]][0])
+            run(p, it["num"] + "   ", taille, True, BLEU)
+            run(p, it["titre"] + " ", taille, True)
+            texte_balise(p, it["texte"], taille)
+            c = boite_txt(slide, x0 + LC, y, LR, h, fond, "D9D9D9")
+            c.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+            p = c.text_frame.paragraphs[0]
+            run(p, "→ ", taille + 1, True, ORANGE)
+            run(p, it["reco"], taille)
+            for xx, l in ((x0 + LC + LR, LX), (x0 + LC + LR + LX, LP)):
+                boite_txt(slide, xx, y, l, h, fond, "D9D9D9")
+            ph = min(0.6, h - 0.12)
+            pilule(slide, x0 + LC + LR + 0.2, y + (h - ph) / 2, LX - 0.4, ph, it["cplx"], {"Faible": "D9EAD3", "Moyenne": "FFF2CC", "Élevée": "F4CCCC"}[it["cplx"]], NOIR, 9)
+            pilule(slide, x0 + LC + LR + LX + 0.45, y + (h - ph) / 2, LP - 0.9, ph, it["prio"], PRIO[it["prio"]], "FFFFFF", 10)
+            y += h
+        y += 0.08
     # légende
-    tb = slide.shapes.add_textbox(Cm(x0), Cm(Y_LEG + 0.05), Cm(31.2), Cm(0.45))
+    tb = slide.shapes.add_textbox(Cm(x0), Cm(Y_FIN + 0.08), Cm(31.2), Cm(0.42))
     tb.text_frame.word_wrap = True
     p = tb.text_frame.paragraphs[0]
-    run(p, "Criticité du constat : ", 7.5, True)
+    run(p, "Criticité : ", 7.5, True)
     for code in ("C", "E", "M", "F"):
         run(p, "● ", 8.5, True, CRIT[code][0])
         run(p, CRIT[code][1] + "   ", 7.5)
-    run(p, "Priorité : ", 7.5, True)
-    for pr, lib in (("P1", "3 mois"), ("P2", "6 mois"), ("P3", "6 à 18 mois"), ("P4", "au-delà")):
-        run(p, "■ ", 8.5, True, PRIO[pr])
-        run(p, f"{pr} {lib}   ", 7.5)
-    run(p, "Complexité : Faible (une décision suffit), Moyenne (travail interne), Élevée (tiers ou financement). Numéros : ceux du résumé exécutif.", 7.5)
+    run(p, "Priorité : P1 dans les 3 mois, P2 dans les 6 mois, P3 de 6 à 18 mois, P4 au-delà.   Complexité : Faible (une décision suffit), Moyenne (travail interne), Élevée (tiers ou financement).   Numéros : ceux du résumé exécutif.", 7.5)
 
 
 def dessin_carte(slide):
@@ -436,53 +467,61 @@ contenu({"titre": "Synthèse chiffrée par activité", "sous_titre": "Cinq activ
                  "largeurs": [6.4, 2.4, 4.2, 12.0, 3.6, 2.6], "taille": 9, "sans_code": True, "lignes": _syn},
         source=RAP + " ; résumé exécutif du 26/10/2026")
 
-GROUPES = [("Produits", ["Maladie", "Décès", "Retraités (CGRAE)"]), ("Produits", ["EFC", "PEP", "MEDOC"]), ("Produits", ["Grenier", "Flotte automobile", "Clinique (CMP)"]),
-           ("Fonctions transverses", ["Cotisations et précomptes", "Comptabilité et provisions"]), ("Fonctions transverses", ["Trésorerie et placements", "Gouvernance", "Données et informatique"])]
-SOUS = {"Maladie": "La maladie perd de l'argent depuis 2025, le décès la finance, et le coût des retraités n'est pas suivi",
+SOUS = {"Maladie": "La garantie maladie perd de l'argent depuis 2025, et ses provisions ne sont pas calculées",
+        "Décès": "La garantie décès est excédentaire, mais sa dette envers les familles grossit",
         "Retraités (CGRAE)": "Les retraités cotisent de plus en plus, mais leurs soins et leurs âges ne sont pas suivis",
-        "Gouvernance": "Les règles de solidité ne sont pas respectées, et les décisions ne sont pas encadrées",
-        "Données et informatique": "Des données essentielles manquent pour finir les calculs",
-        "Comptabilité et provisions": "Les comptes ne mesurent pas les vraies dettes envers les policiers",
-        "PEP": "Les intérêts de l'épargne ne sont ni fixés ni comptabilisés",
-        "Flotte automobile": "Les services aux policiers manquent de documents et de suivi",
+        "EFC": "L'épargne de fin de carrière a triplé, sans taux fixé ni intérêts comptabilisés",
+        "PEP": "L'épargne volontaire sort vite et ses intérêts ne sont pas comptabilisés",
+        "MEDOC": "MEDOC fonctionne sans documentation ni fichiers complets",
+        "Grenier": "Le Grenier grandit vite, financé presque entièrement par l'épargne",
+        "Flotte automobile": "Le risque est porté par GNA, mais les documents et le suivi manquent",
         "Clinique (CMP)": "La clinique n'a ni comptes séparés ni valeur établie",
-        "EFC": "Les intérêts de l'épargne ne sont ni fixés ni comptabilisés, et MEDOC n'est pas documenté",
-        "Grenier": "Les services aux policiers grandissent avec l'épargne, sans comptes séparés ni évaluation",
-        "Cotisations et précomptes": "Les cotisations ne sont pas rapprochées, et les comptes ne mesurent pas les vraies dettes",
-        "Trésorerie et placements": "L'argent disponible ne couvre pas l'année, et les décisions ne sont pas encadrées"}
+        "Cotisations et précomptes": "Le total prélevé est juste, mais les fichiers ne sont pas rapprochés",
+        "Comptabilité et provisions": "Les comptes ne mesurent pas les vraies dettes envers les policiers",
+        "Trésorerie et placements": "L'argent disponible ne couvre pas l'année, et l'épargne n'est pas mise à part",
+        "Gouvernance": "Les règles de solidité ne sont pas respectées, et les décisions ne sont pas encadrées",
+        "Données et informatique": "Des données essentielles manquent pour finir les calculs"}
+def h_bloc(items, t_):
+    return 1.25 + sum(hauteur_item(it, t_) for it in items) + 0.08
 
 
-def decouper(acts):
-    """Découpe un groupe en diapositives lisibles : on retire une activité tant que le texte ne tient pas en 7 points."""
-    paquets, reste = [], list(acts)
-    while reste:
-        k = len(reste)
-        while k > 1 and not tient(reste[:k], 6.5):
-            k -= 1
-        paquets.append(reste[:k])
-        reste = reste[k:]
-    return paquets
+def grave(items):
+    return min(items, key=lambda it: (ORDRE_C[it["crit"]], it["prio"]))
 
 
-def taille_ok(acts):
-    for t_ in (8.0, 7.5, 7.0, 6.5, 6.0):
-        if tient(acts, t_):
-            return t_
-    return 6.0
+def libelle(it):
+    t = it["titre"].rstrip(".")
+    return t if t[:2].isupper() else t[0].lower() + t[1:]
 
 
-sep_fait = set()
-for groupe, acts in GROUPES:
-    if groupe not in sep_fait:
-        sep_fait.add(groupe)
-        separateur(2 if groupe == "Produits" else 3, groupe, "Constats et commentaires, recommandations, complexité et priorité, activité par activité")
-    for paquet in decouper(acts):
-        n_c = sum(len(ACT[a]) for a in paquet)
-        n_p1 = sum(1 for a in paquet for it in ACT[a] if it["prio"] == "P1")
-        contenu({"titre": " | ".join(paquet), "sous_titre": SOUS.get(paquet[0], SOUS.get(acts[0])),
-                 "synthese": f"{n_c} constats, dont {n_p1} à traiter dans les trois mois" if n_p1 else f"{n_c} constats, aucun à traiter dans les trois mois, mais plusieurs dans les six mois"},
-                "Lire chaque colonne de haut en bas : le constat, sa recommandation, sa complexité et sa priorité portent le même numéro. Les numéros sont ceux du résumé exécutif.",
-                activites={"acts": paquet, "groupe": groupe, "taille": taille_ok(paquet)},
+for groupe, liste in (("Produits", PRODUITS), ("Fonctions transverses", TRANSV)):
+    separateur(2 if groupe == "Produits" else 3, groupe, "Chaque constat se lit sur une ligne : son commentaire, sa recommandation, sa complexité et sa priorité")
+    diapos, k = [], 0
+    while k < len(liste):
+        a = liste[k]
+        paq = paquets_activite(a)
+        if len(paq) == 1 and k + 1 < len(liste):
+            b_ = liste[k + 1]
+            for t_ in (10.0, 9.5):
+                if len(ACT[a]) + len(ACT[b_]) <= 6 and h_bloc(ACT[a], t_) + h_bloc(ACT[b_], t_) <= Y_FIN - 5.1:
+                    diapos.append(([{"act": a, "items": ACT[a]}, {"act": b_, "items": ACT[b_]}], t_))
+                    k += 2
+                    break
+            else:
+                diapos.append(([{"act": a, "items": ACT[a]}], paq[0][1]))
+                k += 1
+            continue
+        for n_, (items, t_) in enumerate(paq):
+            diapos.append(([{"act": a, "items": items, "partie": f"{n_ + 1}/{len(paq)}" if len(paq) > 1 else None}], t_))
+        k += 1
+    for blocs, t_ in diapos:
+        tous = [it for b_ in blocs for it in b_["items"]]
+        g_ = grave(tous)
+        act_g = next(b_["act"] for b_ in blocs if g_ in b_["items"])
+        titre = " et ".join(b_["act"] for b_ in blocs) + (f" ({blocs[0]['partie']})" if blocs[0].get("partie") else "")
+        contenu({"titre": titre, "sous_titre": SOUS[act_g], "synthese": f"Constat le plus grave : {g_['num']}, {libelle(g_)}"},
+                "Lire chaque ligne de gauche à droite : le constat et son commentaire, la recommandation, la complexité de l'action et sa priorité. Le bandeau du haut situe l'activité parmi les 14 activités du FPPN.",
+                activites={"blocs": blocs, "taille": t_},
                 source=RAP + " ; logigrammes du FPPN (« FLOW_CHART_COTISATION_ET_PRODUITS_DEPARGNE_1.pptx ») ; résumé exécutif du 26/10/2026")
 
 separateur("A", "Annexes", "Circuits des cotisations par produit, avec les contrôles absents")
