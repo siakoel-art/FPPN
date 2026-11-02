@@ -686,3 +686,14 @@ for _sl in _prs.slides:
                         _c.fill.solid()
                         _c.fill.fore_color.rgb = _RGB.from_string(_col)
 _prs.save(SORTIE)
+
+# version diaporama (.ppsx) : s'ouvre directement en mode diaporama, où les boutons répondent au simple clic
+import zipfile as _zf
+_ppsx = os.path.splitext(SORTIE)[0] + ".ppsx"
+with _zf.ZipFile(SORTIE) as _zi, _zf.ZipFile(_ppsx, "w", _zf.ZIP_DEFLATED) as _zo:
+    for _it in _zi.infolist():
+        _d = _zi.read(_it.filename)
+        if _it.filename == "[Content_Types].xml":
+            _d = _d.replace(b"presentationml.presentation.main+xml", b"presentationml.slideshow.main+xml")
+        _zo.writestr(_it, _d)
+print(_ppsx)
