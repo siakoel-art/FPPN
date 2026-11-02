@@ -8,6 +8,7 @@ Moteur repris du point d'étape (deck_point_etape_management_fppn.py), lui-même
 Usage : python3 deck_resume_executif_rapport_fppn.py <skill adenka-powerpoint> <sortie.pptx>
 """
 import os
+import re
 import sys
 
 ICI = os.path.dirname(os.path.abspath(__file__))
@@ -383,60 +384,53 @@ RECAP_COMPL = [
 ]
 LEG_CRIT = [("🔴", "Critique", "risque élevé ou non-conformité"), ("🟠", "Élevé", "impact significatif"), ("🟡", "Moyen", "amélioration souhaitable"), ("🟢", "Faible", "point maîtrisé ou de faible montant")]
 
-# ---------------------------------------------------------------- recommandations du rapport (diapositives 25 et 26), regroupées par axe
-HOR = {"🔴": ("Moins de 6 mois", "C00000"), "🟠": ("6 à 18 mois", "ED7D31"), "🟢": ("Plus de 18 mois", "70AD47")}
-AXES_R = [("1", "Engagements et épargne", "ENG", [("R2", "Arrêter le taux servi sur l'épargne, tenir un relevé par épargnant et comptabiliser les intérêts dus", "🔴", "25"),
-                                                   ("R8", "Faire réaliser l'étude actuarielle de l'EFC et du PEP et certifier les comptes", "🟢", "26")]),
-          ("2", "Provisions et comptes", "PROV", [("R1", "Calculer les provisions maladie et décès à chaque clôture, dans une note signée", "🔴", "25"),
-                                                  ("R1", "Reprendre les montants hérités après décision des organes et information de l'AIRMS", "🔴", "25")]),
-          ("3", "Liquidité et placements", "ALM  PLA", [("R5", "Constituer une réserve de liquidité et faire voter une politique de placement", "🟠", "25"),
-                                                        ("R7", "Encadrer la clinique, le Grenier et le projet de Cocody", "🟠", "26")]),
-          ("4", "Conformité et garantie maladie", "REG  STAT", [("R4", "Présenter à l'AIRMS un plan de mise en conformité prudentielle", "🔴", "25"),
-                                                                ("R6", "Rééquilibrer la garantie maladie sur son coût complet", "🟠", "26")]),
-          ("5", "Données et pilotage", "DON", [("R3", "Transmettre les données qui manquent aux calculs actuariels", "🔴", "25"),
-                                               ("R9", "Mettre en place un dispositif actuariel permanent", "🟢", "26")])]
+# ---------------------------------------------------------------- recommandations par axe (modèle validé le 02/11/2026)
+AXES_R = [("1", "Engagements et épargne", "ENG", [("Fixer par délibération le taux servi sur l'épargne", "P1"), ("Comptabiliser les intérêts dus et tenir un compte par épargnant", "P1"),
+                                                   ("Étude actuarielle des risques longs tous les cinq ans", "P4")]),
+          ("2", "Provisions et comptes", "PROV", [("Note de calcul annuelle des provisions, signée et présentée à l'Assemblée générale", "P1"),
+                                                  ("Reclasser l'excédent après décision des organes et avis de l'AIRMS", "P1"), ("Déprécier les prêts du Grenier, comptabilité séparée de la clinique", "P2")]),
+          ("3", "Liquidité et placements", "ALM  PLA", [("Réserve de liquidité égale aux sorties d'épargne d'une année", "P1"), ("Échéancier des sorties d'épargne (départs à la retraite)", "P1"),
+                                                        ("Politique de placement votée, évaluation de la clinique et des terrains", "P2")]),
+          ("4", "Conformité et gouvernance", "REG", [("Plan de mise en conformité chiffré présenté à l'AIRMS", "P1"), ("Délibération du conseil pour chaque placement, comité actif-passif", "P2"),
+                                                     ("Recalculer la cotisation maladie, contrôler 5 % des factures", "P2")]),
+          ("5", "Données et pilotage", "DON  STAT", [("Transmettre les données manquantes (dates de naissance, prestations datées)", "P1"),
+                                                     ("Rapprocher chaque mois les fichiers de cotisations envoyés et reçus", "P2"), ("Tableau de bord semestriel des indicateurs de solidité", "P3")])]
 
 
 def d_recos_rapport(slide):
-    x0, g = 1.4, 0.2
+    x0, g = 1.4, 0.18
     l = (31.2 - 4 * g) / 5
-    y0 = 3.95
+    y0, h_t, h_c, h_k, g_k = 3.95, 1.45, 0.6, 2.45, 0.1
     for k, (num, titre, codes, actions) in enumerate(AXES_R):
         x = x0 + k * (l + g)
-        b = cadre(slide, x, y0, l, 1.45, BLEU, ancre=MSO_ANCHOR.MIDDLE, marge=0.2)
+        b = cadre(slide, x, y0, l, h_t, NOIR, ancre=MSO_ANCHOR.MIDDLE, marge=0.25)
         p = b.text_frame.paragraphs[0]
-        run(p, f"Axe {num}  ", 9.5, True, ORANGE)
-        run(p, codes, 8.5, False, GRIS_CLAIR)
+        run(p, f"Axe {num}", 9.5, True, ORANGE)
         p2 = b.text_frame.add_paragraph()
         run(p2, titre, 11, True, BLANC)
-        y = y0 + 1.6
-        for code, t_, hor, dia in actions:
-            b = cadre(slide, x, y, l, 4.55, CARTE, ancre=MSO_ANCHOR.TOP, marge=0.25)
-            b.text_frame.margin_top = Cm(0.85)
-            run(b.text_frame.paragraphs[0], t_, 11, True)
-            q2 = b.text_frame.add_paragraph()
-            q2.space_before = Pt(6)
-            run(q2, f"Rapport : recommandation {code[1:]}, diapositive {dia}", 8.5, False, "53565A")
-            lib, coul = HOR[hor]
-            pil = cadre(slide, x + 0.2, y + 0.18, 2.9, 0.5, coul, ancre=MSO_ANCHOR.MIDDLE, marge=0.02, forme=MSO_SHAPE.ROUNDED_RECTANGLE)
+        b = cadre(slide, x, y0 + h_t + 0.05, l, h_c, ORANGE, ancre=MSO_ANCHOR.MIDDLE, marge=0.25)
+        run(b.text_frame.paragraphs[0], "Constats : " + codes, 9, True, NOIR)
+        y = y0 + h_t + 0.05 + h_c + 0.1
+        for t_, pr in actions:
+            b = cadre(slide, x, y, l, h_k, CARTE, ancre=MSO_ANCHOR.MIDDLE, marge=0.25)
+            b.text_frame.margin_top = Cm(0.55)
+            run(b.text_frame.paragraphs[0], t_, 10.5)
+            pil = cadre(slide, x + l - 1.2, y + 0.15, 1.0, 0.45, PRIO[pr], ancre=MSO_ANCHOR.MIDDLE, marge=0.02, forme=MSO_SHAPE.ROUNDED_RECTANGLE)
             q = pil.text_frame.paragraphs[0]
             q.alignment = PP_ALIGN.CENTER
-            run(q, lib, 8.5, True, BLANC)
-            tc = slide.shapes.add_textbox(Cm(x + l - 1.3), Cm(y + 0.18), Cm(1.1), Cm(0.5))
-            pc_ = tc.text_frame.paragraphs[0]
-            pc_.alignment = PP_ALIGN.RIGHT
-            run(pc_, code, 9, True, NOIR)
-            y += 4.7
-    tb = slide.shapes.add_textbox(Cm(1.4), Cm(y0 + 1.6 + 2 * 4.7 + 0.05), Cm(31.2), Cm(0.45))
-    p = tb.text_frame.paragraphs[0]
-    run(p, "Horizon : ", 8.5, True, NOIR)
-    for hor in ("🔴", "🟠", "🟢"):
-        lib, coul = HOR[hor]
-        run(p, "■ ", 10, True, coul)
-        run(p, f"{lib}     ", 8.5, False, NOIR)
+            run(q, pr, 8.5, True, BLANC)
+            y += h_k + g_k
+    tb = slide.shapes.add_textbox(Cm(2.2), Cm(y + 0.05), Cm(8.0), Cm(2.3))
+    tf = tb.text_frame
+    run(tf.paragraphs[0], "Priorité :", 8.5, True, NOIR)
+    for pr, lib in (("P1", "dans les 3 mois"), ("P2", "dans les 6 mois"), ("P3", "de 6 à 18 mois"), ("P4", "au-delà de 18 mois")):
+        q = tf.add_paragraph()
+        run(q, "■ ", 9, True, PRIO[pr])
+        run(q, f"{pr} {lib}", 8.5, False, NOIR)
 
 
 DESSINS["recos_rapport"] = d_recos_rapport
+#@@HELPERS_ACTIVITES@@
 
 # ---------------------------------------------------------------- constats et enseignements par analyse attendue
 VERD = {"🔴": "Insuffisant", "🟠": "Partiel", "🟡": "Moyen", "🟢": "Satisfaisant"}
@@ -531,15 +525,28 @@ contenu({"titre": "Constats classés par criticité", "sous_titre": "Quatre cons
                  "sans_code": True, "legende": LEG_CRIT,
                  "lignes": [[r_[0].split(" ", 1)[1], r_[1], "**" + r_[4].split("**")[1] + "**", r_[4].split("**", 2)[2].strip(), DETAIL[r_[0].split(" ", 1)[1]], r_[0].split(" ", 1)[0]] for r_ in TOUS]},
         source=SRC_R + ", diapositives 4 à 13, 45 à 228 ; plan de travail du 23/10/2026")
-contenu({"titre": "Recommandations", "sous_titre": "Cinq axes, neuf recommandations : quatre à engager dans les six mois conditionnent toutes les autres",
-         "synthese": "Chaque action renvoie à la recommandation du rapport principal, qui précise qui agit, comment et dans quel délai"},
+#@@CONSTATS_ACTIVITES@@
+contenu({"titre": "Recommandations - Actuariat", "sous_titre": "Cinq axes de recommandations, dont huit actions à lancer dans les trois mois",
+         "synthese": "Chaque axe répond aux constats codés du récapitulatif, avec une priorité de P1 à P4"},
         "Présenter axe par axe. Le détail des actions figure aux diapositives 25 à 27 du rapport principal.",
-        dessin="recos_rapport", sommaire="Recommandations", source=SRC_R + ", diapositives 25 à 27")
+        dessin="recos_rapport", sommaire="Recommandations", source=SRC_R + ", diapositives 25 à 27 ; résumé exécutif du 26/10/2026")
 SL.append({"type": "merci", "notes": ""})
 ENTREES = [(x["sommaire"], i) for i, x in enumerate(SL, 1) if x.get("sommaire")]
 '''
 
-code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + "\nprint(SORTIE, len(SL), 'diapositives')\n"
+CONS = open(os.path.join(ICI, "deck_constats_activites_fppn.py"), encoding="utf-8").read()
+_aides = CONS[CONS.index("CRIT = {"):CONS.index('SL.append({"type": "couverture"')]
+_carte = CONS[CONS.index("n_tot = sum"):CONS.index("_nd = sum")]
+_synth = CONS[CONS.index("_syn = []"):CONS.index("SOUS = {")]
+_boucle = CONS[CONS.index("SOUS = {"):CONS.index("_SRC_FLOW = ")]
+_boucle = re.sub(r"^\s*separateur\(.*\n", "", _boucle, flags=re.M)
+assert "separateur(" not in _boucle
+_carte = _carte.replace('carte=True, source=RAP + " ; résumé exécutif du 26/10/2026")', 'carte=True, sommaire="Constats par activité", source=RAP + " ; résumé exécutif du 26/10/2026")')
+CONTENU = CONTENU.replace("#@@HELPERS_ACTIVITES@@", _aides).replace("#@@CONSTATS_ACTIVITES@@", _carte + _synth + _boucle)
+LIENS = CONS[CONS.index("# ---- navigation : boutons cliquables"):CONS.index("finaliser(SORTIE)\nprint(\"liens de navigation")]
+MOTEUR = MOTEUR.replace('        if x.get("dessin"):', '        if "activites" in x:\n            dessin_activites(sl, x["activites"])\n        if "carte" in x:\n            dessin_carte(sl)\n        if x.get("dessin"):', 1)
+LIENS += 'finaliser(SORTIE)\nprint("liens de navigation :", n_liens, "| diapositives masquées :", n_masq)\n'
+code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + "\n" + LIENS + "\nprint(SORTIE, len(SL), 'diapositives')\n"
 g = {"__name__": "__main__", "__file__": os.path.join(ICI, "rapport_v12_fppn.py"), "SKILL": SKILL, "SORTIE": SORTIE}
 exec(compile(code, "deck_resume_executif_rapport_fppn (assemblé)", "exec"), g)
 
