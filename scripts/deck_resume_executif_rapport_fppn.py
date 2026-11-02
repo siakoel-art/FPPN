@@ -33,6 +33,104 @@ for avant, apres in [('"Audit Comptable et financier FPPN", "Text Placeholder 4"
     assert avant in MOTEUR, avant
     MOTEUR = MOTEUR.replace(avant, apres)
 
+ACT_AIDES = r'''
+# ---------------------------------------------------------------- constats par activité : menu cliquable puis une fiche par activité
+FAM_ACT = [("Garanties", ["Maladie", "Décès", "Retraités (CGRAE)"]), ("Épargne", ["EFC", "PEP"]),
+            ("Services aux policiers", ["Grenier", "Flotte automobile", "MEDOC", "Clinique (CMP)"]), ("Fonctions transverses", TRANSV)]
+ORDRE_ACT = [a for _, l_ in FAM_ACT for a in l_]
+FAMILLE_DE = {a: f for f, l_ in FAM_ACT for a in l_}
+COURT_N = {"Retraités (CGRAE)": "Retraités", "Flotte automobile": "Flotte auto", "Clinique (CMP)": "Clinique", "Cotisations et précomptes": "Cotisations",
+           "Comptabilité et provisions": "Compta.", "Trésorerie et placements": "Trésorerie", "Données et informatique": "Données", "Gouvernance": "Gouvern."}
+BOULE_C = {"C": "🔴", "E": "🟠", "M": "🟡", "F": "🟢"}
+COUL_C = {"C": "C00000", "E": "ED7D31", "M": "FFC000", "F": "70AD47"}
+
+
+def tri_items(a):
+    return sorted(ACT[a], key=lambda it: (ORDRE_C[it["crit"]], it["prio"]))
+
+
+def bouton(slide, x, y, l, h, nom, fond, bord=None):
+    sh = cadre(slide, x, y, l, h, fond, bord, ancre=MSO_ANCHOR.MIDDLE, marge=0.12)
+    sh.name = nom
+    return sh
+
+
+def d_menu_act(slide):
+    y = 3.95
+    for fam, liste in FAM_ACT:
+        b = cadre(slide, 1.4, y, 31.2, 0.5, BLEU, ancre=MSO_ANCHOR.MIDDLE, marge=0.15)
+        run(b.text_frame.paragraphs[0], fam, 9.5, True, BLANC)
+        y += 0.58
+        n_ = len(liste)
+        g_ = 0.2
+        l_ = (31.2 - (n_ - 1) * g_) / n_
+        for k, a in enumerate(liste):
+            its = tri_items(a)
+            sh = bouton(slide, 1.4 + k * (l_ + g_), y, l_, 1.62, "Nav " + a, BLANC, "112A40")
+            p = sh.text_frame.paragraphs[0]
+            run(p, "● ", 12, True, COUL_C[its[0]["crit"]])
+            run(p, a, 10.5, True, NOIR)
+            p1 = sh.text_frame.add_paragraph()
+            run(p1, f"{len(its)} constats  ›  ouvrir la fiche", 8, True, "53565A")
+            p2 = sh.text_frame.add_paragraph()
+            run(p2, f"Le plus grave : {its[0]['num']}, {(its[0]['titre'] if its[0]['titre'][1:2].isupper() else its[0]['titre'][0].lower() + its[0]['titre'][1:])}", 8, False, "53565A")
+        y += 1.72
+    tb = slide.shapes.add_textbox(Cm(1.4), Cm(y + 0.1), Cm(31.2), Cm(0.5))
+    p = tb.text_frame.paragraphs[0]
+    run(p, "Comment lire : ", 9, True, NOIR)
+    run(p, "en diaporama, cliquer sur une activité pour ouvrir sa fiche. Les fiches se lisent aussi dans l'ordre, de la maladie aux données. Boule : criticité du constat le plus grave.", 9, False, NOIR)
+
+
+def d_nav(slide, act):
+    k = ORDRE_ACT.index(act)
+    y, h = 3.85, 0.72
+    sh = bouton(slide, 1.4, y, 2.6, h, "Nav MENU", BLEU)
+    run(sh.text_frame.paragraphs[0], "⌂ Toutes les activités", 7.5, True, BLANC)
+    x = 4.1
+    if k > 0:
+        sh = bouton(slide, x, y, 0.95, h, "Nav " + ORDRE_ACT[k - 1], ORANGE)
+        sh.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
+        run(sh.text_frame.paragraphs[0], "◀", 10, True, NOIR)
+    x += 1.03
+    if k < len(ORDRE_ACT) - 1:
+        sh = bouton(slide, x, y, 0.95, h, "Nav " + ORDRE_ACT[k + 1], ORANGE)
+        sh.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
+        run(sh.text_frame.paragraphs[0], "▶", 10, True, NOIR)
+    x0 = x + 1.08
+    n_ = len(ORDRE_ACT)
+    g_ = 0.08
+    l_ = (32.6 - x0 - (n_ - 1) * g_) / n_
+    for j, a in enumerate(ORDRE_ACT):
+        courant = a == act
+        sh = bouton(slide, x0 + j * (l_ + g_), y, l_, h, ("Ici " if courant else "Nav ") + a, NOIR if courant else BLANC, None if courant else "BBBCBC")
+        sh.text_frame.margin_left = sh.text_frame.margin_right = Cm(0.04)
+        p = sh.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        run(p, "●", 6.5, True, COUL_C[tri_items(a)[0]["crit"]])
+        run(p, " " + COURT_N.get(a, a), 6.5, True, BLANC if courant else NOIR)
+
+
+DESSINS["menu_act"] = d_menu_act
+'''
+ACT_DIAPOS = r'''
+_ntot = sum(len(ACT[a]) for a in ORDRE_ACT)
+contenu({"titre": "Constats par activité", "sous_titre": f"{_ntot} constats sur 14 activités : l'épargne, la liquidité et les règles de solidité concentrent les plus graves",
+         "synthese": "Chaque bouton ouvre la fiche de l'activité : couleur du constat le plus grave, nombre de constats et constat le plus grave"},
+        "Menu des fiches. En diaporama, cliquer sur une activité, puis revenir par « Toutes les activités ».",
+        dessin="menu_act", sommaire="Constats par activité", source=SRC_R + " ; résumé exécutif du 26/10/2026")
+for a in ORDRE_ACT:
+    its = tri_items(a)
+    nb = {c: sum(1 for it in its if it["crit"] == c) for c in "CEMF"}
+    det = ", ".join(f"{nb[c]} {lib}" for c, lib in (("C", "critique" + ("s" if nb["C"] > 1 else "")), ("E", "élevé" + ("s" if nb["E"] > 1 else "")),
+                                                    ("M", "moyen" + ("s" if nb["M"] > 1 else "")), ("F", "faible" + ("s" if nb["F"] > 1 else ""))) if nb[c])
+    contenu({"titre": f"{FAMILLE_DE[a]} : {a}", "sous_titre": SOUS[a],
+             "synthese": f"{len(its)} constats ({det}). Le plus grave : {its[0]['num']}, {(its[0]['titre'] if its[0]['titre'][1:2].isupper() else its[0]['titre'][0].lower() + its[0]['titre'][1:]).rstrip('.')}"},
+            "Lire chaque ligne de gauche à droite : le constat et son commentaire, la recommandation, la complexité, la priorité, puis la criticité. Les boutons du haut mènent aux autres activités.",
+            tableau={"titre": None, "entetes": ["N°", "Constat et commentaire", "Recommandation", "Complexité", "Priorité", "Criticité"], "largeurs": [1.3, 15.4, 8.9, 2.1, 1.75, 1.75],
+                     "taille": 8.5, "sans_code": True, "legende": LEG_CRIT,
+                     "lignes": [[it["num"], f"**{it['titre']}** {it['texte']}", it["reco"], it["cplx"], it["prio"], BOULE_C[it["crit"]]] for it in its]},
+            nav=a, source=SRC_R + " ; résumé exécutif du 26/10/2026")
+'''
 CONTENU = r'''
 import copy
 VALIDITE = {}
@@ -535,17 +633,30 @@ ENTREES = [(x["sommaire"], i) for i, x in enumerate(SL, 1) if x.get("sommaire")]
 '''
 
 CONS = open(os.path.join(ICI, "deck_constats_activites_fppn.py"), encoding="utf-8").read()
-_aides = CONS[CONS.index("CRIT = {"):CONS.index('SL.append({"type": "couverture"')]
-_carte = CONS[CONS.index("n_tot = sum"):CONS.index("_nd = sum")]
-_synth = CONS[CONS.index("_syn = []"):CONS.index("SOUS = {")]
-_boucle = CONS[CONS.index("SOUS = {"):CONS.index("_SRC_FLOW = ")]
-_boucle = re.sub(r"^\s*separateur\(.*\n", "", _boucle, flags=re.M)
-assert "separateur(" not in _boucle
-_carte = _carte.replace('carte=True, source=RAP + " ; résumé exécutif du 26/10/2026")', 'carte=True, sommaire="Constats par activité", source=RAP + " ; résumé exécutif du 26/10/2026")')
-CONTENU = CONTENU.replace("#@@HELPERS_ACTIVITES@@", _aides).replace("#@@CONSTATS_ACTIVITES@@", _carte + _synth + _boucle)
-LIENS = CONS[CONS.index("# ---- navigation : boutons cliquables"):CONS.index("finaliser(SORTIE)\nprint(\"liens de navigation")]
-MOTEUR = MOTEUR.replace('        if x.get("dessin"):', '        if "activites" in x:\n            dessin_activites(sl, x["activites"])\n        if "carte" in x:\n            dessin_carte(sl)\n        if x.get("dessin"):', 1)
-LIENS += 'finaliser(SORTIE)\nprint("liens de navigation :", n_liens, "| diapositives masquées :", n_masq)\n'
+_donnees = CONS[CONS.index("CRIT = {"):CONS.index("\n\n\ndef pire")] + "\n" + CONS[CONS.index("SOUS = {"):CONS.index("def h_bloc")]
+CONTENU = CONTENU.replace("#@@HELPERS_ACTIVITES@@", _donnees + "\n" + ACT_AIDES).replace("#@@CONSTATS_ACTIVITES@@", ACT_DIAPOS)
+MOTEUR = MOTEUR.replace('        if "tableau" in x:\n            tableau_avec_analyse(sl, x)', '        if x.get("nav"):\n            d_nav(sl, x["nav"])\n            tableau(sl, x["tableau"], 4.85, hauteur_max=BAS_CONTENU - 4.85)\n        elif "tableau" in x:\n            tableau_avec_analyse(sl, x)', 1)
+assert 'd_nav(sl, x["nav"])' in MOTEUR
+LIENS = r"""
+# ---- navigation : chaque bouton est une forme unique qui porte l'action « aller à la diapositive »
+prs = Presentation(SORTIE)
+cible = {}
+for sl in prs.slides:
+    for sh in sl.shapes:
+        if sh.name.startswith("Ici "):
+            cible[sh.name[4:]] = sl
+        if sh.has_text_frame and sh.name == "Adenka_Titre" and sh.text_frame.text.strip() == "Constats par activité":
+            cible["MENU"] = sl
+n_liens = 0
+for sl in prs.slides:
+    for sh in sl.shapes:
+        if sh.name.startswith("Nav ") and sh.name[4:] in cible:
+            sh.click_action.target_slide = cible[sh.name[4:]]
+            n_liens += 1
+prs.save(SORTIE)
+finaliser(SORTIE)
+print("liens de navigation :", n_liens, "| fiches d'activité :", sum(1 for k in cible if k != "MENU"))
+"""
 code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + "\n" + LIENS + "\nprint(SORTIE, len(SL), 'diapositives')\n"
 g = {"__name__": "__main__", "__file__": os.path.join(ICI, "rapport_v12_fppn.py"), "SKILL": SKILL, "SORTIE": SORTIE}
 exec(compile(code, "deck_resume_executif_rapport_fppn (assemblé)", "exec"), g)
