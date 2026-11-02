@@ -331,13 +331,13 @@ contenu({"titre": "Objectifs et périmètre", "sous_titre": "Quatre questions à
         dessin="objectifs", source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et profil de l'actuaire (p. 74) ; plan d'analyse statistique du 16/10/2026")
 for k, (lot, titre_, sous_, synth_) in enumerate((
         (RECAP_DEMANDES, "Récapitulatif des activités (1/2) : les quatre demandes", "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
-         "Les quatre demandes de la mission dans leur ordre, puis par criticité : méthodes, volume traité et résultats"),
+         "Les quatre demandes de la mission, du constat le plus critique au moins critique : méthodes, volume traité et résultats"),
         (RECAP_COMPL, "Récapitulatif des activités (2/2) : travaux complémentaires", "Les travaux complémentaires confirment le risque sur l'agrément et la garantie maladie",
-         "Travaux nécessaires pour répondre aux quatre demandes, classés par criticité : méthodes, volume traité et résultats"))):
+         "Travaux nécessaires pour répondre aux quatre demandes, du plus critique au moins critique : méthodes, volume traité et résultats"))):
     contenu({"titre": titre_, "sous_titre": sous_, "synthese": synth_},
-            "Lire chaque ligne de gauche à droite : la criticité, le code, l'activité, la méthode retenue, le volume traité, puis le résultat, annoncé par son titre en gras.",
-            tableau={"titre": None, "entetes": ["Criticité", "Code", "Activité", "Méthodes", "Volume traité", "Résultat"], "largeurs": [1.75, 1.75, 3.4, 7.0, 4.6, 12.7], "taille": 8.5,
-                     "sans_code": True, "legende": LEG_CRIT, "lignes": [r_[0].split(" ", 1) + r_[1:] for r_ in lot]},
+            "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, le volume traité, le résultat annoncé par son titre en gras, puis la criticité.",
+            tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Résultat", "Criticité"], "largeurs": [1.75, 3.4, 7.0, 4.6, 12.7, 1.75], "taille": 8.5,
+                     "sans_code": True, "legende": LEG_CRIT, "lignes": [[r_[0].split(" ", 1)[1]] + r_[1:] + [r_[0].split(" ", 1)[0]] for r_ in sorted(lot, key=lambda r_: "🔴🟠🟡🟢".index(r_[0][0]))]},
             sommaire="Récapitulatif des activités" if k == 0 else None,
             source=RAP + ", diapositives 4 à 13, 48 à 61, 75, 90 à 166, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026")
 contenu({"titre": "Recommandations", "sous_titre": "Cinq axes de recommandations, dont huit actions à lancer dans les trois mois",
