@@ -28,7 +28,7 @@ VAL = {
     "Circuit des fichiers par produit": "circuit déclaré par le service des cotisations le 19/10/2026 ; non confirmé par une procédure écrite",
     "Flux financiers 2025": "exercice 2025, classes 6 et 7 de « BALANCE FPPN 2025.xlsx » ; flux d'épargne et du Grenier exclus du résultat",
     "Notions de base": "définitions de la Décision n° 05/2022 (annexe) et du règlement d'exécution n° 004/2022 ; sans chiffre propre au FPPN",
-    "Mission et périmètre": "périmètre fixé par le dossier de préparation du 13/10/2026 et la demande de M. Wabi ; période du 01/01/2020 au 31/08/2026",
+    "Mission et périmètre": "périmètre fixé par le dossier de préparation du 13/10/2026 et les termes de la mission ; période du 01/01/2020 au 31/08/2026",
     # ---------------------------------------------------------------- partie 3
     "Couverture de la période": "fichiers de précomptes reçus le 15/10/2026, par poste et par mois, de janvier 2020 à août 2026 (80 mois) ; un mois est « reçu » si au moins un fichier lisible le couvre",
     "Rapprochement aller et retour": "mois pour lesquels le fichier aller et le fichier retour d'un même poste sont tous deux reçus ; montants totaux du mois, sans rapprochement agent par agent",

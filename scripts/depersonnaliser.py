@@ -11,6 +11,10 @@ import re
 import sys
 
 REGLES = [
+    # personnes nommées
+    (r"\bla demande de M\. Wabi\b", "les termes de la mission"),
+    (r"\bdemande de M\. Wabi \(associé responsable\)", "termes de la mission"),
+    (r"\bdemande de M\. Wabi\b", "termes de la mission"),
     # direction comptable
     (r"\b([Ss])elon le chef comptable\b", r"\1elon la direction comptable"),
     (r"\bpar le chef comptable\b", "par la direction comptable"),

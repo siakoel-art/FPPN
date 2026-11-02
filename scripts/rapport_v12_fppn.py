@@ -497,7 +497,7 @@ SL.append({"type": "sommaire", "notes": "Le rapport suit l'ordre : résumé exé
 separateur("R", "Résumé exécutif", "Constats, chiffres clés, risques et actions",
            "Cette partie peut être présentée seule : elle reprend les messages essentiels du rapport, avec les chiffres et les renvois aux parties détaillées.")
 # ---- v10 : réponse aux quatre demandes de la mission (premières diapositives du résumé exécutif)
-SRC_DEM = "Source : demande de M. Wabi (associé responsable) : engagements, suffisance des provisions, adossement actif-passif, adéquation des placements, de 2020 au 31/08/2026 ; analyses détaillées citées dans la colonne « Détail »"
+SRC_DEM = "Source : termes de la mission : engagements, suffisance des provisions, adossement actif-passif, adéquation des placements, de 2020 au 31/08/2026 ; analyses détaillées citées dans la colonne « Détail »"
 V_ENG, V_PROV, V_ADO, V_PLA = "Partiellement démontré", "Partiellement démontré", "Insuffisant", "Insuffisant"
 contenu({"titre": "Réponse aux quatre demandes de la mission", "sous_titre": "Engagements et provisions partiellement démontrés ; adossement et placements insuffisants",
          "synthese": "Chaque verdict est détaillé dans la diapositive suivante, avec tous les chiffres qui le fondent et le renvoi à leur démonstration"},
