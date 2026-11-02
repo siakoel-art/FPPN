@@ -24,7 +24,8 @@ debut = next(i for i, l in enumerate(SRC, 1) if l.startswith("tmp = SORTIE.repla
 fin = next(i for i, l in enumerate(SRC, 1) if l.startswith("finaliser(SORTIE)"))
 MOTEUR = lignes(debut, fin + 1)
 for avant, apres in [('"Audit Comptable et financier FPPN", "Text Placeholder 4": "23 octobre 2026"', '"Audit Comptable et financier FPPN", "Text Placeholder 4": "Novembre 2026"'),
-                     ('r.text = "Rapport actuariel et statistique"', 'r.text = "Volet actuariel et statistique : point d\'étape"'),
+                     ('r.text = "Rapport actuariel et statistique"', 'r.text = "Point d\'étape : volets Actuariat et Stratégie"'),
+                     ("def remplir_gab(slide, num, d, analyse=None):\n", "def remplir_gab(slide, num, d, analyse=None):\n    if num == 11:\n        remplir_11(slide, d)\n        return\n"),
                      ('entrees = [("Résumé exécutif", 3)]', 'entrees = ENTREES'),
                      ('        sommaire(sl, entrees)', '        sommaire_noir(sl, entrees)'),
                      ('        if x.get("triangle"):', '        if x.get("dessin"):\n            DESSINS[x["dessin"]](sl)\n        if x.get("triangle"):')]:
@@ -32,6 +33,7 @@ for avant, apres in [('"Audit Comptable et financier FPPN", "Text Placeholder 4"
     MOTEUR = MOTEUR.replace(avant, apres)
 
 CONTENU = r'''
+import copy
 VALIDITE = {}
 PBCM = {}
 GAB = {"couverture": 1, "sommaire": 4, "contenu": 5, "merci": 110}
@@ -194,37 +196,92 @@ def d_objectifs(slide):
     run(p2, "repris dans le récapitulatif et les recommandations.", 11, False, NOIR)
 
 
-AXES = [("1", "Engagements et épargne", "ENG", [("Fixer par délibération le taux servi sur l'épargne", "P1"), ("Comptabiliser les intérêts dus et tenir un compte par épargnant", "P1"), ("Étude actuarielle des risques longs tous les cinq ans", "P4")]),
-        ("2", "Provisions et comptes", "PROV", [("Note de calcul annuelle des provisions, signée et présentée à l'Assemblée générale", "P1"), ("Reclasser l'excédent après décision des organes et avis de l'AIRMS", "P1"), ("Déprécier les prêts du Grenier, comptabilité séparée de la clinique", "P2")]),
-        ("3", "Liquidité et placements", "ALM  PLA", [("Réserve de liquidité égale aux sorties d'épargne d'une année", "P1"), ("Échéancier des sorties d'épargne (départs à la retraite)", "P1"), ("Politique de placement votée, évaluation de la clinique et des terrains", "P2")]),
-        ("4", "Conformité et gouvernance", "REG", [("Plan de mise en conformité chiffré présenté à l'AIRMS", "P1"), ("Délibération du conseil pour chaque placement, comité actif-passif", "P2"), ("Recalculer la cotisation maladie, contrôler 5 % des factures", "P2")]),
-        ("5", "Données et pilotage", "DON  STAT", [("Transmettre les données manquantes (dates de naissance, prestations datées)", "P1"), ("Rapprocher chaque mois les fichiers de cotisations envoyés et reçus", "P2"), ("Tableau de bord semestriel des indicateurs de solidité", "P3")])]
+def _texte_p(p_el, texte):
+    rs = p_el.findall(qn("a:r"))
+    for r_ in rs[1:]:
+        p_el.remove(r_)
+    if rs:
+        rs[0].find(qn("a:t")).text = texte
+    return p_el
+
+
+def remplir_11(slide, d):
+    """Deux cartes du Timesaver : en-tête noir (Actuariat) et orange (Stratégie), sous-titres en gras et puces."""
+    formes = {sh.name: sh for sh in slide.shapes}
+    for nom_t, nom_c, (titre, sections) in (("Rectangle 3", "Rectangle 20", d["cartes"][0]), ("Rectangle 16", "Rectangle 23", d["cartes"][1])):
+        ecrire(formes[nom_t], [titre], [13], [True])
+        corps = formes[nom_c]
+        corps.height = Cm(7.4)
+        txb = corps.text_frame._txBody
+        paras = txb.findall(qn("a:p"))
+        mod_t, mod_p = copy.deepcopy(paras[0]), copy.deepcopy(paras[1])
+        for p_ in paras:
+            txb.remove(p_)
+        for sous, puces in sections:
+            txb.append(_texte_p(copy.deepcopy(mod_t), sous))
+            for x_ in puces:
+                txb.append(_texte_p(copy.deepcopy(mod_p), x_))
+        for p_ in corps.text_frame.paragraphs:
+            for r_ in p_.runs:
+                r_.font.size = Pt(10.5 if r_.font.bold else 10)
+
+
+AXES = [("1", "Engagements et épargne", "ENG", [("Fixer le taux servi et comptabiliser les intérêts dus", "P1"), ("Tenir un compte par épargnant", "P2")]),
+        ("2", "Provisions et comptes", "PROV", [("Calculer les provisions chaque année et reclasser l'excédent", "P1"), ("Déprécier les prêts du Grenier", "P3")]),
+        ("3", "Liquidité et placements", "ALM  PLA", [("Constituer une réserve de liquidité et établir l'échéancier de l'épargne", "P1"), ("Voter une politique de placement", "P2")]),
+        ("4", "Conformité et gouvernance", "REG", [("Présenter un plan de conformité à l'AIRMS", "P1"), ("Délibérer en conseil sur chaque placement", "P2")]),
+        ("5", "Données et pilotage", "DON  STAT", [("Transmettre les données manquantes", "P1"), ("Rapprocher chaque mois les cotisations", "P2")])]
+
+
+def bande_volet(slide, y, h, libelle, fond):
+    b = cadre(slide, 1.4, y, 1.1, h, fond, ancre=MSO_ANCHOR.MIDDLE, marge=0.02)
+    b.text_frame.word_wrap = True
+    bp = b._element.find(qn("p:txBody")).find(qn("a:bodyPr"))
+    bp.set("vert", "vert270")
+    p = b.text_frame.paragraphs[0]
+    p.alignment = PP_ALIGN.CENTER
+    run(p, libelle, 11, True, BLANC if fond != ORANGE else NOIR)
 
 
 def d_recos(slide):
-    x0, y0, g = 1.4, 3.95, 0.2
-    l = (31.2 - 4 * g) / 5
+    x0, g = 2.7, 0.18
+    l = (31.2 - 1.3 - 4 * g) / 5
+    # bande actuariat
+    y0, h_b = 3.95, 6.35
+    bande_volet(slide, y0, h_b, "VOLET ACTUARIAT", NOIR)
     for k, (num, titre, codes, actions) in enumerate(AXES):
         x = x0 + k * (l + g)
-        b = cadre(slide, x, y0, l, 1.55, BLEU, ancre=MSO_ANCHOR.MIDDLE, marge=0.25)
+        b = cadre(slide, x, y0, l, 1.35, BLEU, ancre=MSO_ANCHOR.MIDDLE, marge=0.2)
         p = b.text_frame.paragraphs[0]
-        run(p, f"Axe {num}", 10, True, ORANGE)
+        run(p, f"Axe {num}  ", 9.5, True, ORANGE)
+        run(p, codes, 8.5, False, GRIS_CLAIR)
         p2 = b.text_frame.add_paragraph()
-        run(p2, titre, 12, True, BLANC)
-        b = cadre(slide, x, y0 + 1.6, l, 0.6, ORANGE, ancre=MSO_ANCHOR.MIDDLE, marge=0.25)
-        run(b.text_frame.paragraphs[0], "Constats : " + codes, 9.5, True, NOIR)
-        y = y0 + 2.35
+        run(p2, titre, 11, True, BLANC)
+        y = y0 + 1.45
         for t_, pr in actions:
-            b = cadre(slide, x, y, l, 2.75, CARTE, ancre=MSO_ANCHOR.MIDDLE, marge=0.25)
-            p = b.text_frame.paragraphs[0]
-            run(p, t_, 11)
-            pil = cadre(slide, x + l - 1.25, y + 0.15, 1.05, 0.5, PRIO[pr], ancre=MSO_ANCHOR.MIDDLE, marge=0.02, forme=MSO_SHAPE.ROUNDED_RECTANGLE)
+            b = cadre(slide, x, y, l, 2.38, CARTE, ancre=MSO_ANCHOR.MIDDLE, marge=0.2)
+            b.text_frame.margin_top = Cm(0.5)
+            run(b.text_frame.paragraphs[0], t_, 10.5)
+            pil = cadre(slide, x + l - 1.2, y + 0.12, 1.0, 0.45, PRIO[pr], ancre=MSO_ANCHOR.MIDDLE, marge=0.02, forme=MSO_SHAPE.ROUNDED_RECTANGLE)
             q = pil.text_frame.paragraphs[0]
             q.alignment = PP_ALIGN.CENTER
-            run(q, pr, 9, True, BLANC)
-            b.text_frame.margin_top = Cm(0.55)
-            y += 2.85
-    tb = slide.shapes.add_textbox(Cm(x0), Cm(y0 + 2.35 + 3 * 2.85 + 0.05), Cm(31.2), Cm(0.45))
+            run(q, pr, 8.5, True, BLANC)
+            y += 2.45
+    # bande stratégie, à renseigner par l'équipe
+    y1 = y0 + h_b + 0.3
+    bande_volet(slide, y1, 5.3, "VOLET STRATÉGIE", ORANGE)
+    for k in range(5):
+        x = x0 + k * (l + g)
+        b = cadre(slide, x, y1, l, 1.35, ORANGE, ancre=MSO_ANCHOR.MIDDLE, marge=0.2)
+        p = b.text_frame.paragraphs[0]
+        run(p, f"Axe {k + 1}", 9.5, True, NOIR)
+        p2 = b.text_frame.add_paragraph()
+        run(p2, "Intitulé de l'axe", 11, True, NOIR)
+        b = cadre(slide, x, y1 + 1.45, l, 3.85, None, "BBBCBC", ancre=MSO_ANCHOR.MIDDLE, marge=0.2)
+        p = b.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        run(p, "Actions et priorités : à renseigner par l'équipe Stratégie", 10, False, "808080")
+    tb = slide.shapes.add_textbox(Cm(1.4), Cm(y1 + 5.35), Cm(31.2), Cm(0.42))
     p = tb.text_frame.paragraphs[0]
     run(p, "Priorité : ", 8.5, True, NOIR)
     for pr, lib in (("P1", "dans les 3 mois"), ("P2", "dans les 6 mois"), ("P3", "de 6 à 18 mois"), ("P4", "au-delà de 18 mois")):
@@ -232,42 +289,50 @@ def d_recos(slide):
         run(p, f"{pr} {lib}     ", 8.5, False, NOIR)
 
 
-ETAPES = [("Transmission des données manquantes", "FPPN", "Dès que possible"), ("Calculs finaux : provisions dossier par dossier, épargne par policier, projection", "Adenka", "À réception des données"),
-          ("Rapprochement avec les travaux de l'expert financier", "Adenka", "Avant la restitution"), ("Restitution du rapport provisoire", "Adenka et FPPN", "23 et 24/11/2026"),
+ETAPES = [("Transmission des données manquantes", "FPPN", "Dès que possible"), ("Calculs finaux : provisions, épargne par policier, projection", "Adenka", "À réception"),
+          ("Rapprochement avec l'expert financier", "Adenka", "Avant la restitution"), ("Restitution du rapport provisoire", "Adenka et FPPN", "23 et 24/11/2026"),
           ("Intégration des commentaires du FPPN", "Adenka", "Du 25 au 27/11/2026"), ("Remise du rapport définitif", "Adenka", "30/11/2026")]
 
 
 def d_etapes(slide):
-    x0, y0 = 1.4, 4.6
-    n = len(ETAPES)
-    pas = 31.2 / n
-    ligne = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Cm(x0 + pas / 2), Cm(y0 + 0.6), Cm(x0 + 31.2 - pas / 2), Cm(y0 + 0.6))
+    x0, n = 2.7, len(ETAPES)
+    pas = (31.2 - 1.3) / n
+    y0 = 3.95
+    # couloir actuariat
+    bande_volet(slide, y0, 5.6, "ACTUARIAT", NOIR)
+    ligne = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Cm(x0 + pas / 2), Cm(y0 + 0.5), Cm(x0 + pas * (n - 0.5)), Cm(y0 + 0.5))
     ligne.line.color.rgb = RGBColor.from_string(ORANGE)
     ligne.line.width = Pt(2)
     for k, (t_, qui, quand) in enumerate(ETAPES):
         cx = x0 + pas * (k + 0.5)
-        d = cadre(slide, cx - 0.6, y0, 1.2, 1.2, ORANGE, ancre=MSO_ANCHOR.MIDDLE, marge=0.02, forme=MSO_SHAPE.OVAL)
+        d = cadre(slide, cx - 0.5, y0, 1.0, 1.0, ORANGE, ancre=MSO_ANCHOR.MIDDLE, marge=0.02, forme=MSO_SHAPE.OVAL)
         q = d.text_frame.paragraphs[0]
         q.alignment = PP_ALIGN.CENTER
-        run(q, f"{k + 1:02d}", 12, True, NOIR)
-        b = cadre(slide, cx - pas / 2 + 0.1, y0 + 1.5, pas - 0.2, 1.0, None, None, ancre=MSO_ANCHOR.MIDDLE, marge=0.05)
+        run(q, f"{k + 1:02d}", 11, True, NOIR)
+        b = cadre(slide, cx - pas / 2 + 0.08, y0 + 1.1, pas - 0.16, 0.8, None, None, ancre=MSO_ANCHOR.MIDDLE, marge=0.03)
         p = b.text_frame.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
-        run(p, quand, 12, True, ORANGE)
-        b = cadre(slide, cx - pas / 2 + 0.1, y0 + 2.6, pas - 0.2, 3.6, CARTE, ancre=MSO_ANCHOR.MIDDLE, marge=0.25)
+        run(p, quand, 11, True, BLEU)
+        b = cadre(slide, cx - pas / 2 + 0.08, y0 + 2.0, pas - 0.16, 3.6, CARTE, ancre=MSO_ANCHOR.MIDDLE, marge=0.2)
         p = b.text_frame.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
-        run(p, t_, 11, True)
+        run(p, t_, 10.5, True)
         p2 = b.text_frame.add_paragraph()
         p2.alignment = PP_ALIGN.CENTER
-        run(p2, qui, 10, False, "53565A")
-    b = cadre(slide, x0, y0 + 6.6, 31.2, 2.3, None, ORANGE, ancre=MSO_ANCHOR.MIDDLE, marge=0.4)
+        run(p2, qui, 9.5, False, "53565A")
+    # couloir stratégie, à renseigner par l'équipe
+    y1 = y0 + 5.9
+    bande_volet(slide, y1, 3.3, "STRATÉGIE", ORANGE)
+    for k in range(n):
+        cx = x0 + pas * (k + 0.5)
+        b = cadre(slide, cx - pas / 2 + 0.08, y1, pas - 0.16, 3.3, None, "BBBCBC", ancre=MSO_ANCHOR.MIDDLE, marge=0.2)
+        p = b.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        run(p, "Étape, responsable et date : à renseigner par l'équipe Stratégie", 9.5, False, "808080")
+    b = cadre(slide, 1.4, y1 + 3.5, 31.2, 1.1, None, ORANGE, ancre=MSO_ANCHOR.MIDDLE, marge=0.4)
     p = b.text_frame.paragraphs[0]
-    run(p, "Point d'attention : ", 11.5, True, ORANGE)
-    run(p, "le calendrier dépend de la transmission des données par le FPPN. Sans elles, la restitution du 23/11/2026 se fera avec des verdicts partiels sur les engagements et les provisions. Les conclusions sur la liquidité et les placements sont déjà acquises.", 11.5, False, NOIR)
-    p2 = b.text_frame.add_paragraph()
-    run(p2, "Avancement au 23/10/2026 : ", 11.5, True, ORANGE)
-    run(p2, "63,85 % des travaux réalisés.", 11.5, False, NOIR)
+    run(p, "Point d'attention, volet actuariat : ", 10.5, True, ORANGE)
+    run(p, "le calendrier dépend des données du FPPN. Sans elles, la restitution du 23/11/2026 se fera avec des verdicts partiels sur les engagements et les provisions. Avancement au 23/10/2026 : 63,85 %.", 10.5, False, NOIR)
 
 
 DESSINS = {"contexte": d_contexte, "objectifs": d_objectifs, "recos": d_recos, "etapes": d_etapes}
@@ -322,36 +387,25 @@ LEG_CRIT = [("🔴", "Critique", "risque élevé ou non-conformité"), ("🟠", 
 SL.append({"type": "couverture", "notes": "Point d'étape du volet actuariel et statistique pour le management : contexte, récapitulatif des travaux, recommandations, prochaines étapes."})
 SL.append({"type": "sommaire", "notes": ""})
 gab(31, {"titre": "Contexte de la mission", "sous_titre": "Le FPPN gère la prévoyance et l'épargne des policiers, l'audit dit s'il peut tenir ses promesses",
-          "synthese": "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN"},
+          "synthese": "Audit comptable et financier du 01/01/2020 au 31/08/2026, présenté ici pour ses volets Actuariat et Stratégie"},
     {"cartes": [("Le FPPN", "Mutuelle des policiers de Côte d'Ivoire : soins, allocation au décès, épargne EFC et PEP, prêts du Grenier. 31 198 policiers cotisants en août 2026."),
                 ("Son cadre", "Mutualité sociale de l'UEMOA, sous le contrôle de l'AIRMS, avec 36 indicateurs de solidité à respecter (Décision n° 05/2022)."),
-                ("La mission Adenka", "Audit comptable et financier du 01/01/2020 au 31/08/2026. Lancement les 13 et 14/10/2026."),
-                ("Le volet actuariel", "Mesurer ce que le FPPN devra payer à ses adhérents et vérifier qu'il pourra le payer à temps.")]},
-    "Présenter le FPPN, son cadre, la mission Adenka et le volet actuariel, autour du centre du gabarit.",
+                ("La mission Adenka", "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN. Lancement les 13 et 14/10/2026."),
+                ("Deux volets présentés", "Actuariat : ce que le FPPN devra payer et sa capacité à le payer. Stratégie : objectifs présentés par l'équipe Stratégie.")]},
+    "Présenter le FPPN, son cadre, la mission Adenka et les deux volets traités dans ce document.",
     source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 61")
 SL[-1]["sommaire"] = "Contexte et objectifs"
-gab(9, {"titre": "Objectifs de la mission", "sous_titre": "Quatre questions structurent le volet actuariel, chacune avec son code",
-        "synthese": "Les codes ENG, PROV, ALM et PLA sont repris dans le récapitulatif des activités et les recommandations"},
-    {"blocs": [("ENG : engagements", "Combien le FPPN doit-il à ses adhérents et à leurs ayants droit, aujourd'hui et plus tard ?"),
-               ("PROV : provisions", "Les sommes mises de côté suffisent-elles à payer les prestations déjà nées ?"),
-               ("ALM : adossement", "L'argent du FPPN sera-t-il disponible au moment où il devra payer ?"),
-               ("PLA : placements", "Les placements sont-ils sûrs, disponibles et assez rentables pour servir l'épargne promise ?")]},
-    "Les quatre questions de l'offre technique (profil de l'actuaire, p. 74), dans l'ordre de la demande.",
-    source="Source : offre technique Adenka validée par le FPPN, profil de l'actuaire (p. 74)")
-gab(23, {"titre": "Périmètre des travaux", "sous_titre": "Des travaux complémentaires sont nécessaires pour répondre aux quatre questions",
-         "synthese": "Contrôle des données, statistiques, indicateurs de solidité et gouvernance, sur la période du 01/01/2020 au 31/08/2026"},
-    {"blocs": [("DON : données de base", "Contrôler les fichiers du FPPN et les rapprocher de la comptabilité (offre technique, pôle 4)."),
-               ("STAT : statistiques", "Effectifs, cotisations, sinistralité, décès et mortalité (plan d'analyse du 16/10/2026)."),
-               ("REG : solidité et gouvernance", "36 indicateurs de l'UEMOA, décisions des organes (pôle 4, risque R3)."),
-               ("PROV : autres provisions", "Prêts du Grenier et départ à la retraite du personnel du FPPN."),
-               ("ALM : projection", "Projeter l'équilibre entre cotisations et prestations (pôle 4)."),
-               ("Période et sources", "Du 01/01/2020 au 31/08/2026 : fichiers, comptes, statuts et entretiens.")]},
-    "Les travaux ajoutés aux quatre questions, avec leur code et leur fondement dans l'offre technique.",
-    source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et risque R3 (p. 36) ; plan d'analyse statistique du 16/10/2026")
+gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémentaires : mesurer les engagements, éclairer la stratégie",
+         "synthese": "Les codes du volet Actuariat sont repris dans le récapitulatif des activités et les recommandations"},
+    {"cartes": [("Volet Actuariat", [("Les quatre questions de la mission", ["ENG : engagements envers les adhérents", "PROV : suffisance des provisions", "ALM : adossement actif-passif", "PLA : adéquation des placements"]),
+                                     ("Travaux complémentaires", ["DON : contrôle des données de base", "STAT : effectifs, cotisations, sinistralité", "REG : indicateurs de solidité et gouvernance"])]),
+                ("Volet Stratégie", [("Objectifs", ["À renseigner par l'équipe Stratégie"]), ("Travaux", ["À renseigner par l'équipe Stratégie"])])]},
+    "Carte noire : volet Actuariat. Carte orange : volet Stratégie, complétée par l'équipe en charge.",
+    source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et profil de l'actuaire (p. 74) ; plan d'analyse statistique du 16/10/2026")
 for k, (lot, titre_, sous_, synth_) in enumerate((
-        (RECAP_DEMANDES, "Récapitulatif des activités (1/2) : les quatre demandes", "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
+        (RECAP_DEMANDES, "Volet Actuariat (1/2) : les quatre demandes", "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
          "Les quatre demandes de la mission, du constat le plus critique au moins critique : méthodes, volume traité et résultats"),
-        (RECAP_COMPL, "Récapitulatif des activités (2/2) : travaux complémentaires", "Les travaux complémentaires confirment le risque sur l'agrément et la garantie maladie",
+        (RECAP_COMPL, "Volet Actuariat (2/2) : travaux complémentaires", "Les travaux complémentaires confirment le risque sur l'agrément et la garantie maladie",
          "Travaux nécessaires pour répondre aux quatre demandes, du plus critique au moins critique : méthodes, volume traité et résultats"))):
     contenu({"titre": titre_, "sous_titre": sous_, "synthese": synth_},
             "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, le volume traité, le résultat annoncé par son titre en gras, puis la criticité.",
@@ -359,12 +413,19 @@ for k, (lot, titre_, sous_, synth_) in enumerate((
                      "sans_code": True, "legende": LEG_CRIT, "lignes": [[r_[0].split(" ", 1)[1]] + r_[1:] + [r_[0].split(" ", 1)[0]] for r_ in sorted(lot, key=lambda r_: "🔴🟠🟡🟢".index(r_[0][0]))]},
             sommaire="Récapitulatif des activités" if k == 0 else None,
             source=RAP + ", diapositives 4 à 13, 48 à 61, 75, 90 à 166, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026")
-contenu({"titre": "Recommandations", "sous_titre": "Cinq axes de recommandations, dont huit actions à lancer dans les trois mois",
-         "synthese": "Chaque axe répond aux constats codés du récapitulatif, avec une priorité de P1 à P4"},
+contenu({"titre": "Volet Stratégie", "sous_titre": "Activités et résultats du volet Stratégie, à renseigner par l'équipe en charge",
+         "synthese": "Même format que le volet Actuariat : code, activité, méthodes, volume traité, résultat et criticité"},
+        "Diapositive à compléter par l'équipe Stratégie. Les lignes et les codes STR-1 à STR-6 sont indicatifs.",
+        tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Résultat", "Criticité"], "largeurs": [1.75, 3.4, 7.0, 4.6, 12.7, 1.75], "taille": 9,
+                 "sans_code": True, "legende": LEG_CRIT, "hauteur_ligne": 1.35,
+                 "lignes": [[f"STR-{k}", "À renseigner", "", "", "", ""] for k in range(1, 7)]},
+        source="Source : équipe Stratégie")
+contenu({"titre": "Recommandations", "sous_titre": "Des axes de recommandations par volet, avec une priorité de P1 à P4",
+         "synthese": "Volet Actuariat : cinq axes reliés aux constats codés. Volet Stratégie : axes renseignés par l'équipe en charge"},
         "Présenter axe par axe, sans entrer dans le détail des actions, qui figure dans le rapport et le résumé exécutif.",
         dessin="recos", sommaire="Recommandations", source=RAP + ", diapositives 25 à 27 ; résumé exécutif du 26/10/2026")
 contenu({"titre": "Prochaines étapes", "sous_titre": "Le rapport définitif est prévu le 30/11/2026, sous réserve des données du FPPN",
-         "synthese": "Six étapes de la transmission des données à la remise du rapport définitif"},
+         "synthese": "Étapes du volet Actuariat jusqu'au rapport définitif, étapes du volet Stratégie renseignées par l'équipe en charge"},
         "Insister sur la dépendance aux données du FPPN et sur ce qui est déjà acquis.",
         dessin="etapes", sommaire="Prochaines étapes", source="Source : plan de travail du 23/10/2026")
 SL.append({"type": "merci", "notes": ""})
