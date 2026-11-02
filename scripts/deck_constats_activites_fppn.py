@@ -106,7 +106,7 @@ ACT = {
   I("9", "E", "G", "L'épargne due est minorée en Assemblée générale.", "Rapport de gestion 2025 : 4 387 823 635 FCFA présentés, pour 13 814 066 964 FCFA dus.", "Présenter le solde dû, distinct de la collecte.", "Faible", "P2"),
   I("18", "M", "C", "Des sommes durables sont en comptes d'attente.", "11 603 989 675 FCFA d'avances et de créances suivis comme du court terme.", "Reclasser dans les comptes prévus par le plan comptable.", "Faible", "P3"),
   I("28", "F", "C", "Deux versions des comptes 2023 existent.", "Excédent de 928 699 102 FCFA ou de 930 629 102 FCFA.", "Transmettre la version approuvée.", "Faible", "P3"),
-  I("5", "F", "C", "La provision du personnel est suffisante.", "43 666 678 FCFA pour 24 446 566 FCFA recalculés. Méthode non écrite.", "Rédiger la note de calcul annuelle.", "Faible", "P4")],
+  I("5", "F", "C", "La provision du personnel est suffisante.", "43 666 678 FCFA pour 17 184 450 FCFA recalculés avec un départ à 60 ans. Méthode non écrite.", "Rédiger la note de calcul annuelle.", "Faible", "P4")],
  "Trésorerie et placements": [
   I("11", "C", "A", "L'argent disponible ne couvre pas l'année.", "34,42 % des paiements de l'année couverts au 31/08/2026. Manque cumulé de 12 596 052 822 FCFA à cinq ans.", "Réserve de trésorerie et échéancier des sorties d'épargne.", "Élevée", "P1"),
   I("10", "E", "AR", "L'épargne n'est pas séparée.", "16,28 % de l'épargne couverte par des actifs qui lui sont réservés.", "Comptes réservés à l'épargne et objectif de couverture.", "Moyenne", "P2"),

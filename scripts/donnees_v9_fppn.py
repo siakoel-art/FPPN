@@ -155,7 +155,7 @@ TAUX10 = sum(cours) / len(cours)
 
 # Table de survie CIMA F (prudente pour un engagement payé si l'agent est en vie au départ)
 lx = {int(r[0]): float(r[1]) for r in feuille(os.path.join(TABLES, "CIMA_F.xlsx"))[1:] if r[0] != ""}
-AGE_DEP = 55          # convention collective interprofessionnelle du 19/07/1977, art. 40
+AGE_DEP = 60          # ordonnance n° 2012-03 du 11/01/2012 (CNPS) : 60 ans ; la convention collective du 19/07/1977 (art. 40, 55 ans) est testée en sensibilité
 
 
 def bareme(anc):
@@ -194,7 +194,7 @@ synth = []
 for an in DISA:
     lig = [x for x in indiv if x["annee"] == an]
     ligne = {"annee": an, "agents": len(lig), "dbo": sum(x["dbo"] for x in lig), "acquis": sum(x["indemnite_acquise"] for x in lig),
-             "age_55_atteint": sum(1 for x in lig if x["age"] >= AGE_DEP),
+             "age_55_atteint": sum(1 for x in lig if x["age"] >= 55),
              "provision_196": next(p["provision_196"] for p in PV["pidr"] if p["exercice"] == an)}
     for e in ENT:
         le = [x for x in lig if x["entite"] == e]
@@ -205,7 +205,7 @@ OUT["pidr_synthese"] = synth
 lig25 = [x for x in indiv if x["annee"] == 2025]
 a25 = sorted(agents[2025], key=lambda x: x["ordre"])
 sens = []
-for lib, kw in (("Hypothèses centrales", {}), ("Départ à 58 ans (trois enfants à charge)", {"age_dep": 58}), ("Départ à 60 ans", {"age_dep": 60}),
+for lib, kw in (("Hypothèses centrales", {}), ("Départ à 55 ans (convention collective de 1977)", {"age_dep": 55}), ("Départ à 58 ans (convention de 1977, trois enfants à charge)", {"age_dep": 58}),
                 ("Taux d'actualisation de 3,5 %", {"i": 0.035}), ("Sans rotation du personnel", {"t": 0.0}), ("Salaires + 1 point par an", {"g": CROIS + 0.01})):
     sens.append({"hypothese": lib, "dbo": sum(evaluer(a, 2025, **kw)["dbo"] for a in a25)})
 OUT["pidr_sensibilites"] = sens
@@ -415,7 +415,7 @@ pa.title = "14a_pidr_parametres"
 titre(pa, "PIDR : paramètres (cellules orange modifiables)", "Sources : décret n° 2017-210 du 30/03/2017, art. 4 et 5 ; convention collective interprofessionnelle du 19/07/1977, art. 40 ; DISA 2021 à 2025 ; Investing.com ; table CIMA F", [46, 18, 90])
 entete(pa, 4, ["Paramètre", "Valeur", "Justification"])
 PAR = [("Date d'évaluation", dt.date(2025, 12, 31), "Clôture de l'exercice 2025, dernière DISA reçue."),
-       ("Âge de départ à la retraite", AGE_DEP, "Convention collective du 19/07/1977, art. 40 : 55 ans, reculé d'un an par enfant à charge (maximum 3) ; enfants non déclarés dans les fichiers reçus."),
+       ("Âge de départ à la retraite", AGE_DEP, "Ordonnance n° 2012-03 du 11/01/2012 (CNPS) : 60 ans dans le secteur privé. La convention collective du 19/07/1977 (art. 40, 55 ans) est dépassée sur ce point et testée en sensibilité ; texte officiel de l'ordonnance à joindre au dossier."),
        ("Taux d'actualisation", TAUX10, f"Moyenne 2025 du rendement de l'obligation de l'État de Côte d'Ivoire à 10 ans ({len(cours)} cotations, Investing.com) ; IAS 19, § 83 (taux des obligations d'État à défaut de marché profond)."),
        ("Croissance annuelle des salaires", CROIS, f"Médiane observée sur {len(crois)} agents présents douze mois en 2021 et en 2025 (DISA 2021 et 2025)."),
        ("Rotation annuelle du personnel", ROT, "Moyenne des taux annuels de sortie observés entre les DISA 2021, 2022, 2023 et 2025."),

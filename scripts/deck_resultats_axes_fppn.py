@@ -75,7 +75,7 @@ t("Engagements : résultats", "Les engagements mesurés atteignent 19 518 949 29
    ["Allocations décès et frais funéraires dus (41591000 et 41592000)", "489 419 669 FCFA", "Liste du FPPN des décès non payés, valorisés au barème"],
    ["Décès non encore déclarés (états 2021 et 2023)", "7 100 000 FCFA", "Six décès d'une année enregistrés l'année suivante"],
    ["Soins faits, non encore facturés (clôture 2024)", "12 481 392 FCFA", "Dette maladie non encore facturée à la clôture"],
-   ["Provision du personnel du FPPN au 31/12/2025 (hors adhérents)", "24 446 566 FCFA", "Compte 196 du FPPN : 43 666 678 FCFA"],
+   ["Provision du personnel du FPPN au 31/12/2025 (hors adhérents)", "17 184 450 FCFA", "Compte 196 du FPPN : 43 666 678 FCFA. Départ à 60 ans (ordonnance n° 2012-03)"],
    ["Santé des policiers retraités", "Non mesurable", "610 retraités cotisants en août 2026, date de naissance connue pour 105 seulement"]],
   R_ + "5, 98, 112, 123, 126, 127, 133 et 143", taille=9)
 t("Engagements : intérêts dus par exercice", "Aucun intérêt n'est comptabilisé : il n'existe ni charge ni dette d'intérêts dans les balances",
@@ -115,11 +115,11 @@ t("Engagements : conclusions", "Le FPPN ne connaît pas la valeur de son princip
 # ================================================================ AXE 2
 separateur(2, "Provisions", "Résultats, hypothèses et conclusions")
 t("Provisions : résultats", "Le FPPN a trop provisionné pour la maladie et le décès, et rien pour les intérêts et les prêts",
-  "Écart total sur les cinq postes : 1 536 007 381 FCFA (montant du FPPN moins recalcul)",
+  "Écart total sur les cinq postes : 1 543 269 497 FCFA (montant du FPPN moins recalcul)",
   ["Poste", "Montant du FPPN", "Recalcul", "Écart absolu", "Écart relatif"], [9.4, 5.6, 5.4, 6.0, 4.8],
   [["Provision maladie (15801000)", "2 867 602 878 FCFA", "12 481 392 FCFA", "2 855 121 486 FCFA", "22 875,03 %"],
    ["Provision obsèques (15802000)", "1 961 695 412 FCFA", "7 100 000 FCFA", "1 954 595 412 FCFA", "27 529,51 %"],
-   ["Départ à la retraite du personnel (196)", "43 666 678 FCFA", "24 446 566 FCFA", "19 220 112 FCFA", "78,62 %"],
+   ["Départ à la retraite du personnel (196)", "43 666 678 FCFA", "17 184 450 FCFA", "26 482 228 FCFA", "154,11 %"],
    ["Intérêts dus sur l'épargne", "0 FCFA", "3 278 913 238 FCFA", "-3 278 913 238 FCFA", "-100,00 %"],
    ["Dépréciation des prêts du Grenier", "0 FCFA", "14 016 392 FCFA", "-14 016 392 FCFA", "-100,00 %"],
    ["Risques courts (statuts, art. 88)", "Aucune", "0 FCFA", "0 FCFA", "-"]],
@@ -166,7 +166,7 @@ t("Provisions : conclusions", "Les provisions suffisent en montant, mais elles s
   [["Provisions maladie et obsèques identiques de 2020 au 31/08/2026, sans calcul", "Non-respect des statuts (art. 89) et du règlement d'exécution n° 004/2022 (art. 7 et 10). Suffisance non démontrable à l'AIRMS", "Note de calcul annuelle signée, présentée à l'Assemblée générale (recommandation 1)"],
    ["Maladie et obsèques : 4 809 716 898 FCFA au-dessus des besoins mesurés", "Résultat et fonds propres sous-évalués, sinistralité mal mesurée. L'excédent est en réalité une réserve", "Reclassement après décision des organes et information de l'AIRMS (recommandation 1)"],
    ["Intérêts dus (3 278 913 238 FCFA) et dépréciation des prêts (14 016 392 FCFA) non provisionnés", "Dettes absentes du bilan. Marge de solvabilité et réserve obligatoire surévaluées", "Comptabiliser les intérêts et déprécier les prêts chaque année (recommandations 2 et 7)"],
-   ["Provision du personnel : 43 666 678 FCFA au bilan pour 24 446 566 FCFA recalculés", "Écart faible, méthode non documentée", "Transmettre la note de calcul (PBC, item 78)"],
+   ["Provision du personnel : 43 666 678 FCFA au bilan pour 17 184 450 FCFA recalculés (départ à 60 ans)", "Provision suffisante, méthode non documentée", "Transmettre la note de calcul (PBC, item 78)"],
    ["La base des prestations datée manque", "Pas de calcul dossier par dossier ni de boni et mali de liquidation", "Transmettre la base (recommandation 3)"]],
   R_ + "144 à 146", taille=9)
 

@@ -73,7 +73,7 @@ K = [
       ["Comptabiliser chaque année la dépréciation des prêts en retard, selon la politique de crédit du Grenier."],
       "Grenier, service comptable", "Faible", "P3", "R7", "129"),
     C(5, "A", "La provision pour le départ à la retraite du personnel est suffisante",
-      "Le FPPN a mis de côté 43 666 678 FCFA au 31/12/2025 pour les indemnités de départ à la retraite de ses salariés. Le recalcul agent par agent donne 24 446 566 FCFA.",
+      "Le FPPN a mis de côté 43 666 678 FCFA au 31/12/2025 pour les indemnités de départ à la retraite de ses salariés. Le recalcul agent par agent donne 17 184 450 FCFA, avec un départ à la retraite à 60 ans (ordonnance n° 2012-03 du 11/01/2012). Avec l'âge de 55 ans de la convention collective de 1977, il serait de 24 446 566 FCFA, toujours en dessous du montant du FPPN.",
       "Le FPPN devra payer une indemnité à chaque salarié qui part à la retraite.",
       "C'est le seul poste où le montant du FPPN couvre largement le besoin. Le FPPN calcule ce montant comme si tous les salariés partaient aujourd'hui, ce qui est prudent. Seule la méthode n'est pas écrite.",
       "Ce poste ne présente pas de risque pour les adhérents.",
