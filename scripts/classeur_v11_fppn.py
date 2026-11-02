@@ -311,5 +311,16 @@ for row in wb["0_controle"].iter_rows():
     if cle in _pub:
         row[2].value = _pub.pop(cle)
 assert not _pub, _pub
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+# aucune attribution à une personne dans les textes (direction ou service rencontré)
+from depersonnaliser import dep as _dep
+for _ws in wb.worksheets:
+    for _row in _ws.iter_rows():
+        for _c in _row:
+            if isinstance(_c.value, str) and not _c.value.startswith("="):
+                _c.value = _dep(_c.value)
+            if _c.comment is not None:
+                _c.comment.text = _dep(_c.comment.text)
 wb.save(SORTIE)
 print(SORTIE, "écritures D9 :", len(lignes), "| lignes", d0, "à", DF)

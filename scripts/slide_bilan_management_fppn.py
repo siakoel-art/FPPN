@@ -98,7 +98,7 @@ RESULTATS = [
      "aucun taux fixé officiellement (3,50 %, 5,50 % ou 14 % selon le document).",
      "la dette est sous-évaluée, et un épargnant peut contester ce qu'il reçoit."),
     ("ED7D31", "4,8 Md", "Provisions : un montant hérité", "de FCFA figés depuis 2020, pour un besoin mesuré de 19,6 millions.",
-     "[[montant passé vers 2004 selon le chef comptable]], jamais recalculé, décès dus déjà comptés ailleurs.",
+     "[[montant passé vers 2004 selon la direction comptable]], jamais recalculé, décès dus déjà comptés ailleurs.",
      "pas un trou : l'argent existe mais il est mal rangé, et rien n'est prévu pour les intérêts."),
     ("ED7D31", "-879 M", "Fonds propres : négatifs", "de FCFA au 31/08/2026, après -6,7 milliards fin 2020.",
      "pertes passées pas encore effacées, puis déficit de 441 millions sur huit mois de 2026.",

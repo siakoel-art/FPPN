@@ -43,7 +43,7 @@ Nouveautés de la version 7 (réponse aux quatre tâches actuarielles de la miss
   20, 21 et 27 du règlement d'exécution n° 004/2022 ; Décision n° 05/2022, section II ; PCMS), quatre scénarios
   de couverture et sorties d'épargne observées.
 
-Nouveautés de la version 6 (entretiens du 19/10/2026 avec M. Koffi, chef comptable) :
+Nouveautés de la version 6 (entretiens du 19/10/2026 avec M. Koffi, direction comptable) :
 - placements (DAT annuel, FCP, décision de placement en logigramme), méthode du FPPN pour les allocations décès
   (logigramme, question du compte utilisé), GNA apporteur d'affaires, compte 10620000, taux servi de 3,5 % ;
 - retouches de l'utilisateur sur la version 5 reprises : couverture (titre, logo du FPPN, date), paragraphe
@@ -57,12 +57,12 @@ Nouveautés de la version 5 :
   sinistralité et les frais de gestion, de 2020 au 31/08/2026 ;
 - tableau des formules en annexe (registre formules_fppn.py), complet dans l'onglet 11_formules du classeur.
 
-Nouveautés de la version 4 (entretien du 19/10/2026 avec le responsable des cotisations) :
+Nouveautés de la version 4 (entretien du 19/10/2026 avec le service des cotisations) :
 - chaînes de traitement et circuits dessinés en logigrammes (formes PowerPoint modifiables : début, étape,
   décision, document, alerte, flèches attachées) : chaîne de traitement Adenka, circuit des précomptes en
   couloirs, parcours des nouvelles recrues ;
 - circuit des fichiers par produit et règles des produits confrontées aux fichiers de précomptes ;
-- déclarations de l'entretien signalées « déclaration du responsable des cotisations, entretien du 19/10/2026,
+- déclarations de l'entretien signalées « déclaration du service des cotisations, entretien du 19/10/2026,
   à confirmer par document ».
 
 Nouveautés de la version 3 :
@@ -116,8 +116,8 @@ _p9 = pd.read_parquet(os.path.join(BASE, "precomptes.parquet"))
 GNA_P = _p9[_p9.retenu & (_p9.sens == "retour") & (_p9.poste == "9W3")].groupby("annee").montant.sum().to_dict()
 del _p9
 FLOW = "« FLOW_CHART_COTISATION_ET_PRODUITS_DEPARGNE_1.pptx » (reçu le 23/10/2026)"
-SRC_ENT14 = "Source : entretien du 19/10/2026 (14h) avec M. Koffi, chef comptable"
-SRC_ENT16 = "Source : entretien du 19/10/2026 (16h) avec M. Koffi, chef comptable"
+SRC_ENT14 = "Source : entretien du 19/10/2026 (14h) avec M. Koffi, direction comptable"
+SRC_ENT16 = "Source : entretien du 19/10/2026 (16h) avec M. Koffi, direction comptable"
 
 _bal = pd.read_parquet(os.path.join(BASE, "compta_balances.parquet"))
 _bal = _bal[_bal.nature == "comptes"].sort_values("periode_au").groupby(["exercice", "compte"]).tail(1)
@@ -222,8 +222,8 @@ DEC = "Décision n° 05/2022/COM/UEMOA du 1er juin 2022, annexe"
 REX = "règlement d'exécution n° 004/2022/COM/UEMOA du 1er juin 2022"
 R07 = "règlement n° 07/2009/CM/UEMOA du 26 juin 2009"
 SRC_REG = "Source : " + DEC + " ; " + REX + " ; " + R07 + " ; balances du FPPN ; calculs Adenka"
-ENT19 = "déclaration du responsable des cotisations, entretien du 19/10/2026"
-SRC_ENT19 = "Source : entretien du 19/10/2026 avec le responsable des cotisations"
+ENT19 = "déclaration du service des cotisations, entretien du 19/10/2026"
+SRC_ENT19 = "Source : entretien du 19/10/2026 avec le service des cotisations"
 
 # Règles des produits : confrontation des déclarations du 19/10/2026 aux fichiers retour (janvier 2020 à août 2026)
 _pre = pd.read_parquet(os.path.join(BASE, "precomptes.parquet"))
@@ -251,7 +251,7 @@ SIGLES = [
     ("CMP", r"\bCMP\b", "Clinique médicale du policier"),
     ("FCP", r"\bFCP\b", "fonds commun de placement"),
     ("DAT", r"\bDAT\b", "dépôt à terme"),
-    ("DAF", r"\bDAF\b", "directeur administratif et financier"),
+    ("DAF", r"\bDAF\b", "direction administrative et financière"),
     ("CNPS", r"\bCNPS\b", "Caisse nationale de prévoyance sociale"),
     ("IS", r"\bIS\b", "impôt sur les salaires (part patronale)"),
     ("FDFP", r"\bFDFP\b", "Fonds de développement de la formation professionnelle"),
@@ -518,7 +518,7 @@ contenu({"titre": "Demande 1 : engagements envers les adhérents", "sous_titre":
         tableau={"titre": tab("Engagements envers les adhérents : chiffres qui fondent le verdict"), "entetes": ["Engagement", "Valeur", "Ce que le chiffre montre", "Détail"], "largeurs": [7.6, 5.6, 13.2, 4.8], "taille": 8,
                  "lignes": [["Épargne PEP et EFC due au 31/08/2026 (comptes 41195100 et 41195200)", F("V1 épargne (t)", EP_DUE26), "Somme des cotisations d'épargne nettes des sorties, sans intérêts", ref("Épargne : intérêts dus non comptabilisés")],
                             ["Intérêts dus du 01/01/2020 au 31/08/2026, PEP 3,5 % et EFC 5,5 %", F("V1 intérêts 5,5", INT55), "Intérêts promis par le manuel d'épargne, absents des comptes", ref("Épargne : intérêts dus non comptabilisés")],
-                            ["Mêmes intérêts si l'EFC est servie à 3,5 %", F("V1 intérêts 3,5", INT35), "Borne basse : taux indiqué par le chef comptable", ref("Épargne : intérêts dus non comptabilisés")],
+                            ["Mêmes intérêts si l'EFC est servie à 3,5 %", F("V1 intérêts 3,5", INT35), "Borne basse : taux indiqué par la direction comptable", ref("Épargne : intérêts dus non comptabilisés")],
                             ["Taux servi sur l'EFC selon les documents", "3,5 %, 5,5 % ou 14 %", "Aucun taux arrêté par une décision signée", ref("EFC et PEP : trois taux dans trois documents")],
                             ["Allocations décès et frais funéraires dus au 31/08/2026 (41591000 et 41592000)", F("V1 dette décès", DETTE_DEC26), "Liste du FPPN des décès non payés, valorisés au barème", ref("Allocations décès : dette réelle et provision obsèques")],
                             ["Décès connus après la clôture (états 2021 et 2023)", F("V1 décès tardifs", TARD_DEC), "Ordre de grandeur de ce qui manque chaque 31 décembre", ref("Allocations décès : décès connus après la clôture")],
@@ -575,7 +575,7 @@ contenu({"titre": "Demande 4 : adéquation des placements", "sous_titre": f"Verd
                             ["Intérêts d'une année sur l'EFC à 3,5 % (2025)", F("V4 int EFC", _E10[2025]["efc_fin"] * 0.035), "Supérieurs aux produits financiers de chaque année de 2021 à 2025", ref("Sensibilité : intérêts annuels dus sur l'EFC")],
                             ["Terrains, clinique (CMP) et créance sur l'hôpital au 31/08/2026", F("V4 immobilisé", b[2026]["terrains"] + b[2026]["cmp_investissements"] + b[2026]["creance_hopital_police"]), "Actifs peu liquides, sans évaluation récente", ref("Structure de l'actif")],
                             ["Financement des prêts du Grenier au 31/08/2026", F("V4 Grenier", b[2026]["grenier_financement"]), "Épargne prêtée aux membres, prêts d'une durée médiane de 10 mois", ref("Encours du Grenier")],
-                            ["Politique de placement votée par le conseil d'administration", "Aucune", "Le directeur général décide seul (entretien du 19/10/2026)", ref("Décision de placement")]]},
+                            ["Politique de placement votée par le conseil d'administration", "Aucune", "La direction générale décide seule (entretien du 19/10/2026)", ref("Décision de placement")]]},
         disposition="dessous",
         analyse=["**Le problème des placements n'est pas d'abord leur rendement, mais leur volume et leur liquidité** : l'essentiel de l'épargne est immobilisé dans des actifs qui ne produisent ni revenu financier ni liquidité."],
         implication="Une politique de placement doit fixer une part minimale d'actifs liquides au regard des sorties d'épargne observées et un rendement minimal au regard du taux servi, une fois ce taux arrêté.",
@@ -785,7 +785,7 @@ SYN2 = [
      f"En 2025, l'encours moyen réellement placé (dépôts à terme et FCP, lu jour par jour dans les grands livres) vaut **{F('SY pl', _PLG['2025']['placements_moyens'])}**.",
      "Règlement d'exécution n° 004/2022, art. 17 : placements sûrs, rentables, liquides et diversifiés, selon une politique votée",
      f"Soit **{pc('SY pl part', _PLG['2025']['placements_moyens'] / EP_DUE25)}** de l'épargne due au 31/12/2025 ({F('SY ep25', EP_DUE25)}). Rendement moyen de 2021 à 2025 : **{pc('SY rdm', V11['rendement_moyen_2021_2025'])}** par an, sous le taux de 5,5 % annoncé sur l'EFC",
-     "Les produits financiers ne peuvent pas payer les intérêts dus sur l'épargne. [[Le directeur général décide seul des placements]]",
+     "Les produits financiers ne peuvent pas payer les intérêts dus sur l'épargne. [[La direction générale décide seule des placements]]",
      "Élevé"],
     ["❑ Données",
      "Ni la base des prestations datée, ni les dates de naissance des mutualistes ne sont reçues. Les fichiers maladie et décès de décembre 2024 sont vides (0 octet).",
@@ -794,7 +794,7 @@ SYN2 = [
      "Mortalité observée, engagement santé des retraités et projection par âge impossibles à calculer",
      "Élevé"],
     ["❑ Gouvernance",
-     "[[Le directeur général décide seul des placements]]. Le projet de Cocody n'a ni budget ni plan de financement transmis. La désignation du directeur général n'est documentée que pour 2020 à 2023.",
+     "[[La direction générale décide seule des placements]]. Le projet de Cocody n'a ni budget ni plan de financement transmis. La désignation du directeur général n'est documentée que pour 2020 à 2023.",
      "Statuts, art. 85 : délibération du conseil d'administration pour chaque placement",
      "Aucune délibération de placement reçue",
      "L'épargne des adhérents est employée sans décision des organes",
@@ -1103,7 +1103,7 @@ def _risques():
          _grav(_INT_AN), f"Intérêts dus de 2025 supérieurs aux produits financiers de 2025 de {F('RQ int an', _INT_AN)}"),
         ("R9", "Engagements impossibles à mesurer faute de données", 5, "Constaté : ni base des prestations datée, ni dates de naissance des mutualistes",
          3, "Non chiffrable : bloque les provisions dossier par dossier, la mortalité, la santé des retraités et la projection"),
-        ("R10", "Placements décidés sans délibération des organes", 4, "[[Le directeur général décide seul des placements]]. Aucune délibération reçue",
+        ("R10", "Placements décidés sans délibération des organes", 4, "[[La direction générale décide seule des placements]]. Aucune délibération reçue",
          _grav(500000000), f"Placement dans le FCP de {F('RQ fcp', 500000000)} en 2025"),
     ]
 
@@ -1149,7 +1149,7 @@ REC1 = [
      "• Le service comptable établit chaque année une note de calcul des provisions : méthode, fichiers utilisés, montant de chaque provision, comparaison au bilan\n"
      "• Provision maladie : soins de l'année facturés après la clôture, mesurés sur le journal SIN de janvier à mars\n"
      "• Provision décès : décès survenus et déclarés après la clôture. Les dossiers connus restent en dette au compte 41591000\n"
-     "• Le directeur général signe la note. Elle est présentée à l'Assemblée générale avec les comptes (statuts, art. 85 et 89)\n"
+     "• La direction générale signe la note. Elle est présentée à l'Assemblée générale avec les comptes (statuts, art. 85 et 89)\n"
      "• Les montants hérités (" + F("RC hérités", PROV_MAL + PROV_OBS) + ") sont repris après décision des organes et information de l'AIRMS",
      "Court terme (moins de 6 mois)"],
     ["2. Arrêter le taux servi sur l'épargne et tenir les comptes individuels",
@@ -1281,7 +1281,7 @@ contenu({"titre": "Garanties et produits", "sous_titre": "Huit postes de précom
 
 contenu({"titre": "Circuit des précomptes", "sous_titre": "La maladie et le décès suivent un circuit direct que le FPPN ne maîtrise pas",
          "synthese": "Les produits complémentaires, les retraités et la flotte passent par une plateforme de partage, la maladie et le décès non"},
-        "Logigramme en couloirs : chaque couloir est un acteur. Rectangle : étape ; losange : décision ; forme ondulée : fichier ; cadre rouge : point de contrôle manquant. Le circuit est celui décrit par le responsable des cotisations le 19/10/2026 ; la procédure écrite est demandée au FPPN. Les formes sont modifiables dans PowerPoint.",
+        "Logigramme en couloirs : chaque couloir est un acteur. Rectangle : étape ; losange : décision ; forme ondulée : fichier ; cadre rouge : point de contrôle manquant. Le circuit est celui décrit par le service des cotisations le 19/10/2026 ; la procédure écrite est demandée au FPPN. Les formes sont modifiables dans PowerPoint.",
         logigramme="circuit",
         analyse=["**Deux circuits coexistent, et le logigramme du FPPN les confirme.** Pour la maladie et le décès, le service du personnel crée le fichier de précompte et calcule les cotisations, le Trésor prélève, et le FPPN reçoit le fichier retour, sur papier puis en numérique. Sans carte de santé FPPN, l'adhérent n'a pas de prestation. Pour l'EFC et le PEP, le service informatique du FPPN intègre la souscription dans la plateforme Easy money et transmet le fichier aller. Pour la CGRAE, le prélèvement porte sur la pension et la CGRAE vire les fonds selon son barème (" + ENT19 + " ; " + FLOW + ")."],
         implication="Pour la maladie et le décès, le FPPN ne dispose pas de ce qui aurait dû être précompté : le taux de recouvrement exigé par la Décision n° 05/2022 (au moins 90 %) ne peut pas être calculé sans les fichiers de la direction du personnel. Pour les autres produits, le FPPN détient les deux fichiers mais ne les rapproche pas.",
@@ -1291,9 +1291,9 @@ contenu({"titre": "Circuit des fichiers par produit", "sous_titre": "Le FPPN ne 
         "Le tableau reprend les circuits décrits le 19/10/2026. Le fichier aller contient le mécano, le nom, le code du poste, une référence et le montant ; la Solde retrouve le mutualiste par son mécano.",
         tableau={"titre": tab("Circuit des fichiers de précomptes par produit"), "entetes": ["Produits", "Fichier aller", "Destinataire", "Fichier retour", "Plateforme de partage"], "largeurs": [7.0, 8.6, 3.4, 8.0, 4.2],
                  "lignes": [["Maladie (936) et décès (8Z6)", "Transmis directement par la direction du personnel de la Police", "Solde", "Reçu par le FPPN : « …_effectif_police_936_….xlsx » et « FPPN_ALLOC_DECES_8Z6_….xlsx »", "Non"],
-                            ["EFC (870), PEP (998), Grenier (9X4), MEDOC (8Z7)", "Produit et déposé par le responsable des cotisations", "Solde", "Déposé par la Solde", "Oui"],
-                            ["Retraités", "Produit et déposé par le responsable des cotisations", "CGRAE", "Déposé par la CGRAE", "Oui"],
-                            ["Flotte automobile (9W3)", "Produit et déposé par le responsable des cotisations", "GNA", "Déposé par GNA", "Oui"]]},
+                            ["EFC (870), PEP (998), Grenier (9X4), MEDOC (8Z7)", "Produit et déposé par le service des cotisations", "Solde", "Déposé par la Solde", "Oui"],
+                            ["Retraités", "Produit et déposé par le service des cotisations", "CGRAE", "Déposé par la CGRAE", "Oui"],
+                            ["Flotte automobile (9W3)", "Produit et déposé par le service des cotisations", "GNA", "Déposé par GNA", "Oui"]]},
         disposition="dessous",
         analyse=["**Les fichiers aller maladie et décès sont absents de tous les envois reçus.** [[Le FPPN ne les produit pas]] (" + ENT19 + ")."],
         implication="Les fichiers aller maladie et décès sont demandés à la direction du personnel de la Police ou à la Solde (PBC, item 61). Les retours vides ou manquants (décembre 2024, décès de mai à octobre 2024 et d'avril 2025) sont demandés au FPPN (PBC, item 62).",
@@ -1667,7 +1667,7 @@ contenu({"titre": "Taux de cotisation", "sous_titre": "Trois clés de répartiti
                               {"nom": "Décès", "valeurs": [1.5, round(5 - 100 * T936["mediane"], 2), round(5 * s[2025]["cot_deces"] / tot25, 2)], "couleur": ORANGE}],
                    "format": "0.00", "unite": "En % du salaire de base"},
         analyse=["**Le total de 5 % est respecté dans les trois sources.** Seule la répartition entre maladie et décès change.",
-                 "**La Solde retient 3,77 % au poste maladie et 1,23 % au poste décès.** Les statuts (art. 17) et le règlement intérieur (art. 33) fixent 3,5 % et 1,5 %, comme l'avait indiqué le responsable des sinistres et prestations le 16/10/2026. Le responsable des cotisations renvoie la répartition à la comptabilité (entretien du 19/10/2026).",
+                 "**La Solde retient 3,77 % au poste maladie et 1,23 % au poste décès.** Les statuts (art. 17) et le règlement intérieur (art. 33) fixent 3,5 % et 1,5 %, comme l'avait indiqué le service des sinistres et prestations le 16/10/2026. Le service des cotisations renvoie la répartition à la comptabilité (entretien du 19/10/2026).",
                  f"**La comptabilité affecte {pc('Clé comptable maladie', SC_['cle_comptable_maladie'])} des cotisations à la maladie**, proche des 70 % du barème indiqué en entretien. Elle ne suit donc pas la Solde."],
         implication="La Décision n° 05/2022 impose de suivre l'excédent par risque : sans clé unique, le FPPN ne peut pas calculer la réserve obligatoire exigée pour chaque risque (au moins 30 % de l'excédent maladie, 50 % des autres).",
         source=SRC_PREC + " ; " + SRC_COMPTA[9:])
@@ -1710,7 +1710,7 @@ contenu({"titre": "Cotisations comptabilisées", "sous_titre": "Les cotisations 
         source=SRC_COMPTA)
 contenu({"titre": "Règles des produits", "sous_titre": "Les fichiers confirment les montants de l'EFC et du PEP ; les textes reçus le 22/10/2026 ne sont pas adoptés formellement",
          "synthese": "Maladie et décès en pourcentage du salaire de base, EFC et PEP en montants fixes, sans règle écrite transmise"},
-        "Colonne « règle déclarée » : déclaration du responsable des cotisations, entretien du 19/10/2026. Colonne « fichiers » : fichiers retour de janvier 2020 à août 2026 reçus le 15/10/2026, part des lignes de chaque montant.",
+        "Colonne « règle déclarée » : déclaration du service des cotisations, entretien du 19/10/2026. Colonne « fichiers » : fichiers retour de janvier 2020 à août 2026 reçus le 15/10/2026, part des lignes de chaque montant.",
         tableau={"titre": tab("Règles des produits déclarées et confrontées aux fichiers de précomptes"), "entetes": ["Produit", "Règle déclarée (19/10/2026)", "Ce que montrent les fichiers", "Pièce demandée"], "largeurs": [3.6, 10.0, 10.0, 7.6], "taille": 9,
                  "lignes": [["Maladie (936) et décès (8Z6)", "Pourcentage du salaire de base. La répartition entre maladie et décès relève de la comptabilité.", "La Solde retient 3,77 % et 1,23 % du salaire de base, soit 5,00 % au total.", "Barème officiel et document de notification à la Solde (PBC, item 56)."],
                             ["EFC (870)", "6 000 FCFA par mois avant 2021, 10 000 FCFA pour les souscriptions depuis 2021. Les anciens souscripteurs restent à 6 000 FCFA et peuvent passer à 10 000 FCFA.", "10 000 FCFA : " + pc("EFC 10000 2023", EFC10[2023]) + " des lignes en 2023 et " + pc("EFC 10000 2026", EFC10[2026]) + " en 2026. 6 000 FCFA : " + pc("EFC 6000 2023", EFC6[2023]) + " puis " + pc("EFC 6000 2026", EFC6[2026]) + ".", "Décision de 2021 (PBC, item 58)."],
@@ -1723,7 +1723,7 @@ contenu({"titre": "Règles des produits", "sous_titre": "Les fichiers confirment
         source=SRC_ENT19 + " ; " + SRC_PREC[9:])
 contenu({"titre": "Nouvelles recrues", "sous_titre": "Les recrues souscrivent avant d'avoir un mécano, ce qui retarde le premier précompte",
          "synthese": "Le mécano est reporté sur les fiches de souscription en masse, après son attribution"},
-        "Logigramme du parcours d'une recrue, de l'école de police au premier précompte, tel que décrit par le responsable des cotisations le 19/10/2026. Cadre rouge : étape à risque. Les formes sont modifiables dans PowerPoint.",
+        "Logigramme du parcours d'une recrue, de l'école de police au premier précompte, tel que décrit par le service des cotisations le 19/10/2026. Cadre rouge : étape à risque. Les formes sont modifiables dans PowerPoint.",
         logigramme="recrues",
         analyse=["[[**Les nouvelles recrues souscrivent avant d'avoir un mécano.** Les élèves policiers n'ont qu'un matricule. Le FPPN attend l'attribution des mécanos, puis reporte chaque mécano sur les fiches de souscription avant de les inscrire au fichier aller. Le premier précompte peut être décalé d'un mois]] (" + ENT19 + ").",
                  "**Le report en masse des mécanos est une étape à risque.** Il peut produire des erreurs d'appariement, et donc des précomptes sur la mauvaise personne. Il crée un retard entre la souscription et le premier versement."],
@@ -1996,7 +1996,7 @@ retenir("épargne", ("L'épargne due aux mutualistes est très peu couverte par 
 
 # ---------------------------------------------------------------- PARTIE 7 : GRENIER
 # ---- v9 : règles et taux de l'épargne, intérêts servis, épargne présentée en Assemblée générale (partie 6)
-SRC_EP = "Source : CAHIER DE CHARGEEFC & PEP 2021.pdf ; MANUEL DE PRODUIT D'EPARGNE FPPN VF VF.docx ; CARTOGRAPHIE DES RISQUES COUVERTS ET DES PRESTATIONS OFFERTES.docx (reçus le 22/10/2026) ; entretien du chef comptable du 19/10/2026"
+SRC_EP = "Source : CAHIER DE CHARGEEFC & PEP 2021.pdf ; MANUEL DE PRODUIT D'EPARGNE FPPN VF VF.docx ; CARTOGRAPHIE DES RISQUES COUVERTS ET DES PRESTATIONS OFFERTES.docx (reçus le 22/10/2026) ; entretien de la direction comptable du 19/10/2026"
 contenu({"titre": "EFC et PEP : trois taux dans trois documents", "sous_titre": "Le taux servi sur l'EFC vaut 3,5 %, 5,5 % ou 14 % selon le document",
          "synthese": "Aucun document ne fixe un taux unique, signé et daté : l'engagement d'épargne ne peut pas être évalué sans ce taux"},
         "Le taux servi est l'intérêt que le FPPN doit ajouter à l'épargne de chaque mutualiste. Il fixe la valeur de l'engagement : à épargne égale, un taux plus élevé fait payer davantage au départ du mutualiste.",
@@ -2005,7 +2005,7 @@ contenu({"titre": "EFC et PEP : trois taux dans trois documents", "sous_titre": 
                             ["MANUEL DE PRODUIT D'EPARGNE FPPN VF VF.docx", "EFC", "5,5 % l'an", "Rémunération de l'EFC ; certificat d'adoption non signé"],
                             ["MANUEL DE PRODUIT D'EPARGNE FPPN VF VF.docx", "PEP", "3,5 % tous les ans", "Rémunération du PEP"],
                             ["CARTOGRAPHIE DES RISQUES COUVERTS ET DES PRESTATIONS OFFERTES.docx", "EFC", "5,5 % à partir de 2024", "Taux d'intérêt de l'EFC"],
-                            ["Entretien du chef comptable, 19/10/2026", "Épargne", "3,5 %", "Taux servi déclaré, sans document"]]},
+                            ["Entretien de la direction comptable, 19/10/2026", "Épargne", "3,5 %", "Taux servi déclaré, sans document"]]},
         disposition="dessous",
         analyse=["**Pour l'EFC, trois taux coexistent : 3,5 %, 5,5 % l'an et 14 % d'intérêt simple.** Le cahier des charges n'indique pas si les 14 % s'appliquent une fois ou chaque année.",
                  "**Aucun des trois documents n'est accompagné d'une décision d'adoption signée.** Le manuel porte un certificat d'adoption non signé."],
@@ -2220,7 +2220,7 @@ contenu({"titre": "Produits annexes", "sous_titre": "Deux produits sont précomp
          "synthese": "Flotte automobile (9W3) : convention avec GNA non reçue ; MEDOC (8Z7) : aucun document ; projets immobiliers suivis en compte d'attente"},
         "Ces produits ne relèvent pas directement des garanties de base, mais ils transitent par le FPPN et engagent sa responsabilité vis-à-vis des adhérents. Aucun compte n'est intitulé « SCI » dans les balances ; les projets immobiliers figurent en comptes 4711120x.",
         tableau={"titre": tab("Produits annexes et points à clarifier"), "entetes": ["Produit", "Ce que montrent les données", "À obtenir du FPPN"], "largeurs": [4.8, 13.2, 13.2],
-                 "lignes": [["Flotte automobile (9W3)", "La Solde précompte environ 10 000 FCFA par mois et par adhérent de 2023 à 2026 ; le compte 47111106 « GNA ASSURANCE » suit l'assureur.", "La convention avec GNA, les primes reversées, les sinistres et les soldes par adhérent. [[GNA met mal à jour les soldes (responsable des cotisations, entretien du 19/10/2026)]]."],
+                 "lignes": [["Flotte automobile (9W3)", "La Solde précompte environ 10 000 FCFA par mois et par adhérent de 2023 à 2026 ; le compte 47111106 « GNA ASSURANCE » suit l'assureur.", "La convention avec GNA, les primes reversées, les sinistres et les soldes par adhérent. [[GNA met mal à jour les soldes (service des cotisations, entretien du 19/10/2026)]]."],
                             ["MEDOC (8Z7)", "Le FPPN précompte 5 000 FCFA par mois depuis novembre 2025 ; les retours de février et avril 2026 sont vides.", "La période de fonctionnement et la décision de suspension. [[Produit décrit comme un complément pharmacie, en pause depuis environ deux mois (entretien du 19/10/2026)]]."],
                             ["Projets immobiliers", "Les comptes 47111200 et 47111201 portent des projets immobiliers ; aucun compte n'est intitulé SCI.", "Le statut juridique des projets et le lien éventuel avec la SCI « La Prévoyance »."],
                             ["Identifiants « 183FPPN »", "Les fichiers aller PEP et Grenier de 2025 et 2026 contiennent 34 identifiants sans mécano.", "L'identité et le mécano de ces personnes."]]},
@@ -2344,7 +2344,7 @@ contenu({"titre": "Provision maladie : montant nécessaire", "sous_titre": f"Le 
         source="Source : " + SRC_ST + ", art. 85 et 89 ; " + REX + ", art. 10 ; " + SRC_GLT + " ; " + SRC_COMPTA[9:] + " ; onglet 18c du classeur des calculs")
 contenu({"titre": "Allocations décès : méthode du FPPN", "sous_titre": "Les dossiers non payés sont valorisés au barème et passés en dette au compte 41591000",
          "synthese": "Les états de fin d'année reçus le 22/10/2026 confirment le circuit décrit en entretien et en donnent le compte"},
-        "Logigramme modifiable, tel que décrit par le chef comptable le 19/10/2026 et confirmé par les états de fin d'année 2021 à 2025. Barème appliqué dans les états : sous-officier 1 400 000 FCFA, officier 1 600 000 FCFA, commissaire 2 200 000 FCFA (le barème déclaré en entretien, 1 000 000 et 2 000 000 FCFA, n'est pas celui des fichiers).",
+        "Logigramme modifiable, tel que décrit par la direction comptable le 19/10/2026 et confirmé par les états de fin d'année 2021 à 2025. Barème appliqué dans les états : sous-officier 1 400 000 FCFA, officier 1 600 000 FCFA, commissaire 2 200 000 FCFA (le barème déclaré en entretien, 1 000 000 et 2 000 000 FCFA, n'est pas celui des fichiers).",
         logigramme="deces",
         analyse=["**La méthode du FPPN se rapproche d'une évaluation dossier par dossier.** La liste des décès transmise par la direction du personnel est rapprochée des allocations payées ; les dossiers restants sont valorisés au barème par grade.",
                  "**Le calcul annuel est comptabilisé en dette au compte 41591000, non au compte de provision 15802000**, qui ne bouge pas depuis 2020 (diapositive suivante).",
@@ -2454,7 +2454,7 @@ GN = [r for r in PV["gna"] if r["exercice"] >= 2023]
 _com = {ex: -_so(ex, r"^71800000$") for ex in range(2023, 2027)}
 contenu({"titre": "Flotte automobile : risque porté par GNA", "sous_titre": "Le FPPN est apporteur d'affaires de GNA et ne doit pas de provision technique",
          "synthese": "Commission déclarée de 20 % des primes collectées, versée en fin d'année ; trop-perçus à traiter comme une dette envers les adhérents"},
-        "Selon le chef comptable et le responsable des cotisations (entretiens du 19/10/2026), les primes vont à GNA, qui porte le risque. Le FPPN est apporteur d'affaires et perçoit une commission de 20 % des primes collectées. Si le FPPN portait le risque, il exercerait une activité d'assurance de dommages, hors du champ de la mutualité sociale (règlement n° 07/2009).",
+        "Selon la direction comptable et le service des cotisations (entretiens du 19/10/2026), les primes vont à GNA, qui porte le risque. Le FPPN est apporteur d'affaires et perçoit une commission de 20 % des primes collectées. Si le FPPN portait le risque, il exercerait une activité d'assurance de dommages, hors du champ de la mutualité sociale (règlement n° 07/2009).",
         tableau={"titre": tab("Compte GNA (47111106) et produits des activités annexes (71800000)"), "entetes": ["Exercice", "Débit du compte GNA", "Solde du compte GNA", "Produits annexes (71800000)"], "largeurs": [3.4, 5.6, 5.6, 6.0],
                  "lignes": [[str(r["exercice"]) if r["exercice"] < 2026 else "31/08/2026", F(f"GNA débit {r['exercice']}", r["mouvements_debit"]), F(f"GNA solde {r['exercice']}", r["solde_debiteur"]), F(f"Produits annexes {r['exercice']}", _com[r["exercice"]])] for r in GN]},
         disposition="droite",
@@ -2469,7 +2469,7 @@ contenu({"titre": "Départ à la retraite du personnel", "sous_titre": "La provi
         tableau={"titre": tab("Provision pour départ à la retraite du personnel"), "entetes": ["Exercice", "Provision (196)", "Dotation (6911)", "Reprise (7911)"], "largeurs": [3.6, 5.6, 5.6, 5.6],
                  "lignes": [[str(r["exercice"]), F(f"PIDR prov {r['exercice']}", r["provision_196"]), F(f"PIDR dot {r['exercice']}", r["dotation_6911"]), F(f"PIDR rep {r['exercice']}", r["reprise_7911"])] for r in PI]},
         disposition="droite",
-        analyse=["**Chaque année, la provision de l'année précédente est reprise en totalité et la nouvelle est dotée en totalité.** Selon le chef comptable (entretien du 19/10/2026), le calcul applique la convention collective à l'ancienneté acquise.",
+        analyse=["**Chaque année, la provision de l'année précédente est reprise en totalité et la nouvelle est dotée en totalité.** Selon la direction comptable (entretien du 19/10/2026), le calcul applique la convention collective à l'ancienneté acquise.",
                  "**Les charges patronales s'ajoutent à l'indemnité** : charges fiscales de 2,80 % (IS 1,20 %, FDFP 0,40 % et 1,20 %), retraite 7,70 % plafonnée à 3 375 000 FCFA, prestations familiales 5,75 % et risques professionnels 2 % (taux du FPPN), plafonnés à 75 000 FCFA.",
                  "**Les DISA reçues le 22/10/2026 donnent l'âge, l'ancienneté et le salaire de chaque agent civil.** Le recalcul est présenté dans les diapositives suivantes."],
         implication="Le montant est faible au regard des provisions techniques, mais il entre dans les dettes à long terme et dans les ratios de la partie 10.",
@@ -2504,7 +2504,7 @@ contenu({"titre": "Provision du personnel par entité de 2021 à 2025", "sous_ti
                  "lignes": [[str(x["annee"]), N(f"PIDR agents {x['annee']}", x["agents"])] + [N(f"PIDR {e} {x['annee']}", x[e]["dbo"]) for e in ENT9]
                             + [N(f"PIDR tot {x['annee']}", x["dbo"]), N(f"PIDR acq {x['annee']}", x["acquis"]), N(f"PIDR 196 {x['annee']}", x["provision_196"])] for x in PSY]},
         disposition="dessous",
-        analyse=[f"**Au 31/12/2025, la provision recalculée vaut {pc('PIDR ratio 196', PSY[-1]['dbo'] / PSY[-1]['provision_196'])} du compte 196 ; les droits acquis en valent {pc('PIDR ratio acquis', PSY[-1]['acquis'] / PSY[-1]['provision_196'])}.** Le montant du FPPN est donc proche d'un calcul sans projection ni actualisation, comme l'a décrit le chef comptable.",
+        analyse=[f"**Au 31/12/2025, la provision recalculée vaut {pc('PIDR ratio 196', PSY[-1]['dbo'] / PSY[-1]['provision_196'])} du compte 196 ; les droits acquis en valent {pc('PIDR ratio acquis', PSY[-1]['acquis'] / PSY[-1]['provision_196'])}.** Le montant du FPPN est donc proche d'un calcul sans projection ni actualisation, comme l'a décrit la direction comptable.",
                  f"**La Direction Générale porte {pc('PIDR part DG', PSY[-1]['Direction Générale']['dbo'] / PSY[-1]['dbo'])} de la provision 2025 avec {N('PIDR agents DG', PSY[-1]['Direction Générale']['agents'])} agents.** Le CMP compte {N('PIDR agents CMP', PSY[-1]['CMP']['agents'])} agents, dont {N('PIDR CMP depuis 2022', sum(1 for x in PIN if x['annee'] == 2025 and x['entite'] == 'CMP' and int(x['embauche'][-4:]) >= 2022))} recrutés depuis 2022 : leurs droits acquis restent faibles."],
         implication="Le compte 196 couvre la provision recalculée selon les deux approches. [[La méthode du FPPN est celle des droits acquis]] : sa note de calcul est demandée (PBC, item 113).",
         valable="exercices 2021, 2022, 2023 et 2025 (pas de DISA exploitable en 2024), personnel civil déclaré à la CNPS ; montants en FCFA",
@@ -2591,7 +2591,7 @@ contenu({"titre": "Conclusion : suffisance des provisions", "sous_titre": "Les p
                             ["Dépréciation des prêts du Grenier", "Encours par tranche de retard × taux de la politique de crédit", "Aucune", F("CP gr", GRD["2026-08-31"]), "Balance âgée du logiciel de prêts"]]},
         disposition="dessous",
         analyse=["**Le FPPN dispose déjà des fichiers nécessaires à un calcul annuel simple de chaque provision.** Ce calcul n'est pas fait : les provisions maladie et obsèques sont inchangées depuis 2020."],
-        implication="Chaque année, le service comptable établit une note de calcul qui reprend ce tableau : méthode, fichiers utilisés, montant de chaque provision et comparaison au bilan. Le directeur général la signe, et elle est présentée à l'Assemblée générale avec les comptes (statuts, art. 85 et 89). Elle démontre la suffisance des provisions à l'AIRMS et au commissaire aux comptes.",
+        implication="Chaque année, le service comptable établit une note de calcul qui reprend ce tableau : méthode, fichiers utilisés, montant de chaque provision et comparaison au bilan. La direction générale la signe, et elle est présentée à l'Assemblée générale avec les comptes (statuts, art. 85 et 89). Elle démontre la suffisance des provisions à l'AIRMS et au commissaire aux comptes.",
         valable="provisions au bilan du 31/08/2026 ; besoins mesurés aux dates indiquées dans les diapositives de détail",
         source="Source : " + SRC_ST + ", art. 85, 88 et 89 ; " + REX + ", art. 10 ; diapositives de détail de la partie 9")
 
@@ -2726,7 +2726,7 @@ contenu({"titre": "Choix des méthodes d'adossement", "sous_titre": "Des méthod
                             ["L'actif suit-il les sorties ?", "Écart de liquidité par échéance", "Écart entre passifs et actifs au cours du temps après écoulement des éléments du bilan (" + SRC_ALM["BAN"] + ", p. 86)", "Actifs classés par délai de mobilisation aux bilans 2025 et 2026"],
                             ["Quels actifs sont mobilisables ?", "Classes de liquidité", "Les titres sont classés selon leur degré de liquidité (" + SRC_ALM["BAN"] + ", p. 95)", "Nature comptable de chaque actif (banques, DAT, FCP, prêts, immeubles)"],
                             ["Que se passe-t-il en cas de choc ?", "Tests de résistance calibrés sur le FPPN", "Le rachat massif de 40 % de la formule standard européenne (" + SRC_ALM["TIC"] + ", p. 110) n'est pas calibré sur le FPPN", f"Taux de sortie maximal observé : {pc('ALM tmax', T_MAX)} ; hausse maximale des prestations maladie de 2024 et 2025 : {pc('ALM pic', PIC)}"],
-                            ["Qui décide ?", "Gouvernance actif-passif", "Le conseil d'administration fixe les limites, un comité suit les écarts (" + SRC_ALM["IAA"] + ", p. 15 et 19 ; " + SRC_ALM["LAV"] + ", p. 8 et 11)", "Décision de placement par le seul directeur général (entretien du 19/10/2026)"]]},
+                            ["Qui décide ?", "Gouvernance actif-passif", "Le conseil d'administration fixe les limites, un comité suit les écarts (" + SRC_ALM["IAA"] + ", p. 15 et 19 ; " + SRC_ALM["LAV"] + ", p. 8 et 11)", "Décision de placement par la seule direction générale (entretien du 19/10/2026)"]]},
         disposition="dessous",
         analyse=["**Les méthodes de taux (duration, immunisation, modèles stochastiques, VaR) ne sont pas retenues** : elles supposent des flux de passif connus et un portefeuille obligataire, absents au FPPN (annexe « Méthodes non retenues et pourquoi »)."],
         implication="Les résultats de l'adossement sont des ordres de grandeur fondés sur le comportement observé des mutualistes ; ils deviendront des flux contractuels dès que l'épargne aura un échéancier.",
@@ -2778,7 +2778,7 @@ contenu({"titre": "Adossement : gouvernance à mettre en place", "sous_titre": "
          "synthese": "Le conseil d'administration doit fixer les limites ; un comité doit suivre les écarts et en rendre compte"},
         "Les pratiques de référence sont celles de l'Association actuarielle internationale et de l'Institut des actuaires. Elles sont rapprochées de la situation constatée au FPPN.",
         tableau={"titre": tab("Gouvernance actif-passif : pratiques de référence et situation du FPPN"), "entetes": ["Pratique de référence", "Source", "Situation du FPPN", "Action proposée"], "largeurs": [7.6, 5.4, 9.0, 9.2], "taille": 8.5,
-                 "lignes": [["Le conseil d'administration s'engage et approuve les limites de risque", "AAI, ch. 13, p. 15", "Aucune limite votée ; le directeur général décide seul des placements", "Faire voter une politique actif-passif et de placement"],
+                 "lignes": [["Le conseil d'administration s'engage et approuve les limites de risque", "AAI, ch. 13, p. 15", "Aucune limite votée ; la direction générale décide seule des placements", "Faire voter une politique actif-passif et de placement"],
                             ["Un comité actif-passif, avec un mandat écrit", "AAI, ch. 13, p. 19 ; Lavoie, p. 11", "Pas de comité", "Créer un comité : direction, comptabilité, actuaire"],
                             ["Une politique qui encadre la gestion actif-passif", "Lavoie, p. 8", "Pas de politique écrite", "Fixer réserve de liquidité, actifs admis, rendement minimal"],
                             ["Un suivi régulier des écarts", "Gestion des risques bancaires, p. 86", "Pas d'échéancier de l'épargne, pas de tableau de suivi", "Écarts de liquidité trimestriels, présentés au comité"],
@@ -2812,7 +2812,7 @@ contenu({"titre": "Calcul pas à pas : fonds propres 2025", "sous_titre": "Les p
                    "largeurs": [3.4, 11.4, 6.6], "rouge": [(3, 2), (6, 2)],
                    "explications": ["Les pertes reportées (compte 129) dépassent l'ensemble des réserves.", "Les fonds propres restent négatifs malgré le résultat positif de 2025.", "Les excédents futurs devront absorber ce solde négatif."],
                    "fichier": "AUDIT ADENKA\\DAFC\\2025\\BALANCE FPPN 2025.xlsx"},
-        analyse=["**Les réserves existent, mais les pertes passées les dépassent.** Le compte 10620000, intitulé « Réévaluation matériels » de 2020 à 2025, est le plus important des comptes positifs ; le chef comptable l'explique par la réévaluation du terrain du siège (partie 10)."],
+        analyse=["**Les réserves existent, mais les pertes passées les dépassent.** Le compte 10620000, intitulé « Réévaluation matériels » de 2020 à 2025, est le plus important des comptes positifs ; la direction comptable l'explique par la réévaluation du terrain du siège (partie 10)."],
         implication="La marge de solvabilité de la Décision n° 05/2022 se calcule sur ces réserves : selon que les pertes reportées sont déduites ou non, le FPPN est conforme ou non (partie 10).",
         source="Source : balance des comptes 2025")
 contenu({"titre": "Fonds propres", "sous_titre": "Les fonds propres restent négatifs malgré six années d'excédents",
@@ -2828,7 +2828,7 @@ contenu({"titre": "Fonds propres", "sous_titre": "Les fonds propres restent nég
         implication="Au rythme des excédents de 2024 et 2025, il faudrait encore au moins un exercice excédentaire pour revenir à des fonds propres positifs. Le déficit de 2026 éloigne cette échéance : le redressement dépend de la maîtrise de la sinistralité et des frais.",
         source=SRC_COMPTA)
 rp = R["rendement_placements"]
-# ---- v6 : placements (entretien du 19/10/2026, 14h, avec le chef comptable)
+# ---- v6 : placements (entretien du 19/10/2026, 14h, avec la direction comptable)
 DATB = [(ex, _mv(ex, r"^5221020", "mvt_d"), _mv(ex, r"^5221020", "mvt_c"), _so(ex, r"^5221020")) for ex in range(2021, 2027)]
 FCP_ = _so(2025, r"^53300001$")
 # ---- v11 : placements lus dans les grands livres (encours moyen pondéré par les jours), tous les dépôts à terme et le FCP
@@ -2849,11 +2849,11 @@ contenu({"titre": "Placements du FPPN", "sous_titre": "Un dépôt mensuel pour p
         implication=f"Le DAT EFC finance les paiements de fin d'année de l'EFC : ce n'est pas une réserve. Seuls le DAT PEP, puis le FCP, ont été des placements durables, face à une épargne de {F('PL ep 2026', b[2026]['epargne_totale'])} au 31/08/2026.",
         valable="grands livres des comptes 2021 à 2026 (« GRAND LIVRE 2021.xlsx », « GRAND LIVRE DES COMPTES 2022.xlsx », grand livre des comptes 2023, « GRAND LIVRE FPPN 2024.xlsx », grand livres des comptes 2025 et du 01/01 au 31/08/2026), comptes 5221, 5330 et 77 ; 2026 du 01/01 au 31/08",
         source="Source : grands livres des comptes du FPPN de 2021 au 31/08/2026 ; " + SRC_COMPTA[9:] + " ; " + SRC_ENT14[9:])
-contenu({"titre": "Décision de placement", "sous_titre": "Le directeur général décide seul, sur la base d'un point de trésorerie",
-         "synthese": "Ni comité, ni avis du conseil d'administration, ni politique de placement écrite selon le chef comptable"},
-        "Logigramme en couloirs, modifiable dans PowerPoint. Le circuit est celui décrit par le chef comptable le 19/10/2026. Cadre rouge : contrôle manquant.",
+contenu({"titre": "Décision de placement", "sous_titre": "La direction générale décide seule, sur la base d'un point de trésorerie",
+         "synthese": "Ni comité, ni avis du conseil d'administration, ni politique de placement écrite selon la direction comptable"},
+        "Logigramme en couloirs, modifiable dans PowerPoint. Le circuit est celui décrit par la direction comptable le 19/10/2026. Cadre rouge : contrôle manquant.",
         logigramme="placement",
-        analyse=["**Le choix des placements ne suit aucune politique validée par les organes du FPPN.** [[La banque propose, le directeur général décide après un point de trésorerie, et la comptabilité enregistre sur la base des relevés.]]"],
+        analyse=["**Le choix des placements ne suit aucune politique validée par les organes du FPPN.** [[La banque propose, la direction générale décide après un point de trésorerie, et la comptabilité enregistre sur la base des relevés.]]"],
         implication="Le règlement d'exécution n° 004/2022 (art. 17) exige que les placements satisfassent aux conditions de sécurité, de rendement, de liquidité et de diversification : sans politique écrite, le FPPN ne peut pas démontrer le respect de ces conditions.",
         source=SRC_ENT14)
 
@@ -2951,7 +2951,7 @@ contenu({"titre": "Deux lectures : comme le FPPN, puis corrigée selon le PCMS",
         tableau={"titre": tab("Reclassements de la lecture corrigée selon le PCMS"), "entetes": ["Comptes", "Tiroir comme le FPPN", "Tiroir selon le PCMS", "Raison du reclassement"], "largeurs": [6.6, 5.4, 5.4, 13.8],
                  "lignes": [["41195100, 41195200 : épargne PEP et EFC", "Dette à court terme (classe 4)", "Ressource longue", "L'épargne est un risque long (art. 3 du règlement d'exécution) : elle n'est pas exigible en totalité dans l'année."],
                             ["47111100 à 47111105, 47111201, 485 : avances et créances durables", "Créance à court terme (classe 4)", "Emploi long", "Ces montants financent le CMP, le Grenier et l'Hôpital de la Police depuis plusieurs années, sans remboursement à court terme."],
-                            ["10620000 : réévaluation", "Réserve libre (libellé « Réserve disponible » en 2026)", "Écart de réévaluation (terrain du siège selon le chef comptable)", "Le PCMS réserve le compte 106 aux écarts de réévaluation des immeubles, qui ne comptent pas dans la marge de solvabilité."]]},
+                            ["10620000 : réévaluation", "Réserve libre (libellé « Réserve disponible » en 2026)", "Écart de réévaluation (terrain du siège selon la direction comptable)", "Le PCMS réserve le compte 106 aux écarts de réévaluation des immeubles, qui ne comptent pas dans la marge de solvabilité."]]},
         disposition="dessous",
         analyse=["**Les deux lectures encadrent la réalité.** La lecture comme le FPPN est prudente pour l'épargne, mais optimiste pour les avances durables ; la lecture corrigée selon le PCMS corrige les deux."],
         implication="La réponse définitive dépend de l'échéancier réel de l'épargne : les conditions de retrait et les âges des épargnants trancheront entre les deux lectures.",
@@ -3279,7 +3279,7 @@ contenu({"titre": "Marge de solvabilité", "sous_titre": "La marge disponible ne
                               {"nom": "Disponible comme le FPPN", "valeurs": [round(MS[a]["marge_disponible_comme_fppn"]) for a in range(2021, 2027)], "couleur": BLEU},
                               {"nom": "Disponible nette des pertes", "valeurs": [round(MS[a]["marge_disponible_nette"]) for a in range(2021, 2027)], "couleur": ORANGE}],
                    "format": FMT_M, "unite": "En millions de FCFA"},
-        analyse=[f"**La marge disponible comme le FPPN repose surtout sur le compte 10620000** ({F('MS 106 (g)', MS[2025]['reserve_disponible_106'])}). Le chef comptable l'explique par la réévaluation du terrain du siège, ce que son intitulé de 2020 à 2025 (« Réévaluation matériels ») ne contredit pas.",
+        analyse=[f"**La marge disponible comme le FPPN repose surtout sur le compte 10620000** ({F('MS 106 (g)', MS[2025]['reserve_disponible_106'])}). La direction comptable l'explique par la réévaluation du terrain du siège, ce que son intitulé de 2020 à 2025 (« Réévaluation matériels ») ne contredit pas.",
                  "**Nette des pertes reportées, la marge disponible est négative chaque année**, même si elle se rapproche de zéro jusqu'en 2025.",
                  f"**La marge exigée augmente avec les cotisations** : elle passe de {F('MS exigée 2021 (g)', MS[2021]['marge_exigee'])} en 2021 à {F('MS exigée 2026 (g)', MS[2026]['marge_exigee'])} en 2026."],
         implication="Un écart de réévaluation ne compte pas dans la marge de solvabilité : la lecture corrigée selon le PCMS, qui l'exclut, devient la lecture de référence, et le FPPN est non conforme. Le rapport de réévaluation est demandé au FPPN (PBC, item 86).",
@@ -3290,7 +3290,7 @@ contenu({"titre": "Dispositif actuariel : qui calcule quoi", "sous_titre": "Aucu
         "Pour chaque calcul exigé par les textes, le tableau indique qui le fait aujourd'hui au FPPN, sur quelle base, et ce que la procédure devrait prévoir.",
         tableau={"titre": tab("Calculs actuariels : situation actuelle et organisation cible"), "entetes": ["Calcul", "Texte", "Situation actuelle", "Organisation cible"],
                  "largeurs": [5.6, 6.0, 9.6, 10.0], "taille": 8.5,
-                 "lignes": [["Provisions maladie et décès", "Statuts, art. 89. " + REX + ", art. 10", "Montants hérités, jamais recalculés", "Note de calcul annuelle du service comptable, signée par le directeur général, présentée à l'Assemblée générale"],
+                 "lignes": [["Provisions maladie et décès", "Statuts, art. 89. " + REX + ", art. 10", "Montants hérités, jamais recalculés", "Note de calcul annuelle du service comptable, signée par la direction générale, présentée à l'Assemblée générale"],
                             ["Allocations décès restant à payer", "Statuts, art. 89", "État de fin d'année au barème, comptabilisé au 41591000 (2024 et 2025)", "Même état, avec date de dépôt de chaque demande pour écarter les dossiers forclos"],
                             ["Intérêts servis sur l'épargne", "Manuel des produits d'épargne", "Aucun calcul, aucune écriture", "Taux arrêté par le conseil d'administration, relevé annuel par épargnant"],
                             ["Provision du personnel (196)", "Décret n° 2017-210, art. 4 et 5", "Reprise et dotation annuelles, méthode non transmise", "Calcul agent par agent avec âge de départ, ancienneté et plafond conventionnel documentés"],
@@ -3626,7 +3626,7 @@ _A5 = list(range(2021, 2026))
 _RGL = {x["exercice"]: x["rendement"] for x in V11["rendement_gl"]}
 SRC_INV = "Investing.com, « Rendement de l'Obligation Cote d'Ivoire 5-Year / 10-Year - Données Historiques », export du 19/10/2026"
 contenu({"titre": "Rendement des placements et taux du marché", "sous_titre": "Le rendement du FPPN est inférieur aux taux du marché de 2022 à 2024",
-         "synthese": f"Obligations de l'État de Côte d'Ivoire : {pc('S8 inv5 der', _ri('INV5', 9))} à 5 ans ({_ri('INV5', 10)}), {pc('S8 inv10 der', _ri('INV10', 9))} à 10 ans ({_ri('INV10', 10)}) ; taux servi sur l'épargne : [[3,50 % selon le chef comptable]], 5,50 % selon le manuel d'épargne"},
+         "synthese": f"Obligations de l'État de Côte d'Ivoire : {pc('S8 inv5 der', _ri('INV5', 9))} à 5 ans ({_ri('INV5', 10)}), {pc('S8 inv10 der', _ri('INV10', 9))} à 10 ans ({_ri('INV10', 10)}) ; taux servi sur l'épargne : [[3,50 % selon la direction comptable]], 5,50 % selon le manuel d'épargne"},
         "Le taux brut de rentabilité des placements doit atteindre au moins le taux moyen du marché (Décision n° 05/2022, section II), sans que le texte précise le marché. Deux lectures : dépôts à terme en Côte d'Ivoire (BCEAO, tableau 22, lecture principale, 2024 et 2025) et obligations de l'État de Côte d'Ivoire à 5 ans (Investing.com, moyenne annuelle des cotations quotidiennes, lecture exigeante). Investing.com est un agrégateur de cotations du marché secondaire : source secondaire, en complément de la BCEAO. Produit possible = solde moyen non rémunéré × taux moyen des dépôts à terme (onglet 13i).",
         tableau={"titre": tab("Rendement du FPPN et taux du marché, 2021 à 2025"), "entetes": ["Indicateur"] + [str(a) for a in _A5] + ["Source"], "largeurs": [8.8] + [2.9] * 5 + [7.9], "taille": 8,
                  "lignes": [["Rendement brut des placements du FPPN"] + [pc(f"S8 RL6 {a}", _RGL[a]) for a in _A5] + ["Grands livres"],
@@ -4132,9 +4132,9 @@ SL.append({"type": "annexe", "titre": "Références et sources", "notes": "", "t
            "entetes": ["Référence", "Contenu utilisé", "Lien ou emplacement"], "largeurs": [10.2, 9.8, 11.2], "taille": 8,
            "lignes": [["Envoi du FPPN du 15/10/2026", "Précomptes, balances, exports du Grenier", "Dossier 04-Documents reçus du client"],
                       ["Grands livres 2021, 2022, 2024, 2025 (PDF)", "Détail des écritures", "Envoi complémentaire du 18/10/2026"],
-                      ["Entretien du 19/10/2026 avec le responsable des cotisations", "Circuit des précomptes, règles des produits, nouvelles recrues", "FPPN_CR_entretien_cotisations_20261019.pptx"],
-                      ["Entretien du 19/10/2026 (14h) avec le chef comptable", "Placements, autres actifs, ressources", "FPPN_CR_entretien_placements_20261019.pptx"],
-                      ["Entretien du 19/10/2026 (16h) avec le chef comptable", "Provisions, allocations décès, retraite du personnel", "FPPN_CR_entretien_provisions_20261019.pptx"],
+                      ["Entretien du 19/10/2026 avec le service des cotisations", "Circuit des précomptes, règles des produits, nouvelles recrues", "FPPN_CR_entretien_cotisations_20261019.pptx"],
+                      ["Entretien du 19/10/2026 (14h) avec la direction comptable", "Placements, autres actifs, ressources", "FPPN_CR_entretien_placements_20261019.pptx"],
+                      ["Entretien du 19/10/2026 (16h) avec la direction comptable", "Provisions, allocations décès, retraite du personnel", "FPPN_CR_entretien_provisions_20261019.pptx"],
                       ["Règlement n° 07/2009/CM/UEMOA du 26/06/2009", "Cadre de la mutualité sociale", "airms-ci.com, documents publics"],
                       ["Règlement d'exécution n° 004/2022/COM/UEMOA du 01/06/2022", "Règles prudentielles, garantie, contrôle", "airms-ci.com, documents publics"],
                       ["Décision n° 05/2022/COM/UEMOA du 01/06/2022", "Indicateurs et ratios prudentiels", "airms-ci.com, documents publics"],

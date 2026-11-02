@@ -160,10 +160,10 @@ class Logigramme:
 # Logigrammes de la mission
 # ---------------------------------------------------------------------------
 def circuit_precomptes(slide, y0=3.9, h_couloir=2.5):
-    """Circuit des précomptes déclaré lors de l'entretien du 19/10/2026 (responsable des cotisations)."""
+    """Circuit des précomptes déclaré lors de l'entretien du 19/10/2026 (service des cotisations)."""
     lg = Logigramme(slide, 8.5)
     lg.couloirs(["Direction du personnel de la Police", "Solde, CGRAE, GNA", "Plateforme de partage",
-                 "FPPN : responsable des cotisations"], y0, h_couloir)
+                 "FPPN : service des cotisations"], y0, h_couloir)
     L, H = 3.4, 1.7
     X = [5.6 + k * 3.85 for k in range(7)]
     c = lg.centre_couloir
@@ -267,9 +267,9 @@ def chaine_traitement(slide, y0=3.95):
 
 
 def decision_placement(slide, y0=3.9, h_couloir=2.35):
-    """Circuit de décision d'un placement décrit par le chef comptable (entretien du 19/10/2026)."""
+    """Circuit de décision d'un placement décrit par la direction comptable (entretien du 19/10/2026)."""
     lg = Logigramme(slide, 8.5)
-    lg.couloirs(["Banque", "Direction générale", "DAF", "Comptabilité (chef comptable)"], y0, h_couloir)
+    lg.couloirs(["Banque", "Direction générale", "DAF", "Direction comptable"], y0, h_couloir)
     L, H = 3.4, 1.6
     X = [5.6 + k * 3.85 for k in range(7)]
     c = lg.centre_couloir
@@ -301,14 +301,14 @@ def decision_placement(slide, y0=3.9, h_couloir=2.35):
 
 
 def provision_deces(slide, y0=4.0):
-    """Calcul de fin d'année des allocations décès restant à payer, décrit par le chef comptable (19/10/2026)."""
+    """Calcul de fin d'année des allocations décès restant à payer, décrit par la direction comptable (19/10/2026)."""
     lg = Logigramme(slide, 9)
     L, H = 3.6, 1.6
     X = [1.6 + k * 4.45 for k in range(7)]
     y1, y2 = y0 + 0.6, y0 + 4.2
     lg.noeud("d1", "debut", "Liste des décès\n(direction du personnel)", X[0], y1, L, H)
     lg.noeud("d2", "etape", "Informaticien :\narrêt du précompte", X[1], y1, L, H)
-    lg.noeud("d3", "document", "Liste annuelle\nau chef comptable", X[2], y1, L, H)
+    lg.noeud("d3", "document", "Liste annuelle\nà la direction comptable", X[2], y1, L, H)
     lg.noeud("d4", "etape", "Pointage avec les\nallocations payées", X[3], y1, L, H)
     lg.noeud("d5", "decision", "Allocation\npayée ?", X[4], y1 - 0.15, L, 1.9)
     lg.noeud("d6", "fin", "Charge de\nl'exercice", X[5], y1, L, H)

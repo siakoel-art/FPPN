@@ -161,5 +161,16 @@ c = s3.cell(r, 1, "Source : PBC pointée au 23/10/2026 ; onglet « Plan de trava
 c._style = source_style
 me = wb["Mode d'emploi"]
 me["B6"].value = me["B6"].value.replace("(rapport v8, classeur v8, PBC, comptes rendus)", "(rapport et classeur des calculs du 23/10/2026, PBC, comptes rendus)")
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+# aucune attribution à une personne dans les textes (direction ou service rencontré)
+from depersonnaliser import dep as _dep
+for _ws in wb.worksheets:
+    for _row in _ws.iter_rows():
+        for _c in _row:
+            if isinstance(_c.value, str) and not _c.value.startswith("="):
+                _c.value = _dep(_c.value)
+            if _c.comment is not None:
+                _c.comment.text = _dep(_c.comment.text)
 wb.save(SORTIE)
 print(SORTIE, "| documents attendus :", r - 4, "| PBC :", compte)

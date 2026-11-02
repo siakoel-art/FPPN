@@ -17,14 +17,14 @@ from pptx.util import Cm, Pt
 
 SRC, SORTIE = sys.argv[1:3]
 ROUGE, NOIR, GRIS = "C00000", "060606", "F2F2F2"
-ENT = "Entretien du 19/10/2026 avec le responsable des cotisations"
+ENT = "Entretien du 19/10/2026 avec le service des cotisations"
 # diapositive : [(texte de la forme à marquer, étape, constat, source, action proposée)]
 NOTES = {
     0: [("Création du mécano", "Création du mécano et ajout à la fiche",
          "Nouvelle recrue sans mécano : le premier précompte peut être décalé d'un mois (déclaration non encore documentée).", ENT,
          "Dater chaque souscription et vérifier le mois du premier précompte."),
         ("Création du fichier de précompte", "Création du fichier de précompte (service du personnel)",
-         "Écart : l'entretien indique que le responsable des cotisations du FPPN produit le fichier aller de l'EFC et du PEP et le dépose sur la plateforme de partage.", ENT,
+         "Écart : l'entretien indique que le service des cotisations du FPPN produit le fichier aller de l'EFC et du PEP et le dépose sur la plateforme de partage.", ENT,
          "Préciser qui produit le fichier aller et qui le transmet à la Solde."),
         ("Réception du fichier", "Réception du fichier retour numérique",
          "Contrôle absent : aucun rapprochement du fichier aller et du fichier retour (rejets, écarts de montant).", ENT + " ; rapport, partie 3",

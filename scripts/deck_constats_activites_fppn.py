@@ -116,7 +116,7 @@ ACT = {
   I("23.b", "M", "R", "Le fonds commun de placement n'est pas suivi.", "500 000 000 FCFA placés en 2025, non garantis et non revalorisés dans les comptes.", "Suivre la valeur liquidative.", "Faible", "P3")],
  "Gouvernance": [
   I("14", "C", "R", "Plusieurs règles de solidité ne sont pas respectées.", "14 indicateurs sur 36 non conformes de 2022 à 2025, dont la réserve obligatoire, la liquidité et les fonds propres. Retrait d'agrément possible.", "Plan de mise en conformité chiffré présenté à l'AIRMS.", "Élevée", "P1"),
-  I("24", "E", "G", "Les placements ne passent pas par le conseil.", "[[Selon le chef comptable, le directeur général décide seul.]] Projet de Cocody sans budget. Mandat du directeur général documenté pour 2020 à 2023.", "Délibération du conseil d'administration pour chaque placement.", "Faible", "P2"),
+  I("24", "E", "G", "Les placements ne passent pas par le conseil.", "[[Selon la direction comptable, la direction générale décide seule.]] Projet de Cocody sans budget. Mandat du directeur général documenté pour 2020 à 2023.", "Délibération du conseil d'administration pour chaque placement.", "Faible", "P2"),
   I("24.a", "E", "G", "Aucun pilotage actif-passif.", "Ni politique votée, ni comité, ni limites.", "Politique actif-passif votée et comité actif-passif.", "Moyenne", "P2"),
   I("16", "M", "R", "Les frais dépassent la norme.", "36,34 % des cotisations en 2025, 44,12 % sur huit mois de 2026, pour un maximum de 20 %.", "Budget de fonctionnement avec un objectif de 20 %.", "Moyenne", "P3")],
  "Données et informatique": [

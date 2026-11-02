@@ -113,7 +113,7 @@ r.para("**Le message : les travaux couvrent tout le périmètre, des fichiers br
 r.tableau(["Étape", "Ce qui a été fait", "Chiffre à citer"],
           [["Lancement", "Réunions de lancement des 13 et 14/10/2026, liste des documents demandés (PBC)", "90 documents demandés"],
            ["Collecte", "Sept envois du FPPN du 15/10 au 23/10/2026, pointés un par un", "6 reçus, 41 partiels, 43 non reçus"],
-           ["Entretiens", "Responsable des cotisations, chef comptable, service des prestations (16 et 19/10/2026), avec guides et comptes rendus", "4 entretiens documentés"],
+           ["Entretiens", "Service des cotisations, direction comptable, service des prestations (16 et 19/10/2026), avec guides et comptes rendus", "4 entretiens documentés"],
            ["Données", "Précomptes sur salaire et sur pension, balances comptables, grands livres, états financiers, fichiers du personnel, prêts du Grenier", "4 454 416 lignes de précomptes contrôlées"],
            ["Contrôles", "Vrai format des fichiers, lignes de total, montants doublés, fichiers vides, rapprochement aller et retour", "7 balances et 506 feuilles de précomptes relues"],
            ["Analyses", "Effectifs, cotisations, sinistralité, épargne, prêts, retraités, provisions, adossement, placements, 36 ratios de l'UEMOA, sensibilités, mortalité, projection", "14 parties de rapport"],

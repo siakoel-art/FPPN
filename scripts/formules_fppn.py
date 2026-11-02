@@ -189,13 +189,13 @@ def registre(Q, P, R):
 
     # ------------------------------------------------------------------ Partie 9 : bilan et provisions
     f("F-09-01", 9, "PSAP en mois de prestations", "Provision pour sinistres à payer divisée par les prestations mensuelles moyennes de l'année.",
-      "PSAP / (prestations de l'année / nombre de mois)", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026)",
+      "PSAP / (prestations de l'année / nombre de mois)", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (direction comptable, 19/10/2026)",
       REX + ", art. 10 : PSAP calculée exercice par exercice, dossier par dossier, plus les sinistres non déclarés",
       "Indicateur de cohérence, pas une norme : une provision figée ne suit pas les prestations.", f"Maladie : {_nb(pr[2025]['psap_en_mois_de_prestations'], 2)} mois de prestations en 2025 ; décès : {_nb(pr[2025]['psap_deces_en_mois'], 2)} mois",
       "Provision ni suffisante ni excessive démontrable sans base de prestations", "Élevé", REX, "provisions_fppn.py, onglet 12_psap_rapprochement",
       ATT, r"^(Mois 20|Prov tot|Prest mens|PSAP)")
     f("F-09-02", 9, "PSAP et dettes envers les cliniques", "Provision maladie comparée aux factures des cliniques déjà enregistrées et non payées.",
-      "PSAP maladie / 40110000", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (chef comptable, 19/10/2026)",
+      "PSAP maladie / 40110000", BAL, "Aucune provision maladie calculée ; montants hérités d'environ 2004, jamais recalculés (direction comptable, 19/10/2026)",
       REX + ", art. 10 (dossiers connus + tardifs) ; PCMS (dettes fournisseurs en classe 4)",
       "Une facture enregistrée en dette n'a plus à être provisionnée : la PSAP doit couvrir les soins survenus et non encore facturés.",
       "Rapport mesuré chaque année (partie 9)", "Double compte possible entre dettes et provision", "Élevé", REX + " ; PCMS",
@@ -215,13 +215,13 @@ def registre(Q, P, R):
       "Non chiffrée", "Faible tant que la cotisation reste mensuelle", "Faible", REX + ", art. 9", "À apprécier", ATT)
     f("F-09-06", 9, "Indemnités de départ à la retraite du personnel", "Somme, pour chaque salarié, de l'indemnité prévue par la convention collective à son départ, pondérée par la probabilité d'être présent et actualisée, au prorata de l'ancienneté acquise.",
       "PIDR = Σ_i IDR_i × p_i × v^(t_i) × ancienneté acquise_i / ancienneté au départ_i ; IDR = salaire × (30 % par année jusqu'à 5 ans, 35 % de 6 à 10, 40 % au-delà) ; charges patronales : fiscales 2,80 %, retraite 7,70 % (plafond 3 375 000 FCFA), prestations familiales 5,75 % et risques professionnels 2 % (plafond 75 000 FCFA)",
-      "DISA 2021, 2022, 2023 et 2025 (CNPS) ; récapitulatifs de salaires 2024 (CMP) et 2025 (Grenier) ; décret n° 2017-210 ; convention collective du 19/07/1977, art. 40", "Convention collective appliquée à l'ancienneté acquise ; provision reprise et dotée en totalité chaque année (chef comptable, 19/10/2026) ; proche des droits acquis recalculés",
+      "DISA 2021, 2022, 2023 et 2025 (CNPS) ; récapitulatifs de salaires 2024 (CMP) et 2025 (Grenier) ; décret n° 2017-210 ; convention collective du 19/07/1977, art. 40", "Convention collective appliquée à l'ancienneté acquise ; provision reprise et dotée en totalité chaque année (direction comptable, 19/10/2026) ; proche des droits acquis recalculés",
       "SYSCOHADA révisé (engagements de retraite, méthode actuarielle) ; convention collective interprofessionnelle du 19/07/1977, art. 40 (âge de départ, plafond) ; décret n° 2017-210, art. 4 et 5 (barème)",
       "Recalcul agent par agent (unités de crédit projetées) dans les onglets 14a à 14c du classeur v9 ; comparaison au compte 196 et aux droits acquis.", "Provision 2025 du FPPN : " + _f(P["pidr"][5]["provision_196"]), "Âge de départ, dates d'embauche et entités demandés au FPPN",
       "Moyen", "Décret n° 2017-210, art. 4 et 5 ; convention collective du 19/07/1977, art. 40 ; IAS 19, § 67, 83 et 145 (bonne pratique)", "donnees_v9_fppn.py, onglets 14a à 14c", "Divergent, justifié", r"^(PIDR)")
     f("F-09-10", 9, "Allocations décès restant à payer (méthode du FPPN)", "Décès de l'année dont l'allocation n'est pas payée, valorisés au barème par grade.",
       "Σ dossiers non payés × allocation du grade (cartographie des risques : sous-officier 1 400 000 FCFA, officier 1 600 000 FCFA)", "Liste des décès de la direction du personnel ; allocations payées",
-      "Liste des décès moins allocations payées, valorisée au barème (chef comptable, 19/10/2026), comptabilisée au compte 41591000",
+      "Liste des décès moins allocations payées, valorisée au barème (direction comptable, 19/10/2026), comptabilisée au compte 41591000",
       REX + ", art. 10 : dossier par dossier, plus les sinistres non déclarés",
       "Méthode proche du dossier par dossier, sans les sinistres tardifs (décès d'ayants droit non déclarés). Le calcul est comptabilisé au compte 41591000 ; le compte 15802000 ne bouge pas.",
       "Non mesurable sans les fichiers des décès (PBC, item 92)", "Allocations restant à payer peut-être non comptabilisées", "Élevé", REX + ", art. 10",
@@ -318,7 +318,7 @@ def registre(Q, P, R):
       "Pas de rapport A/E sans dates de naissance", "Moyen", "Code CIMA, art. 338 (tables)", "donnees_v9_fppn.py, onglet 15_mortalite_sinistralite", "Sans texte applicable", r"^(Taux brut|Déc adh|Adh 20)")
     f("F-06-10", 6, "Intérêts d'une année sur l'encours EFC", "Encours EFC de fin d'année multiplié par chaque taux écrit dans les documents du FPPN.",
       "Intérêts = solde 41195200 × taux (3,5 %, 5,5 %, 14 %)", BAL + " ; cahier des charges EFC et PEP 2021 ; manuel des produits d'épargne ; cartographie des risques",
-      "Taux non arrêté : 3,5 % (chef comptable), 5,5 % (manuel, cartographie), 14 % d'intérêt simple (cahier des charges) ; aucune écriture d'intérêts dans les comptes",
+      "Taux non arrêté : 3,5 % (direction comptable), 5,5 % (manuel, cartographie), 14 % d'intérêt simple (cahier des charges) ; aucune écriture d'intérêts dans les comptes",
       "Statuts, art. 79 et 81 ; " + REX + ", art. 17 (adéquation des placements aux engagements)", "Une hypothèse à la fois (IAS 19, § 145) ; 14 % traité comme borne haute annuelle.",
       "Au taux le plus bas, les intérêts d'une année dépassent les produits financiers de chaque année de 2021 à 2025", "Dette d'épargne inférieure à l'engagement si un taux est dû",
       "Élevé", "Documents du FPPN reçus le 22/10/2026", "donnees_v9_fppn.py, onglet 16_efc_taux_servi", "Sans texte applicable", r"^(EFC i|EFC enc)")

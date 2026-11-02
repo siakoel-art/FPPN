@@ -25,7 +25,7 @@ VAL = {
     "Statuts et règlement intérieur : cotisations, provisions, prestations": "statuts et règlement intérieur du FPPN édités le 15/06/2023 (adoptés le 30/06/2021), articles cités ; leur application n'est testée que là où le rapport le dit",
     "Statuts et règlement intérieur : épargne, personnel, organes": "statuts et règlement intérieur du FPPN édités le 15/06/2023, articles cités ; décrets n° 2017-210 et n° 2012-652 ; application non testée sauf mention",
     "Garanties et produits": "montants précomptés par poste dans les fichiers retour de la Solde et de la CGRAE, mois reçus entre 2023 et septembre 2026 selon le poste (diapositive « Couverture de la période »)",
-    "Circuit des fichiers par produit": "circuit déclaré par le responsable des cotisations le 19/10/2026 ; non confirmé par une procédure écrite",
+    "Circuit des fichiers par produit": "circuit déclaré par le service des cotisations le 19/10/2026 ; non confirmé par une procédure écrite",
     "Flux financiers 2025": "exercice 2025, classes 6 et 7 de « BALANCE FPPN 2025.xlsx » ; flux d'épargne et du Grenier exclus du résultat",
     "Notions de base": "définitions de la Décision n° 05/2022 (annexe) et du règlement d'exécution n° 004/2022 ; sans chiffre propre au FPPN",
     "Mission et périmètre": "périmètre fixé par le dossier de préparation du 13/10/2026 et la demande de M. Wabi ; période du 01/01/2020 au 31/08/2026",
@@ -120,7 +120,7 @@ VAL = {
     "Étapes du traitement des données": "traitements appliqués aux fichiers reçus jusqu'au 22/10/2026",
     "Analyses en attente": "documents demandés non reçus au 22/10/2026 (PBC pointée)",
     "Points à clarifier": "questions ouvertes au 22/10/2026",
-    "Points issus de l'entretien cotisations": "déclarations du responsable des cotisations le 19/10/2026, non confirmées par document sauf mention",
+    "Points issus de l'entretien cotisations": "déclarations du service des cotisations le 19/10/2026, non confirmées par document sauf mention",
     "Provisions : documents attendus": "documents de provisions demandés et non reçus au 22/10/2026 (PBC pointée)",
-    "Points issus des entretiens du chef comptable": "déclarations du chef comptable le 19/10/2026 (14h et 16h), non confirmées par document sauf mention",
+    "Points issus des entretiens de la direction comptable": "déclarations de la direction comptable le 19/10/2026 (14h et 16h), non confirmées par document sauf mention",
 }
