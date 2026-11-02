@@ -321,14 +321,33 @@ LEG_CRIT = [("🔴", "Critique", "risque élevé ou non-conformité"), ("🟠", 
 # ---------------------------------------------------------------- diapositives
 SL.append({"type": "couverture", "notes": "Point d'étape du volet actuariel et statistique pour le management : contexte, récapitulatif des travaux, recommandations, prochaines étapes."})
 SL.append({"type": "sommaire", "notes": ""})
-contenu({"titre": "Contexte de la mission", "sous_titre": "Le FPPN gère la prévoyance et l'épargne des policiers, l'audit dit s'il peut tenir ses promesses",
-         "synthese": "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN"},
-        "Présenter le FPPN, son cadre, la mission et le volet actuariel en quatre cartes, puis les quatre chiffres clés.",
-        dessin="contexte", sommaire="Contexte et objectifs", source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositives 13 et 61")
-contenu({"titre": "Objectifs et périmètre", "sous_titre": "Quatre questions à traiter, complétées par les travaux nécessaires pour y répondre",
-         "synthese": "Chaque question et chaque travail portent un code, repris dans le récapitulatif et les recommandations"},
-        "Les codes ENG, PROV, ALM et PLA correspondent aux quatre questions. DON, STAT et REG aux travaux ajoutés.",
-        dessin="objectifs", source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et profil de l'actuaire (p. 74) ; plan d'analyse statistique du 16/10/2026")
+gab(31, {"titre": "Contexte de la mission", "sous_titre": "Le FPPN gère la prévoyance et l'épargne des policiers, l'audit dit s'il peut tenir ses promesses",
+          "synthese": "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN"},
+    {"cartes": [("Le FPPN", "Mutuelle des policiers de Côte d'Ivoire : soins, allocation au décès, épargne EFC et PEP, prêts du Grenier. 31 198 policiers cotisants en août 2026."),
+                ("Son cadre", "Mutualité sociale de l'UEMOA, sous le contrôle de l'AIRMS, avec 36 indicateurs de solidité à respecter (Décision n° 05/2022)."),
+                ("La mission Adenka", "Audit comptable et financier du 01/01/2020 au 31/08/2026. Lancement les 13 et 14/10/2026."),
+                ("Le volet actuariel", "Mesurer ce que le FPPN devra payer à ses adhérents et vérifier qu'il pourra le payer à temps.")]},
+    "Présenter le FPPN, son cadre, la mission Adenka et le volet actuariel, autour du centre du gabarit.",
+    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 61")
+SL[-1]["sommaire"] = "Contexte et objectifs"
+gab(9, {"titre": "Objectifs de la mission", "sous_titre": "Quatre questions structurent le volet actuariel, chacune avec son code",
+        "synthese": "Les codes ENG, PROV, ALM et PLA sont repris dans le récapitulatif des activités et les recommandations"},
+    {"blocs": [("ENG : engagements", "Combien le FPPN doit-il à ses adhérents et à leurs ayants droit, aujourd'hui et plus tard ?"),
+               ("PROV : provisions", "Les sommes mises de côté suffisent-elles à payer les prestations déjà nées ?"),
+               ("ALM : adossement", "L'argent du FPPN sera-t-il disponible au moment où il devra payer ?"),
+               ("PLA : placements", "Les placements sont-ils sûrs, disponibles et assez rentables pour servir l'épargne promise ?")]},
+    "Les quatre questions de l'offre technique (profil de l'actuaire, p. 74), dans l'ordre de la demande.",
+    source="Source : offre technique Adenka validée par le FPPN, profil de l'actuaire (p. 74)")
+gab(23, {"titre": "Périmètre des travaux", "sous_titre": "Des travaux complémentaires sont nécessaires pour répondre aux quatre questions",
+         "synthese": "Contrôle des données, statistiques, indicateurs de solidité et gouvernance, sur la période du 01/01/2020 au 31/08/2026"},
+    {"blocs": [("DON : données de base", "Contrôler les fichiers du FPPN et les rapprocher de la comptabilité (offre technique, pôle 4)."),
+               ("STAT : statistiques", "Effectifs, cotisations, sinistralité, décès et mortalité (plan d'analyse du 16/10/2026)."),
+               ("REG : solidité et gouvernance", "36 indicateurs de l'UEMOA, décisions des organes (pôle 4, risque R3)."),
+               ("PROV : autres provisions", "Prêts du Grenier et départ à la retraite du personnel du FPPN."),
+               ("ALM : projection", "Projeter l'équilibre entre cotisations et prestations (pôle 4)."),
+               ("Période et sources", "Du 01/01/2020 au 31/08/2026 : fichiers, comptes, statuts et entretiens.")]},
+    "Les travaux ajoutés aux quatre questions, avec leur code et leur fondement dans l'offre technique.",
+    source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et risque R3 (p. 36) ; plan d'analyse statistique du 16/10/2026")
 for k, (lot, titre_, sous_, synth_) in enumerate((
         (RECAP_DEMANDES, "Récapitulatif des activités (1/2) : les quatre demandes", "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
          "Les quatre demandes de la mission, du constat le plus critique au moins critique : méthodes, volume traité et résultats"),
