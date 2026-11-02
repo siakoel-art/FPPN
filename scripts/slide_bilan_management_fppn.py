@@ -1,9 +1,9 @@
 """Diapositive unique pour une réunion de management : bilan du volet actuariel et statistique de la mission FPPN.
 
-Trois colonnes : le poids des travaux (volumétrie), les premiers résultats commentés, les décisions à prendre ; une
-bande sur les méthodes, l'avancement et la suite. Chiffres du rapport actuariel et statistique du 23/10/2026, du plan
-de travail du 23/10/2026 et de la liste des documents demandés du 26/10/2026.
-Moteur de mise en page repris du script du rapport (rapport_v12_fppn.py).
+Gabarit Timesaver n° 25 (9 blocs icône + titre orange + texte) sous l'en-tête Adenka : le poids des travaux, sept
+résultats (constat, cause, conséquence pour le FPPN, en langage simple) et les décisions à prendre.
+Chiffres du rapport actuariel et statistique du 23/10/2026, du plan de travail du 23/10/2026 et de la liste des
+documents demandés du 26/10/2026. Moteur de mise en page repris du script du rapport (rapport_v12_fppn.py).
 
 Usage : python3 slide_bilan_management_fppn.py <skill adenka-powerpoint> <sortie.pptx>
 """
@@ -23,9 +23,9 @@ ENTETE = "\n".join([lignes(82, 87), lignes(90, 91), lignes(94, 94), lignes(96, 1
 debut = next(i for i, l in enumerate(SRC, 1) if l.startswith("tmp = SORTIE.replace"))
 fin = next(i for i, l in enumerate(SRC, 1) if l.startswith("finaliser(SORTIE)"))
 MOTEUR = lignes(debut, fin + 1)
-avant = '        if x.get("triangle"):'
+avant = "def remplir_gab(slide, num, d, analyse=None):\n"
 assert avant in MOTEUR
-MOTEUR = MOTEUR.replace(avant, '        if x.get("bilan"):\n            dessin_bilan(sl)\n' + avant)
+MOTEUR = MOTEUR.replace(avant, avant + "    if num == 25:\n        remplir_25(slide, d)\n        return\n")
 
 CONTENU = r'''
 VALIDITE = {}
@@ -33,128 +33,88 @@ PBCM = {}
 GAB = {"contenu": 5}
 
 
-def run(p, texte, taille, gras=False, couleur=NOIR):
-    r_ = p.add_run()
-    r_.text = texte
-    r_.font.name = "Helvetica"
-    r_.font.size = Pt(taille)
-    r_.font.bold = gras
-    r_.font.color.rgb = RGBColor.from_string(couleur)
-    return r_
+def remplir_25(slide, d):
+    """Neuf blocs : titre orange (paragraphe du gabarit) puis paragraphes « Constat / Cause / Pour le FPPN »."""
+    boites = sorted([sh for sh in slide.shapes if sh.name == "TextBox 49"], key=lambda sh: (round(sh.top / 360000), sh.left))
+    icones = sorted([sh for sh in slide.shapes if sh.shape_type == 13 and sh.width < Cm(3)], key=lambda sh: (round(sh.top / 360000), sh.left))
+    # grille régulière sous l'en-tête : 3 colonnes (icône + texte) et 3 rangées
+    xs_ic, xs_tx, larg = (1.3, 12.0, 22.7), (3.1, 13.8, 24.5), (8.6, 8.6, 8.2)
+    ys, h_r, t_ic = (3.85, 8.0, 12.15), 4.1, 1.5
+    for k, ic in enumerate(icones[:9]):
+        r_, c_ = divmod(k, 3)
+        ic.width, ic.height = Cm(t_ic), Cm(t_ic)
+        ic.left, ic.top = Cm(xs_ic[c_]), Cm(ys[r_] + (h_r - t_ic) / 2)
+    for k, (sh, (titre, parties)) in enumerate(zip(boites, d["blocs"])):
+        r_, c_ = divmod(k, 3)
+        sh.left, sh.top, sh.width, sh.height = Cm(xs_tx[c_]), Cm(ys[r_]), Cm(larg[c_]), Cm(h_r)
+        sh.text_frame.margin_top = Cm(0.02)
+        tf = sh.text_frame
+        tf.word_wrap = True
+        ecrire(sh, [titre], [10], [True])
+        for lib, texte in parties:
+            p = tf.add_paragraph()
+            p.space_before = Pt(1.5)
+            if lib:
+                r_ = p.add_run()
+                r_.text = lib + " : "
+                r_.font.name, r_.font.size, r_.font.bold = "Helvetica", Pt(8), True
+                r_.font.color.rgb = RGBColor.from_string(BLEU)
+            for morceau, g_, s_ in morceaux_balises(texte):
+                r_ = p.add_run()
+                r_.text = morceau
+                r_.font.name, r_.font.size, r_.font.bold = "Helvetica", Pt(8), g_
+                r_.font.color.rgb = RGBColor.from_string(NOIR)
+                if s_:
+                    surligner(r_)
 
 
-def cadre(slide, x, y, l, h, fond=None, bord=None, ancre=MSO_ANCHOR.TOP, marge=0.15):
-    sh = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Cm(x), Cm(y), Cm(l), Cm(h))
-    if fond:
-        sh.fill.solid()
-        sh.fill.fore_color.rgb = RGBColor.from_string(fond)
-    else:
-        sh.fill.background()
-    if bord:
-        sh.line.color.rgb = RGBColor.from_string(bord)
-        sh.line.width = Pt(0.75)
-    else:
-        sh.line.fill.background()
-    sh.shadow.inherit = False
-    tf = sh.text_frame
-    tf.word_wrap = True
-    tf.auto_size = None
-    tf.margin_left = tf.margin_right = Cm(marge)
-    tf.margin_top = tf.margin_bottom = Cm(0.06)
-    tf.vertical_anchor = ancre
-    tf.paragraphs[0].alignment = PP_ALIGN.LEFT
-    return sh
+BLOCS = [
+    ("Le poids des travaux", [
+        ("", "**4 454 416 lignes** de cotisations contrôlées sur **80 mois** (2020 au 31/08/2026), **4 287 fichiers** du FPPN extraits, balances et grands livres relus."),
+        ("", "**99 onglets** de calcul, **36 ratios** réglementaires recalculés, **2 885 chiffres** vérifiés sans écart, 88 documents demandés, 4 entretiens, 64 constats."),
+        ("Avancement", "63,85 % au 23/10/2026.")]),
+    ("Liquidité : insuffisante", [
+        ("Constat", "l'argent disponible dans l'année couvre 34,42 % de ce que le FPPN doit payer dans l'année. Il manquerait 12,6 milliards de FCFA en cinq ans."),
+        ("Cause", "l'épargne des policiers a financé la clinique, des terrains et des prêts, qui ne se revendent pas vite."),
+        ("Pour le FPPN", "il paie les sorties d'épargne avec les nouvelles cotisations. Si les départs à la retraite augmentent, il ne pourra pas payer tout le monde à temps.")]),
+    ("Épargne : dette sous-évaluée", [
+        ("Constat", "15,7 milliards de FCFA d'épargne due au 31/08/2026, 19,0 milliards avec les intérêts promis."),
+        ("Cause", "aucun taux n'est fixé officiellement (3,50 %, 5,50 % ou 14 % selon le document) et aucun intérêt n'est comptabilisé depuis 2020, soit 3,3 milliards."),
+        ("Pour le FPPN", "ses comptes sous-estiment ce qu'il doit aux policiers, et un épargnant peut contester le montant reçu à son départ.")]),
+    ("Provisions : un montant hérité", [
+        ("Constat", "4,8 milliards de FCFA mis de côté pour la maladie et le décès, le même montant depuis 2020, pour un besoin mesuré de 19,6 millions."),
+        ("Cause", "[[un montant passé vers 2004 selon le chef comptable]], jamais recalculé. Les allocations décès dues sont déjà comptées ailleurs (489 millions)."),
+        ("Pour le FPPN", "ce n'est pas un trou : l'argent existe mais il est mal rangé. Il gonfle les dettes et cache l'absence de réserve pour les intérêts de l'épargne.")]),
+    ("Placements : trop faibles", [
+        ("Constat", "5,53 % de l'épargne réellement placée en 2025, pour un rendement de 4,90 % par an."),
+        ("Cause", "presque toute l'épargne est immobilisée dans des biens qui ne rapportent ni intérêts ni liquidités, sans politique de placement votée."),
+        ("Pour le FPPN", "les placements ne rapportent pas de quoi payer les intérêts promis : 470 millions de FCFA d'écart en 2025.")]),
+    ("Fonds propres : négatifs", [
+        ("Constat", "-879 millions de FCFA au 31/08/2026, après -6,7 milliards fin 2020."),
+        ("Cause", "des pertes passées que les excédents de 2020 à 2025 n'ont pas encore effacées, puis un déficit de 441 millions sur les huit premiers mois de 2026."),
+        ("Pour le FPPN", "aucun coussin pour absorber un coup dur. Comptes remis en ordre (provisions, intérêts, prêts), ils seraient positifs d'environ 637 millions.")]),
+    ("Règles de solidité : non respectées", [
+        ("Constat", "14 indicateurs réglementaires sur 36 non conformes de 2022 à 2025 : réserve, liquidité, fonds propres, frais."),
+        ("Cause", "les points précédents, et des frais de fonctionnement de 36,34 % des cotisations pour un maximum de 20 %."),
+        ("Pour le FPPN", "deux années de suite non conformes permettent à l'AIRMS de retirer l'agrément. Ce n'est pas automatique, mais c'est l'enjeu principal.")]),
+    ("Garantie maladie : déficitaire", [
+        ("Constat", "les soins consomment 73,53 % des cotisations maladie en 2025 et 97,40 % en 2026. Déficit de 702 millions sur huit mois de 2026."),
+        ("Cause", "les soins augmentent beaucoup plus vite que les cotisations. Le niveau bas de 2020 à 2022 venait d'une couverture limitée et de factures impayées."),
+        ("Pour le FPPN", "la garantie décès paie le déficit. Sans mesure, il faudra revoir la cotisation ou les remboursements.")]),
+    ("Décisions à prendre dans les trois mois", [
+        ("1", "fixer le taux de l'épargne et comptabiliser les intérêts dus."),
+        ("2", "calculer les provisions chaque année et reclasser l'excédent."),
+        ("3", "constituer une réserve de liquidité et cesser de financer des biens durables avec l'épargne."),
+        ("4", "présenter un plan de mise en conformité à l'AIRMS."),
+        ("5", "transmettre les données manquantes : dates de naissance, prestations datées, comptes individuels.")]),
+]
 
-
-def entete_col(slide, x, y, l, num, titre):
-    b = cadre(slide, x, y, l, 0.62, BLEU, ancre=MSO_ANCHOR.MIDDLE)
-    p = b.text_frame.paragraphs[0]
-    run(p, f"{num}  ", 12, True, ORANGE)
-    run(p, titre, 11.5, True, "FFFFFF")
-
-
-def dessin_bilan(slide):
-    y0 = 3.95
-    y_bas = y0 + 0.75 + 4 * 1.95 + 3 * 0.12
-    # ---- colonne 1 : le poids des travaux
-    x1, l1 = 1.4, 9.2
-    entete_col(slide, x1, y0, l1, "1", "Le poids des travaux")
-    tuiles = [("4 454 416", "lignes de cotisations contrôlées"), ("80 mois", "couverts, de 2020 au 31/08/2026"),
-              ("4 287", "fichiers du FPPN extraits et inventoriés"), ("2 885", "chiffres du rapport vérifiés, 0 écart"),
-              ("99", "onglets de calcul à formules visibles"), ("36", "ratios réglementaires recalculés"),
-              ("88", "documents demandés, 4 entretiens"), ("64", "constats, 10 risques notés")]
-    lt, ht, g = (l1 - 0.2) / 2, 1.95, 0.2
-    for k, (val, lib) in enumerate(tuiles):
-        x = x1 + (k % 2) * (lt + g)
-        y = y0 + 0.75 + (k // 2) * (ht + 0.12)
-        b = cadre(slide, x, y, lt, ht, "F2F2F2", ancre=MSO_ANCHOR.MIDDLE)
-        p = b.text_frame.paragraphs[0]
-        p.alignment = PP_ALIGN.CENTER
-        run(p, val, 20, True, BLEU)
-        p2 = b.text_frame.add_paragraph()
-        p2.alignment = PP_ALIGN.CENTER
-        run(p2, lib, 9, False, "53565A")
-    # ---- colonne 2 : les premiers résultats
-    x2, l2 = x1 + l1 + 0.4, 11.6
-    entete_col(slide, x2, y0, l2, "2", "Les premiers résultats")
-    res = [("C00000", "Adossement : insuffisant", "34,42 %", "des paiements de l'année couverts par l'argent disponible. Manque de 12,6 milliards de FCFA à cinq ans.", "Risque principal : la liquidité de l'épargne."),
-           ("C00000", "Placements : insuffisants", "5,53 %", "de l'épargne réellement placée. Rendement de 4,90 %, sous le taux de 5,50 % promis sur l'EFC.", "L'épargne a financé clinique, terrains et prêts."),
-           ("ED7D31", "Engagements : partiellement démontrés", "19,0 Md", "de FCFA dus aux épargnants, dont 3,3 milliards d'intérêts jamais comptabilisés.", "La dette réelle est sous-évaluée."),
-           ("ED7D31", "Provisions : partiellement démontrées", "4,8 Md", "de FCFA figés depuis 2020, très au-dessus du besoin mesuré (19,6 millions).", "L'argent existe, mais il est mal affecté.")]
-    hr = (y_bas - (y0 + 0.75) - 3 * 0.12) / 4
-    for k, (coul, titre, chiffre, txt, com) in enumerate(res):
-        y = y0 + 0.75 + k * (hr + 0.12)
-        cadre(slide, x2, y, 0.18, hr, coul)
-        b = cadre(slide, x2 + 0.18, y, 2.9, hr, "F2F2F2", ancre=MSO_ANCHOR.MIDDLE, marge=0.08)
-        p = b.text_frame.paragraphs[0]
-        p.alignment = PP_ALIGN.CENTER
-        run(p, chiffre, 17, True, coul)
-        b = cadre(slide, x2 + 3.15, y, l2 - 3.15, hr, None, "D9D9D9", ancre=MSO_ANCHOR.MIDDLE)
-        p = b.text_frame.paragraphs[0]
-        run(p, titre, 10.5, True)
-        p2 = b.text_frame.add_paragraph()
-        run(p2, txt, 9.5)
-        p3 = b.text_frame.add_paragraph()
-        run(p3, "→ " + com, 9.5, True, BLEU)
-    # ---- colonne 3 : ce que cela implique
-    x3, l3 = x2 + l2 + 0.4, 31.2 - (l1 + l2 + 0.8)
-    entete_col(slide, x3, y0, l3, "3", "Les décisions à prendre")
-    b = cadre(slide, x3, y0 + 0.75, l3, 2.15, "FBE5C8", ancre=MSO_ANCHOR.MIDDLE)
-    p = b.text_frame.paragraphs[0]
-    run(p, "Enjeu majeur : ", 10, True, "C00000")
-    run(p, "14 règles de solidité sur 36 non respectées et fonds propres négatifs (-879 millions de FCFA). Deux exercices non conformes de suite permettent à l'AIRMS de retirer l'agrément.", 9.5)
-    dec = [("Fixer le taux servi", "et comptabiliser les intérêts dus"), ("Calculer les provisions", "chaque année et reclasser l'excédent"),
-           ("Constituer une réserve de liquidité", "et cesser de financer des biens durables avec l'épargne"),
-           ("Présenter un plan de conformité", "chiffré à l'AIRMS"), ("Obtenir les données manquantes", "pour finir les calculs")]
-    b = cadre(slide, x3, y0 + 3.02, l3, y_bas - (y0 + 3.02), None, "D9D9D9", ancre=MSO_ANCHOR.MIDDLE)
-    tf = b.text_frame
-    p = tf.paragraphs[0]
-    run(p, "Cinq actions à lancer dans les trois mois", 10.5, True, BLEU)
-    p.space_after = Pt(6)
-    for k, (t_, s_) in enumerate(dec, 1):
-        q = tf.add_paragraph()
-        q.space_after = Pt(6)
-        run(q, f"{k}  ", 11, True, ORANGE)
-        run(q, t_ + " ", 10.5, True)
-        run(q, s_, 10)
-    # ---- bande du bas : méthodes, avancement, suite
-    yb = y_bas + 0.2
-    b = cadre(slide, x1, yb, 31.2, 1.55, "F2F2F2", ancre=MSO_ANCHOR.MIDDLE)
-    tf = b.text_frame
-    p = tf.paragraphs[0]
-    run(p, "Méthodes : ", 9, True, BLEU)
-    run(p, "écart de liquidité par échéance, écoulement de l'épargne, tests de résistance, provisions par règlements postérieurs à la clôture et cadence des déclarations tardives, intérêts sur encours moyen, rendement pondéré par les jours, 36 ratios de la Décision n° 05/2022.", 9)
-    p2 = tf.add_paragraph()
-    run(p2, "Avancement : ", 9, True, BLEU)
-    run(p2, "63,85 % au 23/10/2026. Les conclusions sur la liquidité et les placements sont acquises. Les montants des engagements et des provisions seront précisés à réception des données du FPPN (base des prestations datée, dates de naissance, comptes individuels d'épargne).", 9)
-
-
-contenu({"titre": "Volet actuariel et statistique : bilan des travaux",
+gab(25, {"titre": "Bilan du volet actuariel et statistique",
          "sous_titre": "Le FPPN est excédentaire, mais ne peut pas démontrer qu'il remboursera l'épargne à temps",
-         "synthese": "Plus de quatre millions de lignes contrôlées sur 80 mois, quatre réponses à la mission, cinq décisions à prendre dans les trois mois"},
-        "Lire de gauche à droite : ce qui a été fait, ce qui en ressort, ce qu'il faut décider. Message clé : le risque principal est la liquidité de l'épargne, l'enjeu réglementaire est l'agrément.",
-        bilan=True,
-        source="Source : rapport actuariel et statistique du 23/10/2026, diapositives 4 à 8, 13 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026")
+         "synthese": "Plus de quatre millions de lignes contrôlées sur 80 mois, sept résultats clés et cinq décisions à prendre dans les trois mois"},
+    {"blocs": BLOCS},
+    "Lire de gauche à droite et de haut en bas : le poids des travaux, sept résultats avec leur cause et leur conséquence pour le FPPN, puis les décisions. Message clé : le risque principal est la liquidité de l'épargne, l'enjeu réglementaire est l'agrément.",
+    source="Source : rapport actuariel et statistique du 23/10/2026, diapositives 4 à 13, 98, 118, 150, 161, 165, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026")
 '''
 
 code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + "\nprint(SORTIE, len(SL), 'diapositive(s)')\n"
