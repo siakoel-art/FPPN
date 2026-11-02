@@ -402,24 +402,24 @@ gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémenta
                 ("Volet Stratégie", [("Objectifs", ["À renseigner par l'équipe Stratégie"]), ("Travaux", ["À renseigner par l'équipe Stratégie"])])]},
     "Carte noire : volet Actuariat. Carte orange : volet Stratégie, complétée par l'équipe en charge.",
     source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et profil de l'actuaire (p. 74) ; plan d'analyse statistique du 16/10/2026")
-for k, (lot, titre_, sous_, synth_) in enumerate((
-        (RECAP_DEMANDES, "Volet Actuariat (1/2) : les quatre demandes", "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
-         "Les quatre demandes de la mission, du constat le plus critique au moins critique : méthodes, volume traité et résultats"),
-        (RECAP_COMPL, "Volet Actuariat (2/2) : travaux complémentaires", "Les travaux complémentaires confirment le risque sur l'agrément et la garantie maladie",
-         "Travaux nécessaires pour répondre aux quatre demandes, du plus critique au moins critique : méthodes, volume traité et résultats"))):
-    contenu({"titre": titre_, "sous_titre": sous_, "synthese": synth_},
-            "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, le volume traité, le résultat annoncé par son titre en gras, puis la criticité.",
-            tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Résultat", "Criticité"], "largeurs": [1.75, 3.4, 7.0, 4.6, 12.7, 1.75], "taille": 8.5,
-                     "sans_code": True, "legende": LEG_CRIT, "lignes": [[r_[0].split(" ", 1)[1]] + r_[1:] + [r_[0].split(" ", 1)[0]] for r_ in sorted(lot, key=lambda r_: "🔴🟠🟡🟢".index(r_[0][0]))]},
-            sommaire="Récapitulatif des activités" if k == 0 else None,
-            source=RAP + ", diapositives 4 à 13, 48 à 61, 75, 90 à 166, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026")
-contenu({"titre": "Volet Stratégie", "sous_titre": "Activités et résultats du volet Stratégie, à renseigner par l'équipe en charge",
-         "synthese": "Même format que le volet Actuariat : code, activité, méthodes, volume traité, résultat et criticité"},
-        "Diapositive à compléter par l'équipe Stratégie. Les lignes et les codes STR-1 à STR-6 sont indicatifs.",
-        tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Résultat", "Criticité"], "largeurs": [1.75, 3.4, 7.0, 4.6, 12.7, 1.75], "taille": 9,
-                 "sans_code": True, "legende": LEG_CRIT, "hauteur_ligne": 1.35,
-                 "lignes": [[f"STR-{k}", "À renseigner", "", "", "", ""] for k in range(1, 7)]},
-        source="Source : équipe Stratégie")
+ORDRE_ACT = ["ENG-1", "ENG-2", "PROV-1", "PROV-2", "PROV-3", "ALM-1", "PLA-1", "DON-1", "STAT-1", "STAT-2", "STAT-3", "REG-1", "REG-2"]
+TOUT = {r_[0].split(" ", 1)[1]: r_ for r_ in RECAP_DEMANDES + RECAP_COMPL}
+SRC_RECAP = RAP + ", diapositives 4 à 13, 48 à 61, 75, 90 à 166, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
+STR_VIDE = [["STR-1", "Stratégie : à renseigner", "", ""], ["STR-2", "Stratégie : à renseigner", "", ""]]
+contenu({"titre": "Actions effectuées", "sous_titre": "Treize activités menées sur le volet Actuariat, des quatre demandes aux travaux complémentaires",
+         "synthese": "Pour chaque activité : la méthode retenue et le volume de données traité. Lignes du volet Stratégie renseignées par l'équipe en charge"},
+        "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, puis le volume traité. Les quatre demandes d'abord, les travaux complémentaires ensuite.",
+        tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité"], "largeurs": [1.9, 5.0, 14.6, 9.7], "taille": 8,
+                 "sans_code": True, "lignes": [[c_, TOUT[c_][1], TOUT[c_][2], TOUT[c_][3]] for c_ in ORDRE_ACT] + STR_VIDE},
+        sommaire="Récapitulatif des activités", source=SRC_RECAP)
+contenu({"titre": "Constats", "sous_titre": "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
+         "synthese": "Les quatre demandes d'abord, puis les travaux complémentaires, chacun du constat le plus critique au moins critique"},
+        "Lire le titre en gras de chaque constat, puis le détail chiffré. La criticité figure en dernière colonne.",
+        tableau={"titre": None, "entetes": ["Code", "Activité", "Constat", "Criticité"], "largeurs": [1.75, 5.3, 22.4, 1.75], "taille": 7.6,
+                 "sans_code": True, "legende": LEG_CRIT,
+                 "lignes": [[r_[0].split(" ", 1)[1], r_[1], r_[4], r_[0].split(" ", 1)[0]] for lot in (RECAP_DEMANDES, RECAP_COMPL) for r_ in sorted(lot, key=lambda r_: "🔴🟠🟡🟢".index(r_[0][0]))]
+                          + [[x[0], x[1], "", ""] for x in STR_VIDE]},
+        source=SRC_RECAP)
 contenu({"titre": "Recommandations", "sous_titre": "Des axes de recommandations par volet, avec une priorité de P1 à P4",
          "synthese": "Volet Actuariat : cinq axes reliés aux constats codés. Volet Stratégie : axes renseignés par l'équipe en charge"},
         "Présenter axe par axe, sans entrer dans le détail des actions, qui figure dans le rapport et le résumé exécutif.",
