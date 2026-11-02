@@ -406,11 +406,24 @@ ORDRE_ACT = ["ENG-1", "ENG-2", "PROV-1", "PROV-2", "PROV-3", "ALM-1", "PLA-1", "
 TOUT = {r_[0].split(" ", 1)[1]: r_ for r_ in RECAP_DEMANDES + RECAP_COMPL}
 SRC_RECAP = RAP + ", diapositives 4 à 13, 48 à 61, 75, 90 à 166, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
 STR_VIDE = [["STR-1", "Stratégie : à renseigner", "", ""], ["STR-2", "Stratégie : à renseigner", "", ""]]
+STATUT = {"ENG-1": "**En cours.** Reste : comptes individuels d'épargne",
+          "ENG-2": "**En cours.** Reste : dossiers non payés, dates de naissance des retraités",
+          "PROV-1": "**En cours.** Reste : base des prestations datée",
+          "PROV-2": "**Réalisé.** Note de calcul du FPPN attendue",
+          "PROV-3": "**Réalisé**",
+          "ALM-1": "**En cours.** Reste : inventaire et échéancier signés des placements",
+          "PLA-1": "**Réalisé**",
+          "DON-1": "**En cours.** Reste : fichiers de décembre 2024, base des prestations",
+          "STAT-1": "**Réalisé**",
+          "STAT-2": "**Réalisé**",
+          "STAT-3": "**En cours.** Reste : dates de naissance, projection par garantie",
+          "REG-1": "**En cours.** Reste : ratios en attente de pièces",
+          "REG-2": "**Réalisé**"}
 contenu({"titre": "Actions effectuées", "sous_titre": "Treize activités menées sur le volet Actuariat, des quatre demandes aux travaux complémentaires",
-         "synthese": "Pour chaque activité : la méthode retenue et le volume de données traité. Lignes du volet Stratégie renseignées par l'équipe en charge"},
-        "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, puis le volume traité. Les quatre demandes d'abord, les travaux complémentaires ensuite.",
-        tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité"], "largeurs": [1.9, 5.0, 14.6, 9.7], "taille": 8,
-                 "sans_code": True, "lignes": [[c_, TOUT[c_][1], TOUT[c_][2], TOUT[c_][3]] for c_ in ORDRE_ACT] + STR_VIDE},
+         "synthese": "Pour chaque activité : la méthode, le volume traité et le statut. Lignes du volet Stratégie renseignées par l'équipe en charge"},
+        "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, le volume traité, puis le statut et ce qui reste à obtenir. Les quatre demandes d'abord, les travaux complémentaires ensuite.",
+        tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Statut au 23/10/2026"], "largeurs": [1.75, 4.6, 11.2, 7.9, 5.75], "taille": 7.8,
+                 "sans_code": True, "lignes": [[c_, TOUT[c_][1], TOUT[c_][2], TOUT[c_][3], STATUT[c_]] for c_ in ORDRE_ACT] + [["STR", "Stratégie : à renseigner par l'équipe en charge", "", "", ""]]},
         sommaire="Récapitulatif des activités", source=SRC_RECAP)
 contenu({"titre": "Constats", "sous_titre": "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
          "synthese": "Les quatre demandes d'abord, puis les travaux complémentaires, chacun du constat le plus critique au moins critique"},
@@ -447,4 +460,17 @@ for _sl in _prs.slides:
                     for _p in _row.cells[2].text_frame.paragraphs:
                         for _r in _p.runs:
                             _r.font.underline = True
+# remplissage coloré de la colonne « Statut » : vert si réalisé, orange si en cours
+from pptx.dml.color import RGBColor as _RGB
+for _sl in _prs.slides:
+    if any(sh.has_text_frame and sh.name == "Adenka_Titre" and sh.text_frame.text.strip() == "Actions effectuées" for sh in _sl.shapes):
+        for _sh in _sl.shapes:
+            if _sh.has_table:
+                for _row in list(_sh.table.rows)[1:]:
+                    _c = _row.cells[4]
+                    _t = _c.text_frame.text
+                    _col = "C6E0B4" if _t.startswith("Réalisé") else "F8CBAD" if _t.startswith("En cours") else None
+                    if _col:
+                        _c.fill.solid()
+                        _c.fill.fore_color.rgb = _RGB.from_string(_col)
 _prs.save(SORTIE)
