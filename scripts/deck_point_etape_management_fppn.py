@@ -335,9 +335,9 @@ for k, (lot, titre_, sous_, synth_) in enumerate((
         (RECAP_COMPL, "Récapitulatif des activités (2/2) : travaux complémentaires", "Les travaux complémentaires confirment le risque sur l'agrément et la garantie maladie",
          "Travaux nécessaires pour répondre aux quatre demandes, classés par criticité : méthodes, volume traité et résultats"))):
     contenu({"titre": titre_, "sous_titre": sous_, "synthese": synth_},
-            "Lire chaque ligne de gauche à droite : la criticité et le code, l'activité, la méthode retenue, le volume traité, puis le résultat, annoncé par son titre en gras.",
-            tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Résultat"], "largeurs": [2.3, 3.6, 7.4, 4.8, 13.1], "taille": 8.5,
-                     "sans_code": True, "legende": LEG_CRIT, "lignes": lot},
+            "Lire chaque ligne de gauche à droite : la criticité, le code, l'activité, la méthode retenue, le volume traité, puis le résultat, annoncé par son titre en gras.",
+            tableau={"titre": None, "entetes": ["Criticité", "Code", "Activité", "Méthodes", "Volume traité", "Résultat"], "largeurs": [1.75, 1.75, 3.4, 7.0, 4.6, 12.7], "taille": 8.5,
+                     "sans_code": True, "legende": LEG_CRIT, "lignes": [r_[0].split(" ", 1) + r_[1:] for r_ in lot]},
             sommaire="Récapitulatif des activités" if k == 0 else None,
             source=RAP + ", diapositives 4 à 13, 48 à 61, 75, 90 à 166, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026")
 contenu({"titre": "Recommandations", "sous_titre": "Cinq axes de recommandations, dont huit actions à lancer dans les trois mois",
