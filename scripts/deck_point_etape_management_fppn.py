@@ -347,7 +347,7 @@ RECAP_DEMANDES = [
      "**La dette envers les familles grossit, et la santé des retraités n'est pas mesurable.** Allocations décès dues : 489 419 669 FCFA, en hausse chaque année. Décès déclarés en retard : 7 100 000 FCFA. Date de naissance connue pour 105 retraités seulement."],
     ["🟠 PROV-1", "Demande 2 : provisions maladie et décès", "Règlements postérieurs à la clôture (écoulement mensuel), cadence des déclarations tardives (Code CIMA, art. 334-12). Chain Ladder écarté : soins réglés en quelques mois",
      "Journal des sinistres de 3 grands livres (2023 à 2025), 5 états décès, délais de paiement de 2020 à 2026",
-     "**Les provisions sont figées et mal affectées, pas insuffisantes.** 4 829 298 290 FCFA au bilan depuis 2020, [[montant passé vers 2004 selon le chef comptable]], pour un besoin mesuré de 19 581 392 FCFA. Rien n'est provisionné pour les intérêts de l'épargne."],
+     "**Les provisions sont figées et mal affectées, pas insuffisantes.** 4 829 298 290 FCFA au bilan depuis 2020, montant passé vers 2004 selon la direction comptable, pour un besoin mesuré de 19 581 392 FCFA. Rien n'est provisionné pour les intérêts de l'épargne."],
     ["🟢 PROV-3", "Demande 2 : prêts du Grenier", "Dépréciation par tranche de retard, aux taux de la politique de crédit (40 %, 80 %, 100 %)",
      "Balances âgées de 2 959 prêts au 31/12/2025 et au 31/08/2026",
      "**Les pertes probables sur prêts ne sont pas comptées.** 14 016 392 FCFA à déprécier, aucune dépréciation depuis 2022. Montant faible : le vrai risque est l'épargne prêtée, le FPPN finançant 87,66 % de l'encours."],
@@ -370,7 +370,7 @@ RECAP_COMPL = [
      "**La garantie maladie perd de l'argent, et le décès la finance.** Soins : 6,00 % des cotisations maladie en 2021, 73,53 % en 2025, 97,40 % en 2026 (déficit de 702 millions). Le taux global de 75,20 % est dans la norme mais masque ce déficit."],
     ["🟠 REG-2", "Gouvernance", "Entretiens, logigrammes du FPPN, lecture des statuts et des décisions",
      "4 entretiens, 4 circuits redessinés à partir des logigrammes du FPPN",
-     "**Les décisions qui engagent l'épargne ne sont pas encadrées.** [[Placements décidés par le seul directeur général selon le chef comptable]]. Projet de Cocody sans budget. Ni politique de placement, ni comité actif-passif. Clinique sans comptabilité séparée."],
+     "**Les décisions qui engagent l'épargne ne sont pas encadrées.** Placements décidés par la direction générale. Projet de Cocody sans budget. Ni politique de placement, ni comité actif-passif. Clinique sans comptabilité séparée."],
     ["🟠 DON-1", "Données de base", "Extraction automatisée, empreinte numérique de chaque fichier, contrôle du format, des doublons, des lignes de total et des fichiers vides, rapprochement des fichiers envoyés et reçus",
      "4 287 fichiers lus, 4 454 416 lignes de cotisations contrôlées, 506 feuilles, 80 mois couverts",
      "**Des données essentielles manquent pour finir les calculs.** Cotisations mensuelles disponibles seulement depuis 2023 ou 2024. Fichiers de décembre 2024 vides. Ni base des prestations datée, ni dates de naissance, ni fichier envoyé à la Solde."],
@@ -414,11 +414,11 @@ contenu({"titre": "Actions effectuées", "sous_titre": "Treize activités menée
         sommaire="Récapitulatif des activités", source=SRC_RECAP)
 contenu({"titre": "Constats", "sous_titre": "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
          "synthese": "Les quatre demandes d'abord, puis les travaux complémentaires, chacun du constat le plus critique au moins critique"},
-        "Lire le titre en gras de chaque constat, puis le détail chiffré. La criticité figure en dernière colonne.",
-        tableau={"titre": None, "entetes": ["Code", "Activité", "Constat", "Criticité"], "largeurs": [1.75, 5.3, 22.4, 1.75], "taille": 7.6,
-                 "sans_code": True, "legende": LEG_CRIT,
-                 "lignes": [[r_[0].split(" ", 1)[1], r_[1], r_[4], r_[0].split(" ", 1)[0]] for lot in (RECAP_DEMANDES, RECAP_COMPL) for r_ in sorted(lot, key=lambda r_: "🔴🟠🟡🟢".index(r_[0][0]))]
-                          + [[x[0], x[1], "", ""] for x in STR_VIDE]},
+        "Lire la conclusion soulignée de chaque constat, puis le commentaire chiffré. La criticité figure en dernière colonne.",
+        tableau={"titre": None, "entetes": ["Code", "Activité", "Constat", "Commentaires", "Criticité"], "largeurs": [1.75, 4.4, 8.3, 15.0, 1.75], "taille": 7.6,
+                 "sans_code": True,
+                 "lignes": [[r_[0].split(" ", 1)[1], r_[1], "**" + r_[4].split("**")[1] + "**", r_[4].split("**", 2)[2].strip(), r_[0].split(" ", 1)[0]]
+                            for lot in (RECAP_DEMANDES, RECAP_COMPL) for r_ in sorted(lot, key=lambda r_: "🔴🟠🟡🟢".index(r_[0][0]))]},
         source=SRC_RECAP)
 contenu({"titre": "Recommandations", "sous_titre": "Des axes de recommandations par volet, avec une priorité de P1 à P4",
          "synthese": "Volet Actuariat : cinq axes reliés aux constats codés. Volet Stratégie : axes renseignés par l'équipe en charge"},
@@ -435,3 +435,16 @@ ENTREES = [(x["sommaire"], i) for i, x in enumerate(SL, 1) if x.get("sommaire")]
 code = ENTETE + "\n" + CONTENU + "\n" + MOTEUR + "\nprint(SORTIE, len(SL), 'diapositives')\n"
 g = {"__name__": "__main__", "__file__": os.path.join(ICI, "rapport_v12_fppn.py"), "SKILL": SKILL, "SORTIE": SORTIE}
 exec(compile(code, "deck_point_etape_management_fppn (assemblé)", "exec"), g)
+
+# conclusions soulignées dans la colonne « Constat »
+from pptx import Presentation as _P
+_prs = _P(SORTIE)
+for _sl in _prs.slides:
+    if any(sh.has_text_frame and sh.name == "Adenka_Titre" and sh.text_frame.text.strip() == "Constats" for sh in _sl.shapes):
+        for _sh in _sl.shapes:
+            if _sh.has_table:
+                for _row in list(_sh.table.rows)[1:]:
+                    for _p in _row.cells[2].text_frame.paragraphs:
+                        for _r in _p.runs:
+                            _r.font.underline = True
+_prs.save(SORTIE)
