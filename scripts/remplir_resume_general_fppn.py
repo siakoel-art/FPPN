@@ -204,7 +204,7 @@ for e in CA.APPROCHE_ETAPES:
 normal(cur, "**Les méthodes ont été choisies selon les données disponibles.** Chaque méthode retenue est la plus précise que permettent les documents transmis :")
 legende(cur, "Tableau : méthodes actuarielles retenues et raison du choix")
 tableau(cur, ["Analyse", "Méthode retenue", "Pourquoi ce choix", "Données utilisées"], [list(m) for m in CA.METHODES], [3.0, 5.4, 4.4, 3.2], taille=8)
-source(cur, CA.RAP + ", diapositives 47, 48 et 238 à 245.")
+source(cur, CA.RAP + ", diapositives 47, 48 et 237 à 244.")
 
 # ---------------------------------------------------------------- 2.2.2 limites actuarielles
 cur = Curseur(trouver("Limites actuarielles", "10"))

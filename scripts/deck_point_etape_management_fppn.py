@@ -393,7 +393,7 @@ gab(31, {"titre": "Contexte de la mission", "sous_titre": "Le FPPN gère la pré
                 ("La mission Adenka", "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN. Lancement les 13 et 14/10/2026."),
                 ("Deux volets présentés", "Actuariat : ce que le FPPN devra payer et sa capacité à le payer. Stratégie : objectifs présentés par l'équipe Stratégie.")]},
     "Présenter le FPPN, son cadre, la mission Adenka et les deux volets traités dans ce document.",
-    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 68")
+    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 67")
 SL[-1]["sommaire"] = "Contexte et objectifs"
 gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémentaires : mesurer les engagements, éclairer la stratégie",
          "synthese": "Les codes du volet Actuariat sont repris dans le récapitulatif des activités et les recommandations"},
@@ -404,7 +404,7 @@ gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémenta
     source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et profil de l'actuaire (p. 74) ; plan d'analyse statistique du 16/10/2026")
 ORDRE_ACT = ["ENG-1", "ENG-2", "PROV-1", "PROV-2", "PROV-3", "ALM-1", "PLA-1", "DON-1", "STAT-1", "STAT-2", "STAT-3", "REG-1", "REG-2"]
 TOUT = {r_[0].split(" ", 1)[1]: r_ for r_ in RECAP_DEMANDES + RECAP_COMPL}
-SRC_RECAP = RAP + ", diapositives 4 à 13, 47 à 53, 56 à 68, 81, 95 à 169, 181 et 198 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
+SRC_RECAP = RAP + ", diapositives 4 à 13, 47 à 52, 55 à 67, 80, 94 à 168, 180 et 197 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
 STR_VIDE = [["STR-1", "Stratégie : à renseigner", "", ""], ["STR-2", "Stratégie : à renseigner", "", ""]]
 STATUT = {"ENG-1": "**En cours.** Reste : comptes individuels d'épargne",
           "ENG-2": "**En cours.** Reste : dossiers non payés, dates de naissance des retraités",
