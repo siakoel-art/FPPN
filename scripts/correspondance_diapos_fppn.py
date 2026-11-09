@@ -24,18 +24,20 @@ A, B = titres(sys.argv[1]), titres(sys.argv[2])
 corr = {}
 sm = difflib.SequenceMatcher(None, A, B, autojunk=False)
 for op, i1, i2, j1, j2 in sm.get_opcodes():
-    if op == "equal":
+    if op == "equal" or (op == "replace" and i2 - i1 == j2 - j1):
         for k in range(i2 - i1):
             corr[i1 + k + 1] = j1 + k + 1
 # diapositives déplacées (même titre ailleurs) : rattachées par le titre
 pos_b = {}
 for j, t in enumerate(B, 1):
     pos_b.setdefault(t, []).append(j)
-meth = [j for j, t in enumerate(B, 1) if t == "Méthodologie & Limites"]
+meth = [j for j, t in enumerate(B, 1) if t == "Méthodologie & Limites"][1:]  # sans le séparateur
 for i, t in enumerate(A, 1):
     if i in corr:
         continue
-    if t in pos_b and len(pos_b[t]) == 1:
+    if t.replace(" et ", " & ").lower() in {u.lower(): u for u in B} and t.startswith("Outils"):
+        corr[i] = B.index(next(u for u in B if u.lower() == t.replace(" et ", " & ").lower())) + 1
+    elif t in pos_b and len(pos_b[t]) == 1:
         corr[i] = pos_b[t][0]
     elif t.startswith("Méthode : ") and meth:
         corr[i] = meth[0]

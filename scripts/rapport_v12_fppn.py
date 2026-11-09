@@ -4111,7 +4111,7 @@ _METH = [  # analyse, méthode retenue, pourquoi ce choix, données utilisées, 
     ("Projection de l'équilibre technique", "Projection agrégée des cotisations, prestations et frais de 2026 à 2030, en deux scénarios fondés sur les tendances observées",
      "Une projection par garantie et par âge exige les données individuelles, non reçues", "Comptes 2023 à 2025, tendances observées", "Projection agrégée : deux scénarios"),
 ]
-_LIG_M = [[a, b, c, d, "Diap. " + ref(e)] for a, b, c, d, e in _METH]
+_LIG_M = [[a, b, c, d, ref(e)] for a, b, c, d, e in _METH]
 for _k, (_lot, _ss) in enumerate(((_LIG_M[:7], "Méthodes retenues (1/2)"), (_LIG_M[7:], "Méthodes retenues (2/2)"))):
     contenu({"titre": "Méthodologie & Limites", "sous_titre": _ss,
              "synthese": "Pour chaque analyse : la méthode retenue, pourquoi elle a été choisie, les données utilisées et la diapositive où voir le détail"},
@@ -4119,7 +4119,7 @@ for _k, (_lot, _ss) in enumerate(((_LIG_M[:7], "Méthodes retenues (1/2)"), (_LI
             tableau={"titre": None, "entetes": ["Analyse", "Méthode retenue", "Pourquoi ce choix", "Données utilisées", "Détail"], "largeurs": [4.2, 10.2, 8.4, 6.0, 2.4],
                      "taille": 8, "sans_code": True, "lignes": _lot},
             disposition="dessous",
-            analyse=["**NB :** la liste des méthodes non retenues et la justification de chaque choix figurent en annexe (diapositive " + ref("Méthodes non retenues : vue d'ensemble") + " et suivantes)."],
+            analyse=["**NB :** la liste des méthodes non retenues et la justification de chaque choix figurent en annexe (" + ref("Méthodes non retenues : vue d'ensemble") + " et suivantes)."],
             source="Source : Adenka, d'après les diapositives de détail citées")
 _LIM = [  # diagnostic, limite, conséquence, documents à obtenir, priorité
     ("Données", "[[Base des prestations non datée]] : ni date des soins, ni date de dépôt, ni date de paiement des factures", "Provisions non calculables dossier par dossier, boni et mali non mesurables",
@@ -4171,7 +4171,26 @@ _ordre = _pre + _blocs["R"] + _blocs["1"] + _blocs["2"] + [_SEP_M] + _NOUV_SL + 
 for _k in ("3", "4", "5", "6", "7", "8", "9", "9.2", "9.3", "10", "11", "12"):
     _ordre += _blocs[_k]
 _ordre += _blocs["14"] + _blocs["A"]
+_old = {id(_x): _i for _i, _x in enumerate(SL, 1)}
 SL[:] = _ordre
+_new = {id(_x): _i for _i, _x in enumerate(SL, 1)}
+_o2n = {_old[_k]: _new[_k] for _k in _new if _k in _old}
+_n_old = len(_old)
+TRACE[:] = [_t for _t in TRACE if _t["diapositive"] > _n_old or _t["diapositive"] in _o2n]  # chiffres des diapositives « Méthode : » retirées
+for _t in TRACE:
+    if _t["diapositive"] <= _n_old:
+        _t["diapositive"] = _o2n[_t["diapositive"]]
+# figures et tableaux renumérotés dans l'ordre des diapositives
+_MAPN = {}
+for _lst, _mot in ((FIG, "Figure"), (TAB, "Tableau")):
+    for _e in _lst:
+        if _e[2] <= _n_old:
+            _e[2] = _o2n.get(_e[2], _e[2])
+    _ord = sorted(_lst, key=lambda e_: (e_[2], e_[0]))
+    _MAPN[_mot] = {str(e_[0]): str(k_) for k_, e_ in enumerate(_ord, 1)}
+    for k_, e_ in enumerate(_ord, 1):
+        e_[0] = k_
+    _lst.sort(key=lambda e_: e_[0])
 for _x in SL:
     if _x["type"] == "separateur" and str(_x["num"]) in _RENUM and _x is not _SEP_M and _x is not _SEP_R:
         _x["num"] = _RENUM[str(_x["num"])]
@@ -4185,6 +4204,7 @@ def _renvois_partie(v):
         def _sub(m):
             nums = re.sub(r"\d+(?:\.\d+)?", lambda n: _RENUM.get(n.group(0), n.group(0)), m.group(2))
             return m.group(1) + " " + nums
+        v = re.sub(r"\b(Figure|Tableau) (\d+) :", lambda m: m.group(1) + " " + _MAPN[m.group(1)].get(m.group(2), m.group(2)) + " :", v)
         return re.sub(r"\b([Pp]arties?)\s+(\d+(?:\.\d+)?(?:\s*(?:,|à|et)\s*\d+(?:\.\d+)?)*)", _sub, v)
     if isinstance(v, list):
         return [_renvois_partie(e) for e in v]
@@ -5124,7 +5144,7 @@ for i, x in enumerate(SL, 1):
                 sh.text_frame.word_wrap = False
                 for p_ in sh.text_frame.paragraphs:
                     for r in p_.runs:
-                        r.font.size = Pt(r.font.size.pt * 0.7 if r.font.size else 40)
+                        r.font.size = Pt((r.font.size.pt if r.font.size else 57) * (0.7 if len(str(x["num"])) <= 3 else 0.5))
     if x["type"] == "couverture":
         # Couverture retouchée par l'utilisateur sur la version 5 : titre, sous-titre orange, logo du FPPN, date
         for sh in sl.shapes:
