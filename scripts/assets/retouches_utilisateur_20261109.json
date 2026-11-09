@@ -1,0 +1,193 @@
+{
+ "formes": {
+  "Conformité prudentielle en bref": [
+   "<p:sp xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:nvSpPr><p:cNvPr id=\"35\" name=\"Rectangle 34\"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"394800\" y=\"5374460\"/><a:ext cx=\"11341199\" cy=\"761540\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val=\"F4F4F4\"/></a:solidFill><a:ln w=\"15875\"><a:solidFill><a:srgbClr val=\"EFAC62\"/></a:solidFill></a:ln><a:effectLst/></p:spPr><p:style><a:lnRef idx=\"1\"><a:schemeClr val=\"accent1\"/></a:lnRef><a:fillRef idx=\"3\"><a:schemeClr val=\"accent1\"/></a:fillRef><a:effectRef idx=\"2\"><a:schemeClr val=\"accent1\"/></a:effectRef><a:fontRef idx=\"minor\"><a:schemeClr val=\"lt1\"/></a:fontRef></p:style><p:txBody><a:bodyPr wrap=\"square\" lIns=\"108000\" tIns=\"54000\" rIns=\"108000\" bIns=\"54000\" rtlCol=\"0\" anchor=\"t\"/><a:lstStyle/><a:p><a:pPr marL=\"0\" marR=\"0\" lvl=\"0\" indent=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" fontAlgn=\"auto\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:spcBef><a:spcPts val=\"0\"/></a:spcBef><a:spcAft><a:spcPts val=\"0\"/></a:spcAft><a:buClrTx/><a:buSzTx/><a:buFontTx/><a:buNone/><a:tabLst/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1050\" b=\"1\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"EFAC62\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>Deux lectures des comptes</a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"1\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>Lecture du FPPN</a:t></a:r><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t> : comptes tels qu'ils sont tenus. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"1\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>Lecture corrigée selon le PCMS</a:t></a:r><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t> : mêmes montants, avec l'épargne des adhérents (41195100, 41195200) en ressource longue et les avances durables (47111100 à 47111105, 47111201, 485) en emplois longs. Pour la marge, pertes reportées déduites et réévaluation (10620000) exclue.</a:t></a:r></a:p></p:txBody></p:sp>"
+  ],
+  "Matrice des risques": [
+   "<p:sp xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:nvSpPr><p:cNvPr id=\"35\" name=\"Rectangle 34\"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"503999\" y=\"4915080\"/><a:ext cx=\"4809681\" cy=\"1477512\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val=\"F4F4F4\"/></a:solidFill><a:ln w=\"15875\"><a:solidFill><a:srgbClr val=\"EFAC62\"/></a:solidFill></a:ln><a:effectLst/></p:spPr><p:style><a:lnRef idx=\"1\"><a:schemeClr val=\"accent1\"/></a:lnRef><a:fillRef idx=\"3\"><a:schemeClr val=\"accent1\"/></a:fillRef><a:effectRef idx=\"2\"><a:schemeClr val=\"accent1\"/></a:effectRef><a:fontRef idx=\"minor\"><a:schemeClr val=\"lt1\"/></a:fontRef></p:style><p:txBody><a:bodyPr wrap=\"square\" lIns=\"108000\" tIns=\"54000\" rIns=\"108000\" bIns=\"54000\" rtlCol=\"0\" anchor=\"t\"/><a:lstStyle/><a:p><a:pPr marL=\"0\" marR=\"0\" lvl=\"0\" indent=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" fontAlgn=\"auto\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:spcBef><a:spcPts val=\"0\"/></a:spcBef><a:spcAft><a:spcPts val=\"0\"/></a:spcAft><a:buClrTx/><a:buSzTx/><a:buFontTx/><a:buNone/><a:tabLst/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1050\" b=\"1\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"EFAC62\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>Échelles</a:t></a:r></a:p><a:p><a:pPr marL=\"0\" marR=\"0\" lvl=\"0\" indent=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" fontAlgn=\"auto\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:spcAft><a:spcPts val=\"0\"/></a:spcAft><a:buClrTx/><a:buSzTx/><a:buFontTx/><a:buNone/><a:tabLst/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"1\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>Gravité</a:t></a:r><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t> (impact en FCFA) : </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>1 négligeable, moins de 50 000 000 FCFA. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>2 mineure, de 50 000 000 à 500 000 000 FCFA. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>3 modérée, de 500 000 000 à 2 000 000 000 FCFA. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>4 majeure, de 2 000 000 000 à 5 000 000 000 FCFA. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>5 catastrophique, plus de 5 000 000 000 FCFA ou arrêt de l'activité.</a:t></a:r></a:p><a:p><a:pPr marL=\"0\" marR=\"0\" lvl=\"0\" indent=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" fontAlgn=\"auto\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:spcAft><a:spcPts val=\"0\"/></a:spcAft><a:buClrTx/><a:buSzTx/><a:buFontTx/><a:buNone/><a:tabLst/><a:defRPr/></a:pPr><a:endParaRPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:endParaRPr></a:p></p:txBody></p:sp>",
+   "<p:sp xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:nvSpPr><p:cNvPr id=\"3\" name=\"Rectangle 2\"><a:extLst><a:ext uri=\"{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}\"><a16:creationId xmlns:a16=\"http://schemas.microsoft.com/office/drawing/2014/main\" id=\"{34291070-3E4B-6116-0460-83DF7C89807D}\"/></a:ext></a:extLst></p:cNvPr><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"5577839\" y=\"4915080\"/><a:ext cx=\"6158159\" cy=\"1477512\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val=\"F4F4F4\"/></a:solidFill><a:ln w=\"15875\"><a:solidFill><a:srgbClr val=\"EFAC62\"/></a:solidFill></a:ln><a:effectLst/></p:spPr><p:style><a:lnRef idx=\"1\"><a:schemeClr val=\"accent1\"/></a:lnRef><a:fillRef idx=\"3\"><a:schemeClr val=\"accent1\"/></a:fillRef><a:effectRef idx=\"2\"><a:schemeClr val=\"accent1\"/></a:effectRef><a:fontRef idx=\"minor\"><a:schemeClr val=\"lt1\"/></a:fontRef></p:style><p:txBody><a:bodyPr wrap=\"square\" lIns=\"108000\" tIns=\"54000\" rIns=\"108000\" bIns=\"54000\" rtlCol=\"0\" anchor=\"t\"/><a:lstStyle/><a:p><a:pPr marL=\"0\" marR=\"0\" lvl=\"0\" indent=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" fontAlgn=\"auto\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:spcBef><a:spcPts val=\"0\"/></a:spcBef><a:spcAft><a:spcPts val=\"0\"/></a:spcAft><a:buClrTx/><a:buSzTx/><a:buFontTx/><a:buNone/><a:tabLst/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1050\" b=\"1\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"EFAC62\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>Échelles</a:t></a:r></a:p><a:p><a:pPr marL=\"0\" marR=\"0\" lvl=\"0\" indent=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" fontAlgn=\"auto\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:lnSpc><a:spcPct val=\"100000\"/></a:lnSpc><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:spcAft><a:spcPts val=\"0\"/></a:spcAft><a:buClrTx/><a:buSzTx/><a:buFontTx/><a:buNone/><a:tabLst/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"1\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>Probabilité</a:t></a:r><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t> : </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>5 très probable, déjà constaté dans les comptes ou les fichiers. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>4 probable, conditions réunies mais risque non encore réalisé. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>3 possible. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>2 peu probable. </a:t></a:r></a:p><a:p><a:pPr marL=\"628650\" lvl=\"1\" indent=\"-171450\"><a:spcBef><a:spcPts val=\"300\"/></a:spcBef><a:buFont typeface=\"Wingdings\" panose=\"05000000000000000000\" pitchFamily=\"2\" charset=\"2\"/><a:buChar char=\"§\"/><a:defRPr/></a:pPr><a:r><a:rPr kumimoji=\"0\" lang=\"fr-FR\" sz=\"1000\" b=\"0\" i=\"0\" u=\"none\" strike=\"noStrike\" kern=\"1200\" cap=\"none\" spc=\"0\" normalizeH=\"0\" baseline=\"0\" noProof=\"0\"><a:ln><a:noFill/></a:ln><a:solidFill><a:srgbClr val=\"060606\"/></a:solidFill><a:effectLst/><a:uLnTx/><a:uFillTx/><a:latin typeface=\"Helvetica\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:rPr><a:t>1 très peu probable.</a:t></a:r></a:p></p:txBody></p:sp>"
+  ]
+ },
+ "corrections": [
+  {
+   "titre": "Conformité prudentielle en bref",
+   "formes": [
+    {
+     "nom": "Adenka_Source",
+     "avant": [
+      367200,
+      6173999,
+      11430000,
+      183600
+     ],
+     "apres": [
+      367200,
+      6377199,
+      11430000,
+      183600
+     ]
+    },
+    {
+     "nom": "Adenka_Synthese",
+     "avant": [
+      745200,
+      882000,
+      11062800,
+      288000
+     ],
+     "apres": [
+      745200,
+      1033072,
+      11062800,
+      288000
+     ]
+    },
+    {
+     "nom": "TextBox 35",
+     "avant": [
+      367200,
+      5932800,
+      11430000,
+      237600
+     ],
+     "apres": [
+      367200,
+      6136000,
+      11430000,
+      237600
+     ]
+    },
+    {
+     "nom": "ZoneTexte 25",
+     "avant": [
+      222103,
+      6396591,
+      4653185,
+      261610
+     ],
+     "apres": [
+      222103,
+      6599791,
+      4653185,
+      261610
+     ]
+    }
+   ]
+  },
+  {
+   "titre": "Matrice de conformité",
+   "formes": [
+    {
+     "nom": "Adenka_Synthese",
+     "avant": [
+      745200,
+      882000,
+      11062800,
+      288000
+     ],
+     "apres": [
+      745200,
+      882000,
+      11062800,
+      229984
+     ]
+    }
+   ]
+  },
+  {
+   "titre": "Matrice des risques",
+   "formes": [
+    {
+     "nom": "Adenka_Source",
+     "avant": [
+      367200,
+      6173999,
+      11430000,
+      183600
+     ],
+     "apres": [
+      367200,
+      6560079,
+      11430000,
+      183600
+     ]
+    },
+    {
+     "nom": "ZoneTexte 25",
+     "avant": [
+      222103,
+      6396591,
+      4653185,
+      261610
+     ],
+     "apres": [
+      222103,
+      6660751,
+      4653185,
+      261610
+     ]
+    }
+   ]
+  }
+ ],
+ "couverture": {
+  "Google Shape;138;p25": [
+   390701,
+   2372334,
+   7087059,
+   1410643
+  ],
+  "ZoneTexte 13": [
+   310299,
+   6285082,
+   4653185,
+   338554
+  ],
+  "ZoneTexte 2": [
+   299261,
+   4972474,
+   6497320,
+   461665
+  ],
+  "Logo FPPN": [
+   420417,
+   3855347,
+   1844040,
+   865220
+  ]
+ },
+ "sep_resume": {
+  "Rectangle 9": [
+   3826803,
+   2737394,
+   3816000,
+   1200329
+  ],
+  "Rectangle 5": [
+   3826803,
+   3075234,
+   3816000,
+   923330
+  ]
+ },
+ "sep_large": {
+  "Rectangle 9": [
+   3938553,
+   2462184,
+   4810927,
+   1200329
+  ],
+  "Rectangle 5": [
+   3938554,
+   3337559,
+   4377564,
+   923330
+  ],
+  "Image 10": [
+   8749481,
+   2415481,
+   1566911,
+   1600975
+  ]
+ }
+}
