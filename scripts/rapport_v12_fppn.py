@@ -4163,12 +4163,12 @@ for _x in SL:
     else:
         _blocs[_cur].append(_x)
 _RENUM = {"3": "4.1", "4": "4.2", "5": "4.3", "6": "4.4", "7": "4.5", "8": "4.6", "9": "4.7", "9.2": "4.7.2", "9.3": "4.7.3",
-          "10": "4.8", "11": "4.9", "12": "4.10", "13": "3.1", "14": "5"}
+          "10": "4.8", "11": "4.9", "12": "4.10", "13": "3", "14": "5"}
 for _k in ("3", "4", "5", "6", "7", "8", "9"):
     _blocs[_k] = [_x for _x in _blocs[_k] if not (_x["type"] == "gab" and str(_x.get("entete", {}).get("titre", "")).startswith("Méthode : "))]
 _SEP_M = {"type": "separateur", "num": "3", "titre": "Méthodologie & Limites", "sous_titre": "Méthodes retenues, limites de l'analyse, outils et traçabilité", "notes": ""}
 _SEP_R = {"type": "separateur", "num": "4", "titre": "Résultats de l'analyse actuarielle", "sous_titre": "Des données à la projection de l'équilibre technique", "notes": ""}
-_ordre = _pre + _blocs["R"] + _blocs["1"] + _blocs["2"] + [_SEP_M] + _NOUV_SL + _blocs["13"] + [_SEP_R]
+_ordre = _pre + _blocs["R"] + _blocs["1"] + _blocs["2"] + [_SEP_M] + _NOUV_SL + _blocs["13"][1:] + [_SEP_R]  # sans intercalaire « Outils & Traçabilité »
 for _k in ("3", "4", "5", "6", "7", "8", "9", "9.2", "9.3", "10", "11", "12"):
     _ordre += _blocs[_k]
 _ordre += _blocs["14"] + _blocs["A"]
