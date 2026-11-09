@@ -3814,6 +3814,7 @@ for nomimg, titre, sous, synth, expl, impl in [
         ("code_statut", "Code : statut d'un ratio prudentiel", "Le statut de chaque ratio suit une règle écrite dans le code", "Conforme, non conforme, en attente ou à apprécier, selon la norme du texte",
          ["**Une valeur absente donne « En attente » ; une norme non chiffrée donne « À apprécier ».**", "**Le test compare la valeur à la norme** : fourchette, minimum ou maximum.", "**Les années 2020, 2021 et 2026 portent la mention « indicatif ».** Le terminal montre la sortie réelle du script."],
          "La règle de statut est la même pour les 36 indicateurs : elle ne laisse aucune place à l'appréciation au cas par cas.")]:
+    continue  # v13 : pas d'extrait de code dans le rapport
     contenu({"titre": titre, "sous_titre": sous, "synthese": synth},
             "Extrait réel du script, placé dans une fenêtre de VS Code sous Windows reconstituée (thème sombre, fil d'Ariane du dossier de la mission, numéros de ligne). Le code complet est dans le dossier scripts de la mission ; il peut être relu et rejoué par un tiers.",
             image={"fichier": os.path.join(IMG, nomimg + ".png"), "legende": fig(f"Extrait du script dans VS Code sous Windows ({titre.split(': ')[1]})")}, analyse=expl, implication=impl,
@@ -4063,7 +4064,6 @@ SL.append({"type": "annexe", "titre": "Outils et bibliothèques", "notes": "", "
                       ["python-calamine, openpyxl, lxml", "Lecture sans perte des fichiers Excel et des pages web", "dernière"],
                       ["pyarrow", "Stockage de la base d'analyse (Parquet)", "26.0"],
                       ["pymupdf, pdftotext, tesseract", "Lecture des PDF comptables et des textes scannés (OCR)", "dernière"],
-                      ["pygments, Pillow", "Mise en forme des extraits de code", "dernière"],
                       ["python-pptx", "Rapport, graphiques et tableaux natifs", "1.0"]]},
            "source": "Source : Adenka"})
 SL.append({"type": "liste_figures", "notes": ""})
