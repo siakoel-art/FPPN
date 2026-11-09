@@ -79,12 +79,12 @@ if (-not (Test-Path -LiteralPath $Liste)) { throw "Liste introuvable : $Liste" }
 foreach ($k in $Racines.Keys) { if (-not (Test-Path -LiteralPath $Racines[$k])) { throw "Dossier introuvable : $($Racines[$k])" } }
 New-Item -ItemType Directory -Force -Path $Sortie | Out-Null
 
-$liste = Import-Csv -LiteralPath $Liste -Delimiter ";" -Encoding UTF8
+$lignes = Import-Csv -LiteralPath $Liste -Delimiter ";" -Encoding UTF8
 $contenu = New-Object System.Collections.Generic.List[object]
 $manquants = New-Object System.Collections.Generic.List[string]
 
 foreach ($lot in $Lots) {
-    $fichiers = @($liste | Where-Object { $_.lot -eq $lot })
+    $fichiers = @($lignes | Where-Object { $_.lot -eq $lot })
     if ($fichiers.Count -eq 0) { continue }
     $code = $lot -replace " ", ""
     $num = 0; $groupe = @(); $cumul = 0; $k = 0
