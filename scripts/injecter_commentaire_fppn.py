@@ -12,6 +12,9 @@ import sys
 import zipfile
 
 SRC, CIBLE, SORTIE = sys.argv[1:4]
+# v14 : correspondance facultative « diapositive de la version relue » -> « diapositive du rapport régénéré » (fichier JSON)
+import json  # noqa: E402
+CORR = json.load(open(sys.argv[4], encoding="utf-8")) if len(sys.argv) > 4 else {}
 zs = zipfile.ZipFile(SRC)
 parts = {}
 for n in zs.namelist():
@@ -22,7 +25,8 @@ lien = {}
 for n in zs.namelist():
     if n.startswith("ppt/slides/_rels/"):
         for cible in re.findall(r'Target="\.\./comments/([^"]+)"', zs.read(n).decode()):
-            lien["ppt/comments/" + cible] = n.split("/")[-1].replace(".rels", "")
+            s_ = n.split("/")[-1].replace(".rels", "")
+            lien["ppt/comments/" + cible] = CORR.get(s_, s_)
 
 zc = zipfile.ZipFile(CIBLE)
 pres = zc.read("ppt/presentation.xml").decode()

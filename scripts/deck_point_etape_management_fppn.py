@@ -2,7 +2,7 @@
 
 Structure demandée : contexte et objectifs, récapitulatif des activités (tableau codifié par axe : méthodes, poids des
 travaux, résultats), recommandations par axe (une diapositive), prochaines étapes (une diapositive).
-Chiffres du rapport actuariel et statistique du 09/11/2026, du plan de travail du 23/10/2026 et de la liste des
+Chiffres du rapport actuariel et statistique du 10/11/2026, du plan de travail du 23/10/2026 et de la liste des
 documents demandés du 26/10/2026. Moteur de mise en page repris du script du rapport (rapport_v12_fppn.py).
 
 Usage : python3 deck_point_etape_management_fppn.py <skill adenka-powerpoint> <sortie.pptx>
@@ -23,7 +23,7 @@ ENTETE = "\n".join([lignes(82, 87), lignes(90, 91), lignes(94, 94), lignes(96, 1
 debut = next(i for i, l in enumerate(SRC, 1) if l.startswith("tmp = SORTIE.replace"))
 fin = next(i for i, l in enumerate(SRC, 1) if l.startswith("finaliser(SORTIE)"))
 MOTEUR = lignes(debut, fin + 1)
-for avant, apres in [('"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "09 novembre 2026"', '"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "Novembre 2026"'),
+for avant, apres in [('"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "10 novembre 2026"', '"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "Novembre 2026"'),
                      ('r.text = "Rapport actuariel et statistique"', 'r.text = "Point d\'étape : volets Actuariat et Stratégie"'),
                      ("def remplir_gab(slide, num, d, analyse=None):\n", "def remplir_gab(slide, num, d, analyse=None):\n    if num == 11:\n        remplir_11(slide, d)\n        return\n"),
                      ('entrees = [("Résumé exécutif", 3)]', 'entrees = ENTREES'),
@@ -39,7 +39,7 @@ PBCM = {}
 GAB = {"couverture": 1, "sommaire": 4, "contenu": 5, "merci": 110}
 BLANC, GRIS_CLAIR, CARTE = "FFFFFF", "BBBCBC", "F2F2F2"
 PRIO = {"P1": "C00000", "P2": "ED7D31", "P3": "FFC000", "P4": "70AD47"}
-RAP = "Source : rapport actuariel et statistique du 09/11/2026"
+RAP = "Source : rapport actuariel et statistique du 10/11/2026"
 
 
 def run(p, texte, taille, gras=False, couleur=NOIR, surl=False):
@@ -377,6 +377,15 @@ RECAP_COMPL = [
     ["🟡 STAT-1", "Effectifs et cotisations", "Comptage mensuel des cotisants, mesure du taux réellement prélevé, tendance par régression",
      "Fichiers mensuels de 31 mois (janvier 2024 à août 2026), salaires de 8 mois",
      "**Les effectifs progressent, mais la répartition des cotisations diffère des statuts.** 23 119 cotisants en janvier 2024, 31 198 en août 2026 (+34,95 %). Taux prélevés : 3,77 % et 1,23 % au lieu de 3,50 % et 1,50 %. Cotisations : +45,76 % de 2020 à 2025."],
+    ["🔴 ACT-1", "Valeur des actifs", "Lecture des rapports du commissaire aux comptes, des PV du conseil et des courriers de l'AIRMS reçus le 09/11/2026, sensibilité des fonds propres",
+     "4 actifs examinés (2 terrains, 2 créances), rapports du commissaire aux comptes de 2022 à 2025",
+     "**Certains actifs ne sont pas correctement évalués.** Terrain d'Attoban sans titre (375 000 000 FCFA), créance sur l'Hôpital de la Police inchangée depuis 2020 (3 407 519 850 FCFA). Sans eux, les fonds propres passeraient à -4 662 018 550 FCFA au 31/08/2026."],
+    ["🟠 ALM-2", "Engagements hors bilan", "Relevé des décisions des PV du conseil et de l'Assemblée générale de 2021 à 2026",
+     "28 PV et rapports du conseil et de l'Assemblée générale",
+     "**Des engagements hors bilan pèsent sur la trésorerie future.** Procès perdu sur l'EFC : 263 000 000 FCFA bloqués. Projet d'Azaguié : 19 539 377 111 FCFA, sans plan de financement. Projet d'entrée au capital de SOMAVIE."],
+    ["🟡 GRE-1", "Comptes du Grenier", "Lecture des états financiers du Grenier 2022 à 2025, rapprochement avec les balances âgées",
+     "États financiers de 4 exercices",
+     "**Le Grenier ne déprécie aucun prêt et inscrit l'épargne PEP et EFC dans ses comptes.** Résultat 2025 : 30 543 376 FCFA avant toute perte. Épargne de 8 493 055 501 FCFA inscrite dans deux comptabilités."],
     ["🟡 STAT-3", "Mortalité et projection", "Tables CIMA, projection agrégée de l'équilibre en deux scénarios",
      "4 tables de mortalité, projection de 2026 à 2030 en 2 scénarios",
      "**Les calculs par âge restent à faire.** La mortalité par âge est impossible sans dates de naissance. La projection de l'équilibre n'est que globale : elle sera affinée à réception des données."],
@@ -393,7 +402,7 @@ gab(31, {"titre": "Contexte de la mission", "sous_titre": "Le FPPN gère la pré
                 ("La mission Adenka", "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN. Lancement les 13 et 14/10/2026."),
                 ("Deux volets présentés", "Actuariat : ce que le FPPN devra payer et sa capacité à le payer. Stratégie : objectifs présentés par l'équipe Stratégie.")]},
     "Présenter le FPPN, son cadre, la mission Adenka et les deux volets traités dans ce document.",
-    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 67")
+    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 68")
 SL[-1]["sommaire"] = "Contexte et objectifs"
 gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémentaires : mesurer les engagements, éclairer la stratégie",
          "synthese": "Les codes du volet Actuariat sont repris dans le récapitulatif des activités et les recommandations"},
@@ -402,14 +411,14 @@ gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémenta
                 ("Volet Stratégie", [("Objectifs", ["À renseigner par l'équipe Stratégie"]), ("Travaux", ["À renseigner par l'équipe Stratégie"])])]},
     "Carte noire : volet Actuariat. Carte orange : volet Stratégie, complétée par l'équipe en charge.",
     source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et profil de l'actuaire (p. 74) ; plan d'analyse statistique du 16/10/2026")
-ORDRE_ACT = ["ENG-1", "ENG-2", "PROV-1", "PROV-2", "PROV-3", "ALM-1", "PLA-1", "DON-1", "STAT-1", "STAT-2", "STAT-3", "REG-1", "REG-2"]
+ORDRE_ACT = ["ENG-1", "ENG-2", "PROV-1", "PROV-2", "PROV-3", "ALM-1", "ALM-2", "PLA-1", "ACT-1", "DON-1", "STAT-1", "STAT-2", "STAT-3", "GRE-1", "REG-1", "REG-2"]
 TOUT = {r_[0].split(" ", 1)[1]: r_ for r_ in RECAP_DEMANDES + RECAP_COMPL}
-SRC_RECAP = RAP + ", diapositives 4 à 13, 47 à 52, 55 à 67, 80, 94 à 168, 180 et 197 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
+SRC_RECAP = RAP + ", diapositives 4 à 13, 48 à 53, 56 à 68, 81, 95 à 173, 185 et 203 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
 STR_VIDE = [["STR-1", "Stratégie : à renseigner", "", ""], ["STR-2", "Stratégie : à renseigner", "", ""]]
 STATUT = {"ENG-1": "**En cours.** Reste : comptes individuels d'épargne",
           "ENG-2": "**En cours.** Reste : dossiers non payés, dates de naissance des retraités",
           "PROV-1": "**En cours.** Reste : base des prestations datée",
-          "PROV-2": "**Réalisé.** Note de calcul du FPPN attendue",
+          "PROV-2": "**Réalisé.** Fichiers de calcul du FPPN reçus le 09/11/2026",
           "PROV-3": "**Réalisé**",
           "ALM-1": "**En cours.** Reste : inventaire et échéancier signés des placements",
           "PLA-1": "**Réalisé**",
@@ -418,17 +427,19 @@ STATUT = {"ENG-1": "**En cours.** Reste : comptes individuels d'épargne",
           "STAT-2": "**Réalisé**",
           "STAT-3": "**En cours.** Reste : dates de naissance, projection par garantie",
           "REG-1": "**En cours.** Reste : ratios en attente de pièces",
-          "REG-2": "**Réalisé**"}
-contenu({"titre": "Actions effectuées", "sous_titre": "Treize activités menées sur le volet Actuariat, des quatre demandes aux travaux complémentaires",
-         "synthese": "Pour chaque activité : la méthode, le volume traité et le statut. Lignes du volet Stratégie renseignées par l'équipe en charge"},
-        "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, le volume traité, puis le statut et ce qui reste à obtenir. Les quatre demandes d'abord, les travaux complémentaires ensuite.",
-        tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Statut au 23/10/2026"], "largeurs": [1.75, 4.6, 11.2, 7.9, 5.75], "taille": 7.8,
-                 "sans_code": True, "lignes": [[c_, TOUT[c_][1], TOUT[c_][2], TOUT[c_][3], STATUT[c_]] for c_ in ORDRE_ACT] + [["STR", "Stratégie : à renseigner par l'équipe en charge", "", "", ""]]},
-        sommaire="Récapitulatif des activités", source=SRC_RECAP)
+          "REG-2": "**Réalisé**",
+          "ACT-1": "**Réalisé.** Décision du CA attendue", "ALM-2": "**Réalisé.** Jugement et plan de financement attendus", "GRE-1": "**Réalisé**"}
+for _k14, _ord14 in enumerate((ORDRE_ACT[:8], ORDRE_ACT[8:]), 1):
+    contenu({"titre": f"Actions effectuées ({_k14}/2)", "sous_titre": "Seize activités menées sur le volet Actuariat, des quatre demandes aux travaux complémentaires",
+             "synthese": "Pour chaque activité : la méthode, le volume traité et le statut. Lignes du volet Stratégie renseignées par l'équipe en charge"},
+            "Lire chaque ligne de gauche à droite : le code, l'activité, la méthode retenue, le volume traité, puis le statut et ce qui reste à obtenir. Les quatre demandes d'abord, les travaux complémentaires ensuite.",
+            tableau={"titre": None, "entetes": ["Code", "Activité", "Méthodes", "Volume traité", "Statut au 10/11/2026"], "largeurs": [1.75, 4.6, 11.2, 7.9, 5.75], "taille": 7.8,
+                     "sans_code": True, "lignes": [[c_, TOUT[c_][1], TOUT[c_][2], TOUT[c_][3], STATUT[c_]] for c_ in _ord14] + ([["STR", "Stratégie : à renseigner par l'équipe en charge", "", "", ""]] if _k14 == 2 else [])},
+            sommaire="Récapitulatif des activités" if _k14 == 1 else None, source=SRC_RECAP)
 contenu({"titre": "Constats", "sous_titre": "Les engagements et les provisions sont partiellement démontrés, l'adossement et les placements insuffisants",
          "synthese": "Les quatre demandes d'abord, puis les travaux complémentaires, chacun du constat le plus critique au moins critique"},
         "Lire la conclusion soulignée de chaque constat, puis le commentaire chiffré. La criticité figure en dernière colonne.",
-        tableau={"titre": None, "entetes": ["Code", "Activité", "Constat", "Commentaires", "Criticité"], "largeurs": [1.75, 4.4, 8.3, 15.0, 1.75], "taille": 7.6,
+        tableau={"titre": None, "entetes": ["Code", "Activité", "Constat", "Commentaires", "Criticité"], "largeurs": [1.75, 4.4, 8.3, 15.0, 1.75], "taille": 6.9,
                  "sans_code": True,
                  "lignes": [[r_[0].split(" ", 1)[1], r_[1], "**" + r_[4].split("**")[1] + "**", r_[4].split("**", 2)[2].strip(), r_[0].split(" ", 1)[0]]
                             for lot in (RECAP_DEMANDES, RECAP_COMPL) for r_ in sorted(lot, key=lambda r_: "🔴🟠🟡🟢".index(r_[0][0]))]},
@@ -463,7 +474,7 @@ for _sl in _prs.slides:
 # remplissage coloré de la colonne « Statut » : vert si réalisé, orange si en cours
 from pptx.dml.color import RGBColor as _RGB
 for _sl in _prs.slides:
-    if any(sh.has_text_frame and sh.name == "Adenka_Titre" and sh.text_frame.text.strip() == "Actions effectuées" for sh in _sl.shapes):
+    if any(sh.has_text_frame and sh.name == "Adenka_Titre" and sh.text_frame.text.strip() .startswith("Actions effectuées") for sh in _sl.shapes):
         for _sh in _sl.shapes:
             if _sh.has_table:
                 for _row in list(_sh.table.rows)[1:]:

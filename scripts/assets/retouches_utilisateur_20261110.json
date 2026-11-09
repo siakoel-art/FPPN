@@ -1,0 +1,2393 @@
+{
+"corrections": [
+{
+"layout": "Diapositive de titre",
+"signature": [
+"09 novembre 2026",
+"Audit comptable et financier de la gestion du FPPN"
+],
+"formes": [
+{
+"nom": "Google Shape;138;p25",
+"rang": 0,
+"apres": [
+390701,
+2372334,
+7087059,
+1231106
+],
+"avant": [
+390701,
+2372334,
+7087059,
+1410643
+],
+"hauteur_si_texte": "Audit comptable et financier de la gestion du FPPN"
+},
+{
+"nom": "ZoneTexte 2",
+"rang": 0,
+"apres": [
+299261,
+4972474,
+4698722,
+461665
+],
+"avant": [
+299261,
+4972474,
+6497320,
+461665
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"R",
+"Résumé exécutif"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3826803,
+2737394,
+3816000,
+646331
+],
+"avant": [
+3826803,
+2737394,
+3816000,
+1200329
+],
+"hauteur_si_texte": "Résumé exécutif"
+}
+]
+},
+{
+"titre": "Synthèse des constats (1/2)",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+5135368,
+11231996,
+220560
+],
+"avant": [
+503999,
+5135368,
+11231996,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Critique : non-conformité réglementaire, impact stratégique majeur, risque élevé | 🟠 | Élevé : impact opérationnel significatif, risque important | 🟡 | Moyen : amélioration souhaitable, impact ponctuel | 🟢 | Faible : opportunité d'optimisation ou de bonne pratique"
+}
+]
+},
+{
+"titre": "Synthèse des constats (2/2)",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+5074692,
+11231996,
+220560
+],
+"avant": [
+503999,
+5074692,
+11231996,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Critique : non-conformité réglementaire, impact stratégique majeur, risque élevé | 🟠 | Élevé : impact opérationnel significatif, risque important | 🟡 | Moyen : amélioration souhaitable, impact ponctuel | 🟢 | Faible : opportunité d'optimisation ou de bonne pratique"
+}
+]
+},
+{
+"titre": "Six constats majeurs",
+"formes": [
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Six constats majeurs"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Les fragilités portent sur les données, les provisions, l'épargne et les normes"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "Chaque constat est démontré dans la partie indiquée, à partir des fichiers du FPPN et des textes de l'UEMOA"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+129957
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : analyses Adenka"
+}
+]
+},
+{
+"titre": "Conformité prudentielle en bref",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+4816460,
+11231990,
+220560
+],
+"avant": [
+503999,
+4816460,
+11231990,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée"
+}
+]
+},
+{
+"titre": "Matrice de conformité",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+5508982,
+11231990,
+220560
+],
+"avant": [
+503999,
+5508982,
+11231990,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée"
+}
+]
+},
+{
+"titre": "Quatre taux à surveiller",
+"formes": [
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Quatre taux à surveiller"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Une faible part des engagements est couverte par des ressources disponibles"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "Couverture de l'épargne, sinistralité, trésorerie rapportée à l'épargne et prêts en retard de plus de 30 jours"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+245373
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : balances des comptes du FPPN de 2020 au 31/08/2026 (provisoire), fichiers « BALANCE … » listés en annexe « Fichiers sources ». Traitements Adenka. Exports du logiciel de prêts du Grenier du Policier « BalanceAgeeDetaille … .xls » et « production_de_la_periode … .xls » reçus le 15/10/2026. Traitements Adenka"
+}
+]
+},
+{
+"titre": "Carte des risques",
+"formes": [
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Carte des risques"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Quatre causes identifiées produisent quatre risques pour le FPPN"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "Les causes sont établies par les données. Le manque de liquidité et les pertes sur prêts sont chiffrés en partie 4.7"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+129957
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : analyses Adenka"
+}
+]
+},
+{
+"titre": "Feuille de route proposée",
+"formes": [
+{
+"nom": "Rectangle 19",
+"rang": 0,
+"apres": [
+2312337,
+4261820,
+3277758,
+1067985
+],
+"avant": [
+2312337,
+4261820,
+3277758,
+883319
+],
+"hauteur_si_texte": "Calculer\nAdenka précise la provision maladie (factures datées), la provision décès (dossiers du 41591000), la mortalité observée et les engagements par épargnant."
+},
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Feuille de route proposée"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Quatre étapes pour passer du constat à l'évaluation des engagements"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "Chaque étape dépend de la précédente. La première est la transmission des données manquantes"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+129957
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : Adenka"
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"2",
+"Contexte & Objectifs"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3826803,
+2869098,
+4810927,
+1200329
+],
+"avant": [
+3938554,
+2462184,
+4810927,
+1200329
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Mission et périmètre",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+3986116,
+11231990,
+502080
+],
+"avant": [
+503999,
+3986116,
+11231990,
+324000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée ||  | 🟠 | Partiel : en partie seulement | 🔴 | Non : réponse négative à la question de la colonne |  |  |  |  |  | "
+}
+]
+},
+{
+"titre": "Documents reçus le 22/10/2026",
+"formes": [
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "124 fichiers reçus, qui complètent les engagements, la méthode du FPPN et les contrôles"
+}
+]
+},
+{
+"titre": "Environnement de travail",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+11232000,
+3339604
+],
+"avant": [
+503999,
+1655999,
+11232000,
+3033155
+],
+"hauteur_si_texte": "Script | Rôle | Contrôle intégré || extraction_fppn.py | Extraction sans perte, archive découpée pour l'envoi | empreintes numériques, lignes et cellules || envoi_fichiers_fppn.py | Envoi de fichiers précis en parties | Empreinte de chaque partie || base_fppn.py | Base d'analyse : lecture par en-tête ou par contenu | Lignes de total, montants doublés || grenier_fppn.py, compta_fppn.py | Lecture des exports du logiciel de prêts et des balances Sage | Totaux imprimés retrouvés, débit = crédit || analyses_fppn.py, analyses_complements_fppn.py | Indicateurs, tests, sensibilités, tables CIMA | Classeur des calculs || ratios_airms_fppn.py | Ratios prudentiels, classement des comptes, excédent par risque | Rapprochement avec les agrégats du premier traitement || provisions_fppn.py, formules_fppn.py | Provisions, variantes de sinistralité, registre des formules | Rapprochement avec les balances || rapport_v9_fppn.py, donnees_v9_fppn.py, sensibilites_fppn.py, logigramme_fppn.py, classeur_v2_fppn.py | Rapport, logigrammes et graphiques natifs, classeur | Contrôle automatique des chiffres"
+},
+{
+"nom": "TextBox 32",
+"rang": 0,
+"apres": [
+503999,
+4990198,
+11232000,
+162000
+],
+"avant": [
+503999,
+4797158,
+11232000,
+162000
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "TextBox 33",
+"rang": 0,
+"apres": [
+503999,
+5244379,
+11232000,
+764841
+],
+"avant": [
+503999,
+5103158,
+11232000,
+764841
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Contrôle automatique des chiffres",
+"formes": [
+{
+"nom": "Rectangle 27",
+"rang": 0,
+"apres": [
+1538714,
+1463475,
+5748535,
+289438
+],
+"avant": [
+1538714,
+1463475,
+5748535,
+166944
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Contrôle automatique des chiffres"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Chaque chiffre du rapport est recalculé et comparé au texte affiché"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "Le contrôle relit le PowerPoint produit et vérifie que chaque chiffre enregistré figure sur sa diapositive"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+129957
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : Adenka"
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"4.1",
+"Données et qualité"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3826803,
+2869098,
+4810927,
+1200329
+],
+"avant": [
+3938554,
+2462184,
+4810927,
+1200329
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Calcul pas à pas : lignes de total",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1548000,
+8136000,
+1422489
+],
+"avant": [
+503999,
+1548000,
+8136000,
+1050045
+],
+"hauteur_si_texte": "Poste | Référence | Org | Matricule | Nom | Montant | Début | Fin || 936 |  | 59 | 175***Z | C. Z. | 22883 | 2011-04-01 |  || 936 |  | 59 | 175***S | C. A. | 22003 | 2011-04-01 |  || 936 |  | 59 | 175***P | K. T. I. | 22003 | 2000-08-01 |  ||  |  |  | 27 861 |  | 202597314 |  | "
+},
+{
+"nom": "TextBox 42",
+"rang": 0,
+"apres": [
+503999,
+3233759,
+8136000,
+1781988
+],
+"avant": [
+8856000,
+4086011,
+2879999,
+1781988
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Calcul pas à pas : montants doublés",
+"formes": [
+{
+"nom": "TextBox 42",
+"rang": 0,
+"apres": [
+455999,
+2916849,
+7967999,
+2153867
+],
+"avant": [
+8640000,
+3714132,
+3096000,
+2153867
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Fichiers vides ou endommagés",
+"formes": [
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Quatre défauts restent identifiés et non traités : Décembre 2024, MEDOC et deux fichiers mal classés"
+}
+]
+},
+{
+"titre": "À retenir : données",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2514876,
+186521,
+2027916,
+4306666
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7222099,
+405551,
+2000788,
+3939672
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Rectangle 3",
+"rang": 0,
+"apres": [
+2946575,
+1442741,
+849913,
+310919
+],
+"avant": [
+2946575,
+1442741,
+1322389,
+295488
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Rectangle 23",
+"rang": 0,
+"apres": [
+7570816,
+1466170,
+881973,
+310919
+],
+"avant": [
+7570816,
+1466170,
+1322389,
+295488
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Rectangle 39",
+"rang": 0,
+"apres": [
+3052718,
+3852190,
+1128835,
+310919
+],
+"avant": [
+3052718,
+3852190,
+1322389,
+295488
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Rectangle 44",
+"rang": 0,
+"apres": [
+7676960,
+3875619,
+740908,
+310919
+],
+"avant": [
+7676960,
+3875619,
+1322389,
+295488
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Rectangle 30",
+"rang": 0,
+"apres": [
+1999671,
+1962253,
+3122592,
+1054135
+],
+"avant": [
+1999671,
+1962253,
+3122592,
+1428712
+],
+"hauteur_si_texte": "La base reproduit les fichiers du FPPN, à 26 lignes près sans matricule valide (737 890 FCFA, 0,0017 % des précomptes), mais il manque les données nécessaires aux calculs actuariels."
+},
+{
+"nom": "Rectangle 31",
+"rang": 0,
+"apres": [
+6623912,
+1926662,
+3122592,
+861774
+],
+"avant": [
+6623912,
+1926662,
+3122592,
+1428712
+],
+"hauteur_si_texte": "Les empreintes, les lignes et les totaux des logiciels sont identiques. Adenka a écarté 87 lignes de total et corrigé 17 montants doublés."
+},
+{
+"nom": "Rectangle 32",
+"rang": 0,
+"apres": [
+2093705,
+4388689,
+3122592,
+861774
+],
+"avant": [
+2093705,
+4388689,
+3122592,
+1428712
+],
+"hauteur_si_texte": "La qualité des analyses dépend désormais de la transmission des données manquantes, et non plus du traitement des fichiers."
+},
+{
+"nom": "Rectangle 33",
+"rang": 0,
+"apres": [
+6768142,
+4336111,
+3122592,
+669414
+],
+"avant": [
+6768142,
+4336111,
+3122592,
+1428712
+],
+"hauteur_si_texte": "Le FPPN doit transmettre les bases de prestations, les dates de naissance et les fichiers vides de décembre 2024."
+},
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "À retenir : données"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Les données reçues sont fidèlement reprises, mais incomplètes"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "Base contrôlée à 100 %, sans prestations, sans âges et sans précomptes mensuels de 2020 à 2022"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+129957
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : analyses Adenka"
+}
+]
+},
+{
+"titre": "À retenir : effectifs et cotisations",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2680206,
+302377,
+1832733,
+3954077
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7308373,
+338957,
+1832735,
+3935176
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 2,
+"apres": [
+2999558,
+3029436,
+1428711,
+3719393
+],
+"avant": [
+2838223,
+3190772,
+1751381,
+3719393
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 3,
+"apres": [
+7623800,
+3052864,
+1428711,
+3719393
+],
+"avant": [
+7474179,
+3202486,
+1727953,
+3719393
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Choix de la formule : sinistralité",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+3266662,
+11231990,
+502080
+],
+"avant": [
+503999,
+3266662,
+11231990,
+324000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée ||  | 🟠 | Divergent : formule différente du texte |  |  |  |  |  |  |  | "
+}
+]
+},
+{
+"titre": "À retenir : sinistralité",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2793518,
+162357,
+1657875,
+4041924
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7343312,
+276549,
+1727954,
+3970080
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Calcul pas à pas : couverture de l'épargne",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1548000,
+7704000,
+2076303
+],
+"avant": [
+503999,
+1548000,
+7704000,
+1890081
+],
+"hauteur_si_texte": "Compte | Intitulé | Solde au 31/08/2026 || 41195100 | COTISATION PEP | 5 229 245 425 FCFA || 41195200 | COTISATION EFC | 10 514 270 966 FCFA ||  | Total épargne due | 15 743 516 391 FCFA || 52110200 | Banque BOA-Entraide fin de carrière | 1 540 006 941 FCFA || 52110300 | Banque BOA PEP | 37 336 916 FCFA || 52210200 | DAT BOA ENTRAIDE  FIN DE CARRIERE | 485 541 804 FCFA || 53300001 | FONDS COMMUN DE PLACEMENT | 500 000 000 FCFA ||  | Total actifs réservés | 2 562 885 661 FCFA"
+},
+{
+"nom": "Rounded Rectangle 34",
+"rang": 0,
+"apres": [
+5813999,
+3357458,
+2411999,
+231609
+],
+"avant": [
+5813999,
+3217276,
+2411999,
+231609
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Oval 35",
+"rang": 0,
+"apres": [
+8027999,
+3213458,
+270000,
+270000
+],
+"avant": [
+8027999,
+3066076,
+270000,
+270000
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "TextBox 42",
+"rang": 0,
+"apres": [
+503999,
+3714132,
+11232001,
+2153867
+],
+"avant": [
+8424000,
+3714132,
+3312000,
+2153867
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "À retenir : épargne",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2632029,
+275870,
+1657875,
+3814897
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7569675,
+227968,
+1630747,
+3937830
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Épargne : intérêts dus non comptabilisés",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+11015998,
+1800304
+],
+"avant": [
+503999,
+1655999,
+11015998,
+1684332
+],
+"hauteur_si_texte": "Exercice | PEP moyen | EFC moyenne | Intérêts PEP (3,5 %) | Intérêts EFC (5,5 %) | Total de l'année | Total si EFC à 3,5 % || 2020 | 7 539 594 956 FCFA | 3 490 677 433 FCFA | 263 885 823 FCFA | 191 987 259 FCFA | 455 873 082 FCFA | 386 059 534 FCFA || 2021 | 6 864 293 020 FCFA | 3 623 520 438 FCFA | 240 250 256 FCFA | 199 293 624 FCFA | 439 543 880 FCFA | 367 073 471 FCFA || 2022 | 5 636 626 650 FCFA | 4 119 506 634 FCFA | 197 281 933 FCFA | 226 572 865 FCFA | 423 854 798 FCFA | 341 464 665 FCFA || 2023 | 4 235 501 312 FCFA | 5 007 709 623 FCFA | 148 242 546 FCFA | 275 424 029 FCFA | 423 666 575 FCFA | 323 512 383 FCFA || 2024 | 3 695 214 698 FCFA | 6 258 105 806 FCFA | 129 332 514 FCFA | 344 195 819 FCFA | 473 528 334 FCFA | 348 366 218 FCFA || 2025 | 4 397 772 850 FCFA | 7 901 792 848 FCFA | 153 922 050 FCFA | 434 598 607 FCFA | 588 520 656 FCFA | 430 484 799 FCFA || 2026 (8 mois) | 5 097 233 672 FCFA | 9 681 558 005 FCFA | 118 935 452 FCFA | 354 990 460 FCFA | 473 925 913 FCFA | 344 838 472 FCFA || Total |  |  | 1 251 850 574 FCFA | 2 027 062 663 FCFA | 3 278 913 238 FCFA | 2 541 799 542 FCFA"
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"4.5",
+"Prêts du Grenier"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3826803,
+2869098,
+4810927,
+1200329
+],
+"avant": [
+3938554,
+2462184,
+4810927,
+1200329
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Rectangle 5",
+"rang": 0,
+"apres": [
+3882678,
+3209389,
+4377564,
+923330
+],
+"avant": [
+3938554,
+3337559,
+4377564,
+923330
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Calcul pas à pas : prêts en retard",
+"formes": [
+{
+"nom": "TextBox 44",
+"rang": 0,
+"apres": [
+472363,
+2776025,
+8527633,
+1967928
+],
+"avant": [
+9216000,
+3900071,
+2520000,
+1967928
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "À retenir : Grenier",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2782379,
+221024,
+1657875,
+3924590
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7367936,
+285067,
+1727954,
+3920839
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 2,
+"apres": [
+3090450,
+2938545,
+1246928,
+3719393
+],
+"avant": [
+2838223,
+3190772,
+1751381,
+3719393
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 3,
+"apres": [
+7714692,
+2961973,
+1246928,
+3719393
+],
+"avant": [
+7474179,
+3202486,
+1727953,
+3719393
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"4.6",
+"Retraités et annexes"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3826803,
+2869098,
+4810927,
+1200329
+],
+"avant": [
+3938554,
+2462184,
+4810927,
+1200329
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"4.7.2",
+"Adossement actif-passif"
+],
+"formes": [
+{
+"nom": "Rectangle 24",
+"rang": 0,
+"apres": [
+2189668,
+3036948,
+513606,
+936923
+],
+"avant": [
+2446471,
+2869098,
+513606,
+936923
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Scénarios de couverture des engagements",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+9792000,
+1505575
+],
+"avant": [
+503999,
+1655999,
+9792000,
+1412464
+],
+"hauteur_si_texte": "Scénario | Actif retenu au 31/12/2025 | Couverture 2025 | Actif retenu au 31/08/2026 | Couverture 2026 || 1. Lecture comptable | 19 954 869 035 FCFA | 98,06 % | 21 925 420 866 FCFA | 96,33 % || 2. Sans actifs de valeur non réalisable | 15 732 740 110 FCFA | 77,31 % | 17 237 600 156 FCFA | 75,73 % || 3. Sans actifs de valeur de marché non établie | 5 298 475 488 FCFA | 26,04 % | 6 188 677 951 FCFA | 27,19 % || 4. Actifs à un an / passif à un an | 2 715 008 827 FCFA | 41,54 % | 3 457 866 951 FCFA | 49,27 % || Engagements connus (scénarios 1 à 3) | 20 349 444 557 FCFA |  | 22 761 252 888 FCFA | "
+}
+]
+},
+{
+"titre": "Calcul pas à pas : fonds propres 2025",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1548000,
+7704000,
+1959405
+],
+"avant": [
+503999,
+1548000,
+7704000,
+1680072
+],
+"hauteur_si_texte": "Compte | Intitulé (balance 2025) | Montant || 10620000 | Réévaluation matériels | 2 899 400 000 FCFA || 11100000 | Réserves légale | 820 232 819 FCFA || 11880000 | RESERVES FACULTATIVES | 677 208 998 FCFA || 12900000 | Report à nouveau débiteur | -5 272 983 928 FCFA ||  | Sous-total capitaux propres | -876 142 111 FCFA ||  | Résultat de l'exercice 2025 | 437 899 911 FCFA ||  | Fonds propres | -438 242 200 FCFA"
+},
+{
+"nom": "Rounded Rectangle 34",
+"rang": 0,
+"apres": [
+5813999,
+3246407,
+2411999,
+231609
+],
+"avant": [
+5813999,
+3007267,
+2411999,
+231609
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Oval 35",
+"rang": 0,
+"apres": [
+8054999,
+3087711,
+270000,
+270000
+],
+"avant": [
+8027999,
+2856067,
+270000,
+270000
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Clinique, projet de Cocody et désignation du Directeur Général",
+"formes": [
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Clinique, projet de Cocody et désignation du Directeur Général"
+}
+]
+},
+{
+"titre": "Conclusion : adéquation des placements",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+2977675,
+11231990,
+502080
+],
+"avant": [
+503999,
+2977675,
+11231990,
+324000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée ||  | 🔴 | Non remplie : condition non remplie |  |  |  |  |  |  |  | "
+}
+]
+},
+{
+"titre": "À retenir : bilan",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2610923,
+392480,
+2000788,
+3924590
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7240753,
+430720,
+2000788,
+3902365
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Lire un ratio : les tiroirs du bilan",
+"formes": [
+{
+"nom": "Rectangle 5",
+"rang": 0,
+"apres": [
+3817401,
+1634006,
+2426584,
+846386
+],
+"avant": [
+3817401,
+1634006,
+2426584,
+800458
+],
+"hauteur_si_texte": "Ressources longues\nArgent qui reste longtemps à la disposition du FPPN : fonds propres, provisions, emprunts."
+},
+{
+"nom": "Rectangle 7",
+"rang": 0,
+"apres": [
+6667705,
+2099782,
+1900232,
+1031051
+],
+"avant": [
+6667705,
+2099782,
+1900232,
+654919
+],
+"hauteur_si_texte": "Dettes à court terme\nArgent que le FPPN doit rendre dans l'année : fournisseurs, cliniques, État."
+},
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+6725638,
+3799190,
+2304183,
+846386
+],
+"avant": [
+6725638,
+3799190,
+2304183,
+654919
+],
+"hauteur_si_texte": "Trésorerie\nArgent disponible tout de suite ou presque : caisse, comptes en banque, dépôts à terme."
+},
+{
+"nom": "Rectangle 12",
+"rang": 0,
+"apres": [
+3806664,
+3779137,
+2395004,
+846386
+],
+"avant": [
+3806664,
+3779137,
+2395004,
+800458
+],
+"hauteur_si_texte": "Emplois longs\nArgent placé pour longtemps : terrains, bâtiments, prêts, avances aux structures liées."
+},
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Lire un ratio : les tiroirs du bilan"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Chaque compte est rangé dans un tiroir selon le temps que met l'argent à entrer ou sortir"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "Un ratio compare le contenu de deux tiroirs. Le classement des comptes décide donc du résultat"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+129957
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : PCMS (structure des classes de comptes). Adenka"
+}
+]
+},
+{
+"titre": "Quatre familles de ratios",
+"formes": [
+{
+"nom": "Rectangle 30",
+"rang": 0,
+"apres": [
+8333454,
+1834006,
+3220254,
+1037207
+],
+"avant": [
+8333454,
+1834006,
+3220254,
+1083627
+],
+"hauteur_si_texte": "Réserves et fonds propres\nRéserve obligatoire, fonds propres et assimilés, fonds des risques longs : ces ratios disent si le FPPN a mis de côté assez de ressources propres."
+},
+{
+"nom": "Rectangle 31",
+"rang": 0,
+"apres": [
+327639,
+4236148,
+3220254,
+860235
+],
+"avant": [
+327639,
+4236148,
+3220254,
+1083627
+],
+"hauteur_si_texte": "Liquidité et équilibre\nLiquidité, trésorerie à échéance et immédiate, équilibre stable, solvabilité de l'épargne : ces ratios disent si l'argent est disponible à temps."
+},
+{
+"nom": "Rectangle 33",
+"rang": 0,
+"apres": [
+362962,
+1811347,
+3220254,
+1037207
+],
+"avant": [
+362962,
+1811347,
+3220254,
+1083627
+],
+"hauteur_si_texte": "Sinistralité et solvabilité\nSinistralité, marge de solvabilité, autonomie financière, excédent net : ces ratios disent si les cotisations suffisent et si le FPPN peut absorber un choc."
+},
+{
+"nom": "Rectangle 41",
+"rang": 0,
+"apres": [
+8677463,
+4236148,
+3220254,
+1037207
+],
+"avant": [
+8677463,
+4236148,
+3220254,
+1083627
+],
+"hauteur_si_texte": "Gestion et gouvernance\nFrais, personnel, recouvrement, délais, contrôles, réunions des organes, FNG : ces ratios disent si l'organisation est efficace et contrôlée."
+},
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Quatre familles de ratios"
+},
+{
+"nom": "Adenka_SousTitre",
+"rang": 0,
+"apres": [
+745200,
+558000,
+11246400,
+260762
+],
+"avant": [
+745200,
+558000,
+11246400,
+306000
+],
+"hauteur_si_texte": "Les 36 indicateurs examinés se regroupent en quatre familles, de la plus actuarielle à la gouvernance"
+},
+{
+"nom": "Adenka_Synthese",
+"rang": 0,
+"apres": [
+745200,
+882000,
+11062800,
+229984
+],
+"avant": [
+745200,
+882000,
+11062800,
+288000
+],
+"hauteur_si_texte": "L'ordre de priorité suit l'importance pour la protection des adhérents : solvabilité d'abord, gouvernance ensuite"
+},
+{
+"nom": "Adenka_Source",
+"rang": 0,
+"apres": [
+367200,
+6173999,
+11430000,
+129957
+],
+"avant": [
+367200,
+6173999,
+11430000,
+183600
+],
+"hauteur_si_texte": "Source : Décision n° 05/2022/COM/UEMOA du 1er juin 2022, annexe. Classement Adenka"
+}
+]
+},
+{
+"titre": "Ratios par garantie : matrice de 2020 au 31/08/2026",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+11228400,
+2015922
+],
+"avant": [
+503999,
+1655999,
+11228400,
+1972856
+],
+"hauteur_si_texte": "Ratio | Norme ou repère | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 | 31/08/2026 || Maladie : sinistralité | Repère 70 % à 80 % | 🟠 12,54 % | 🟠 6,00 % | 🟠 6,47 % | 🟠 26,91 % | 🟠 48,13 % | 🟢 73,53 % | 🔴 97,40 % || Décès : sinistralité | Repère 70 % à 80 % | 🔴 82,23 % | 🟠 55,42 % | 🟠 15,21 % | 🟠 17,05 % | 🟠 21,81 % | 🟠 19,14 % | 🟠 21,76 % || Toutes garanties : taux de sinistralité réglementaire | Norme 70 % à 80 % | 🔴 8,92 % | 🔴 20,77 % | 🔴 9,06 % | 🔴 24,56 % | 🔴 40,34 % | 🔴 57,48 % | 🟢 75,20 % || Maladie : ratio combiné (prestations et frais) | Au plus 100 % | 🟢 72,55 % | 🟢 54,14 % | 🟢 54,02 % | 🟢 71,87 % | 🟢 84,29 % | 🔴 109,87 % | 🔴 141,52 % || Décès : ratio combiné (prestations et frais) | Au plus 100 % | 🔴 142,24 % | 🔴 103,56 % | 🟢 62,76 % | 🟢 62,01 % | 🟢 57,96 % | 🟢 55,48 % | 🟢 65,88 % || Maladie : résultat technique | Au moins 0 FCFA | 🟢 450 556 166 FCFA | 🟢 775 696 432 FCFA | 🟢 818 990 532 FCFA | 🟢 544 608 847 FCFA | 🟢 346 250 445 FCFA | 🔴 -237 774 567 FCFA | 🔴 -701 679 552 FCFA || Décès : résultat technique | Au moins 0 FCFA | 🔴 -297 076 358 FCFA | 🔴 -25 796 447 FCFA | 🟢 284 293 552 FCFA | 🟢 315 201 377 FCFA | 🟢 392 850 349 FCFA | 🟢 449 151 155 FCFA | 🟢 239 560 278 FCFA"
+}
+]
+},
+{
+"titre": "Solvabilité et réserves : tableau de bord",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+4383347,
+11231990,
+220560
+],
+"avant": [
+503999,
+4383347,
+11231990,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée"
+}
+]
+},
+{
+"titre": "Risques longs : tableau de bord",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+4143007,
+11231990,
+220560
+],
+"avant": [
+503999,
+4143007,
+11231990,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée"
+}
+]
+},
+{
+"titre": "Gestion : tableau de bord",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+4544965,
+11231990,
+220560
+],
+"avant": [
+503999,
+4544965,
+11231990,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée"
+}
+]
+},
+{
+"titre": "Dispositif actuariel",
+"formes": [
+{
+"nom": "Adenka_Titre",
+"rang": 0,
+"apres": [
+547200,
+144000,
+11246400,
+322317
+],
+"avant": [
+547200,
+144000,
+11246400,
+396000
+],
+"hauteur_si_texte": "Dispositif actuariel  "
+},
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+11231999,
+2317596
+],
+"avant": [
+503999,
+1655999,
+11231999,
+2216872
+],
+"hauteur_si_texte": "Calcul | Texte | Situation actuelle | Organisation cible || Provisions maladie et décès | Statuts, art. 89. règlement d'exécution n° 004/2022/COM/UEMOA du 1er juin 2022, art. 10 | Montants hérités, jamais recalculés | Note de calcul annuelle du service comptable, signée par la direction générale, présentée à l'Assemblée générale || Allocations décès restant à payer | Statuts, art. 89 | État de fin d'année au barème, comptabilisé au 41591000 (2024 et 2025) | Même état, avec date de dépôt de chaque demande pour écarter les dossiers forclos || Intérêts servis sur l'épargne | Manuel des produits d'épargne | Aucun calcul, aucune écriture | Taux arrêté par le conseil d'administration, relevé annuel par épargnant || Provision du personnel (196) | Décret n° 2017-210, art. 4 et 5 | Reprise et dotation annuelles, méthode non transmise | Calcul agent par agent avec âge de départ, ancienneté et plafond conventionnel documentés || Ratios de la Décision n° 05/2022 | Décision n° 05/2022/COM/UEMOA du 1er juin 2022, annexe | Étude des ratios du FPPN, sans provisions | Tableau de bord semestriel selon les formules du texte || Étude des risques longs | règlement d'exécution n° 004/2022/COM/UEMOA du 1er juin 2022, art. 14 | Aucune étude transmise | Étude actuarielle tous les cinq ans"
+}
+]
+},
+{
+"titre": "Dispositif actuariel : grille de conformité",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+4840644,
+11231990,
+220560
+],
+"avant": [
+503999,
+4840644,
+11231990,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée"
+}
+]
+},
+{
+"titre": "Contrôle du plan comptable",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+11231996,
+3152484
+],
+"avant": [
+503999,
+1655999,
+11231996,
+3051760
+],
+"hauteur_si_texte": "Point | Attendu selon le PCMS | Constat | Incidence || Provisions pour prestations à payer | 19011 et 19012 (classe 19, provisions techniques). La rubrique 15 est réservée aux provisions réglementées à caractère fiscal. | Conforme de 2020 à 2023. Depuis 2024, les provisions techniques sont classées en provisions réglementées (158), sans changement de montant. | Aucune sur les montants. Les provisions techniques n'apparaissent plus comme telles dans le bilan, ce qui gêne leur lecture et le contrôle de l'article 7 du règlement d'exécution. || Réserve disponible | 106 = écarts de réévaluation des immeubles (fonds mutualistes). Les réserves vont en 11. | Libellé et rubrique ne concordent pas. L'origine du montant (réévaluation ou excédents mis en réserve) n'est pas documentée. | Le montant compte ou non dans la marge de solvabilité selon sa nature : à confirmer par le FPPN. || Réserves légales et facultatives | 111 réserves légales, 118 autres réserves | Conforme. | Base du ratio de réserve obligatoire et de la marge de solvabilité. || Épargne des adhérents (PEP, EFC) | 41195 « Autres comptes créditeurs des adhérents » (classe 4, tiers). | Compte conforme au PCMS. Le PCMS ne prévoit pas de compte propre aux risques longs. Le règlement d'exécution exige des états financiers par risque long (art. 13). | Classée en dette à court terme, l'épargne pèse sur les ratios de liquidité. Son échéance réelle reste à établir avec les âges. || Avances au CMP, au Grenier et créance sur l'Hôpital de la Police | 471 = comptes d'attente débiteurs (opérations à régulariser). Les prêts et placements durables relèvent des classes 26 et 27. | Des emplois durables de 11 603 989 675 FCFA au 31/08/2026 sont suivis en comptes d'attente ou de tiers. | Ils sont comptés en court terme dans les ratios de liquidité et absents des emplois longs du ratio d'équilibre stable. || Cotisations et prestations | 701 maladie, 702 décès. 601 maladie, 602 obsèques, 608 autres prestations | Conforme. | Base de la sinistralité réglementaire. || Primes, indemnités et supplément familial du personnel | 641 = impôts et taxes sur salaires. Les rémunérations relèvent de 66. | Ces montants sont classés en impôts et taxes. | Faible (moins de 8 000 000 FCFA par an) : le taux de charges de personnel est légèrement sous-estimé."
+}
+]
+},
+{
+"titre": "À retenir : conformité prudentielle",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2735626,
+267777,
+1751382,
+3924590
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7354364,
+289402,
+1751384,
+3935598
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Ratios non conformes de 2020 au 31/08/2026",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+5653385,
+11231990,
+220560
+],
+"avant": [
+503999,
+5653385,
+11231990,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non conforme : norme non respectée | 🟠 | Non démontré : non démontré par les documents reçus | 🟡 | En attente : document du FPPN attendu | ⚪ | À apprécier : norme non chiffrée | 🟢 | Conforme : norme respectée"
+}
+]
+},
+{
+"titre": "Effet de chaque levier sur chaque ratio",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+11217600,
+1535520
+],
+"avant": [
+503999,
+1655999,
+11217600,
+1457660
+],
+"hauteur_si_texte": "Levier | Sinistralité | Réserve obligatoire | Fonds propres et assimilés | Liquidité | Équilibre stable | Excédent net | Solvabilité de l'épargne | Trésorerie à échéance | Trésorerie immédiate | Réserve de trésorerie | Fonds propres / prestations longues | Charges de fonctionnement | Charges de fonctionnement brut | Coût par unité prestée || Hausse des cotisations | - | 0 | + | + | + | - | 0 | + | + | 0 | + | + | + | 0 || Hausse des prestations | + | - | - | - | - | + | 0 | - | - | 0 | - | 0 | 0 | + || Baisse des charges | 0 | 0 | + | + | + | - | 0 | + | + | 0 | + | + | + | + || Dotation à la réserve | 0 | + | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 || Réallocation des placements | 0 | 0 | 0 | + | + | 0 | + | + | + | + | 0 | 0 | 0 | 0 || Apport en fonds propres | 0 | 0 | + | + | + | 0 | 0 | + | + | 0 | + | 0 | 0 | 0"
+}
+]
+},
+{
+"titre": "Sinistralité face à une hausse des prestations",
+"formes": [
+{
+"nom": "Table 32",
+"rang": 0,
+"apres": [
+503999,
+4076765,
+7055997,
+220560
+],
+"avant": [
+503999,
+4076765,
+7055997,
+162000
+],
+"hauteur_si_texte": "Code couleur | 🔴 | Non : réponse négative à la question de la colonne | 🟠 | Partiel : en partie seulement | 🟢 | Oui : réponse positive à la question de la colonne"
+}
+]
+},
+{
+"titre": "À retenir : leviers de conformité",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2597359,
+406044,
+2027916,
+3924590
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7236137,
+426103,
+2000788,
+3911600
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"4.9",
+"Tables de mortalité"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3826803,
+2869098,
+4810927,
+1200329
+],
+"avant": [
+3938554,
+2462184,
+4810927,
+1200329
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "À retenir : tables de mortalité",
+"formes": [
+{
+"nom": "Google Shape;7367;p39",
+"rang": 0,
+"apres": [
+2494760,
+508642,
+2027916,
+3719393
+],
+"avant": [
+2201124,
+215006,
+2027916,
+4306666
+],
+"hauteur_si_texte": null
+},
+{
+"nom": "Google Shape;7367;p39",
+"rang": 1,
+"apres": [
+7164386,
+442433,
+2000788,
+3878939
+],
+"avant": [
+7569073,
+228570,
+2000788,
+4306666
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"5",
+"Analyses en attente"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3938554,
+2869098,
+4810927,
+1200329
+],
+"avant": [
+3938554,
+2462184,
+4810927,
+1200329
+],
+"hauteur_si_texte": null
+}
+]
+},
+{
+"titre": "Matrice des données et des analyses",
+"formes": [
+{
+"nom": "Table 31",
+"rang": 0,
+"apres": [
+503999,
+1655999,
+11217599,
+2658480
+],
+"avant": [
+503999,
+1655999,
+11217599,
+2565383
+],
+"hauteur_si_texte": "Analyse | Base des prestations datée\nPBC n° 47 | Dossiers non payés\nPBC n° 7 | Fichiers des décès\nPBC n° 64 | Dates de naissance des mutualistes\nPBC n° 4 | Dates de naissance des retraités\nPBC n° 84 | Fichier des ayants droit\nPBC n° 43 | Comptes individuels d'épargne\nPBC n° 9 | Taux servi arrêté\nPBC n° 69 | Inventaire des placements\nPBC n° 55 || Provision maladie dossier par dossier | 🟠 | 🟠 |  |  |  |  |  |  |  || Provision décès dossier par dossier |  | 🟠 | 🟠 |  |  |  |  |  |  || Mortalité observée par âge |  |  | 🟠 | 🟠 |  |  |  |  |  || Engagement santé des retraités | 🟠 |  |  |  | 🔴 |  |  |  |  || Engagement d'épargne par épargnant |  |  |  |  |  |  | 🟠 | 🟠 |  || Adossement par échéance |  |  |  |  |  |  | 🟠 |  | 🟠 || Projection par garantie | 🟠 |  |  | 🟠 |  | 🔴 |  |  | "
+}
+]
+},
+{
+"layout": "Title Only",
+"signature": [
+"A",
+"Annexes"
+],
+"formes": [
+{
+"nom": "Rectangle 9",
+"rang": 0,
+"apres": [
+3938554,
+2802444,
+4810927,
+1200329
+],
+"avant": [
+3938554,
+2462184,
+4810927,
+1200329
+],
+"hauteur_si_texte": null
+}
+]
+}
+]
+}

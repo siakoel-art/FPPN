@@ -408,18 +408,18 @@ def circuit_epargne(slide, y0=3.9, h_couloir=2.05):
 
 
 def circuit_gna(slide, y0=3.9, h_couloir=2.05):
-    """Flotte automobile (GNA) : cotation, plateforme du GNA, collecte, retour, trop-perçu, commission."""
+    """Flotte automobile (GNA) : cotation, plateforme de GNA, collecte, retour, trop-perçu, commission."""
     lg = Logigramme(slide, 8)
     X, L, H = _grille(lg, y0, ["Policier", "FPPN : service informatique", "Trésor (Solde)", "GNA", "FPPN : service comptable"], h_couloir)
     c = lg.centre_couloir
     lg.noeud("g1", "debut", "Souscription,\nenvoi des documents", X[0], c(0, H), L, H)
     lg.noeud("g2", "etape", "Calcul des cotations,\nprésentation au policier", X[0], c(1, H), L, H)
     lg.noeud("g3", "decision", "Accord ?", X[1], c(1, 1.9), L, 1.9)
-    lg.noeud("g4", "etape", "Enregistrement sur la\nplateforme du GNA", X[2], c(1, H), L, H)
+    lg.noeud("g4", "etape", "Enregistrement sur la\nplateforme de GNA", X[2], c(1, H), L, H)
     lg.noeud("g5", "document", "Fichier aller\n(liste des bénéficiaires)", X[3], c(1, H), L, H)
     lg.noeud("g6", "etape", "Collecte des fonds :\ndirect, précompte, FPPN", X[3], c(2, H), L, H)
     lg.noeud("g7", "document", "Fichier retour", X[4], c(2, H), L, H)
-    lg.noeud("g8", "etape", "Dépôt du retour sur\nla plateforme du GNA", X[4], c(1, H), L, H)
+    lg.noeud("g8", "etape", "Dépôt du retour sur\nla plateforme de GNA", X[4], c(1, H), L, H)
     lg.noeud("g9", "etape", "Demande de\ntrop-perçu", X[5], c(0, H), L, H)
     lg.noeud("g10", "etape", "Remboursement\ndu trop-perçu", X[5], c(3, H), L, H)
     lg.noeud("g11", "etape", "Virement de la\ncommission (20 %)", X[6], c(3, H), L, H)
