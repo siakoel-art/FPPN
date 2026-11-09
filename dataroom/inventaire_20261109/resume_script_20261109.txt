@@ -1,0 +1,12 @@
+﻿Inventaire de la dataroom FPPN du 09/11/2026 18:24 
+05-Adenka Audit Juridique et Fiscal : 38 fichiers, 99.7 Mo
+   - Nouveau : 36
+   - Déjà reçu (contenu identique) : 2
+   - doublons internes : 0
+03-Adenka-Audit : 5328 fichiers, 4949.8 Mo
+   - Nouveau : 923
+   - Même nom qu'un fichier déjà reçu, contenu différent : 4115
+   - Déjà reçu (contenu identique) : 290
+   - doublons internes : 126
+
+Fichiers copiés dans D:\FPPN_Nouveaux_fichiers_20261109 : 4990
