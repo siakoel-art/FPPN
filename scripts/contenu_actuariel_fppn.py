@@ -5,7 +5,7 @@ résumé exécutif Word du seul volet actuariel. Tous les chiffres viennent du r
 
 Syntaxe : **gras**, [[surligné jaune = à confirmer]].
 """
-RAP = "Rapport actuariel et statistique du 23/10/2026"
+RAP = "Rapport actuariel et statistique du 09/11/2026"
 
 # ---------------------------------------------------------------- objectifs
 QUESTIONS = [
@@ -75,22 +75,22 @@ RESULTATS = [  # titre, message en gras, paragraphes, renvoi
      "La première dette du FPPN est l'épargne des policiers, et elle est sous-évaluée d'environ 3,3 milliards de FCFA.",
      ["L'épargne inscrite au bilan vaut 15 743 516 391 FCFA au 31/08/2026. Les intérêts promis par le manuel d'épargne n'ont jamais été comptabilisés depuis le 01/01/2020 : ils représentent 3 278 913 238 FCFA, ou 2 541 799 542 FCFA si l'EFC est servie à 3,50 %. L'engagement réel d'épargne atteint donc 19 022 429 629 FCFA.",
       "Les autres engagements mesurés sont des dettes de court terme : 489 419 669 FCFA d'allocations décès dues aux familles, en hausse chaque année, et environ 7 100 000 FCFA de décès déclarés après la clôture. La santé des 610 policiers retraités cotisants n'est pas mesurable, faute de suivi de leurs soins et de leurs dates de naissance."],
-     "Rapport, diapositives 5, 95 à 98, 112 et 126"),
+     "Rapport, diapositives 5, 107 à 110, 123 et 136"),
     ("La suffisance des provisions",
      "Les provisions ne manquent pas en montant global, mais elles sont figées depuis 2020 et mal affectées.",
      ["Une provision est de l'argent mis de côté pour une dépense déjà due mais pas encore payée. Le bilan porte 4 829 298 290 FCFA de provisions maladie et décès, identiques au franc près de 2020 au 31/08/2026. [[Ce montant aurait été passé vers 2004 selon la direction comptable.]] Le besoin réellement mesuré n'est que de 19 581 392 FCFA : l'excédent atteint 4 809 716 898 FCFA.",
       "À l'inverse, rien n'est mis de côté pour les intérêts promis sur l'épargne (3 278 913 238 FCFA) ni pour les pertes probables sur les prêts du Grenier (14 016 392 FCFA). La provision pour la retraite du personnel est suffisante : 43 666 678 FCFA au bilan pour 17 184 450 FCFA recalculés avec un départ à 60 ans."],
-     "Rapport, diapositives 6, 117 à 133 et 144"),
+     "Rapport, diapositives 6, 127 à 143 et 154"),
     ("L'adossement actif-passif",
      "Le FPPN n'a pas assez d'argent disponible pour payer ce qu'il devra payer dans l'année.",
      ["Au 31/08/2026, l'argent mobilisable en moins d'un an vaut 3 457 866 951 FCFA. Les paiements attendus dans l'année, sorties d'épargne comprises, valent 10 046 113 184 FCFA. La couverture n'est que de 34,42 %, et de 26,22 % dans le scénario de choc sévère. Le manque cumulé atteint 12 596 052 822 FCFA à cinq ans.",
       "La cause est simple : l'épargne, que les policiers peuvent retirer à tout moment, finance des biens qui ne se vendent pas vite (terrains, clinique, créance sur l'Hôpital de la Police, prêts du Grenier). Seuls 16,28 % de l'épargne sont couverts par des actifs qui lui sont réservés."],
-     "Rapport, diapositives 7, 90 et 147 à 158"),
+     "Rapport, diapositives 7, 102 et 157 à 168"),
     ("L'adéquation des placements",
      "Les placements sont trop faibles pour payer les intérêts promis aux épargnants.",
      ["En 2025, l'argent réellement placé (dépôts à terme et fonds communs de placement) vaut en moyenne 763 752 135 FCFA, soit 5,53 % de l'épargne due. Son rendement moyen de 2021 à 2025 est de 4,90 % par an. Les produits financiers de 2025 (117 912 488 FCFA) sont inférieurs aux intérêts d'une seule année sur l'EFC au taux le plus bas (309 709 577 FCFA).",
       "Le problème n'est pas d'abord le rendement, mais le volume et la disponibilité : 2 356 399 123 FCFA dorment sur des comptes courants sans rapporter, et aucune politique de placement n'a été votée par le conseil d'administration."],
-     "Rapport, diapositives 8 et 159 à 166"),
+     "Rapport, diapositives 8 et 169 à 176"),
 ]
 AUTRES_CONSTATS = [
     "**La garantie maladie perd de l'argent depuis 2025 :** les soins consomment 73,53 % des cotisations maladie en 2025 et 97,40 % sur les huit premiers mois de 2026 (109,87 % frais compris en 2025). Le décès, excédentaire, finance la maladie ;",
@@ -113,50 +113,50 @@ RATIOS_TABLE = [  # indicateur, norme, valeur 2025, statut
     ("Frais de fonctionnement", "Au plus 20 % des cotisations", "36,34 %", "🔴"),
     ("Sinistralité réglementaire, toutes garanties", "70 % à 80 %", "57,48 % (75,20 % au 31/08/2026)", "🔴"),
 ]
-RATIOS_RENVOI = "Rapport, diapositives 19 et 168 à 217"
+RATIOS_RENVOI = "Rapport, diapositives 19 et 178 à 227"
 
 # ---------------------------------------------------------------- constats classés par criticité (13 constats codés)
 CRIT_LIB = {"🔴": "Critique", "🟠": "Élevé", "🟡": "Moyen", "🟢": "Faible"}
 CONSTATS = [  # boule, code, constat en une phrase simple, ce que cela veut dire concrètement, chiffre clé, détail
     ("🔴", "ENG-1", "Les intérêts promis aux épargnants ne sont pas comptabilisés.",
      "Le FPPN doit plus à ses épargnants que ce que montrent ses comptes, et il ne peut pas dire à chacun ce qui lui revient.",
-     "3 278 913 238 FCFA d'intérêts non inscrits, sur 15 743 516 391 FCFA d'épargne", "5, 95 à 98"),
+     "3 278 913 238 FCFA d'intérêts non inscrits, sur 15 743 516 391 FCFA d'épargne", "5, 107 à 110"),
     ("🔴", "ALM-1", "L'argent disponible ne couvre qu'un tiers des paiements de l'année.",
      "Si les retraits d'épargne suivent leur rythme habituel, le FPPN devra vendre ou mobiliser des biens qui ne se vendent pas vite.",
-     "Couverture de 34,42 % (26,22 % en choc sévère), manque de 12 596 052 822 FCFA à cinq ans", "7, 147 à 158"),
+     "Couverture de 34,42 % (26,22 % en choc sévère), manque de 12 596 052 822 FCFA à cinq ans", "7, 157 à 168"),
     ("🔴", "PLA-1", "Les placements sont trop faibles pour payer les intérêts promis.",
      "L'épargne rapporte moins que ce qui est promis aux épargnants, et une grande partie dort sans rien rapporter.",
-     "763 752 135 FCFA placés en 2025, soit 5,53 % de l'épargne, rendement de 4,90 %", "8, 159 à 166"),
+     "763 752 135 FCFA placés en 2025, soit 5,53 % de l'épargne, rendement de 4,90 %", "8, 169 à 176"),
     ("🔴", "REG-1", "Le FPPN ne respecte pas 14 règles de solidité sur 36.",
      "Deux exercices de suite non conformes permettent à l'autorité de contrôle de retirer l'agrément du FPPN.",
-     "Fonds propres de -879 498 700 FCFA, liquidité de 0,13 en 2025", "19, 168 à 217"),
+     "Fonds propres de -879 498 700 FCFA, liquidité de 0,13 en 2025", "19, 178 à 227"),
     ("🟠", "ENG-2", "La dette envers les familles des policiers décédés grossit chaque année.",
      "Des familles attendent leur allocation, et la date de leur demande n'est pas enregistrée.",
-     "489 419 669 FCFA dus au 31/08/2026, contre 370 503 332 FCFA fin 2021", "110 à 112, 124 à 127"),
+     "489 419 669 FCFA dus au 31/08/2026, contre 370 503 332 FCFA fin 2021", "121 à 123, 134 à 137"),
     ("🟠", "PROV-1", "Les provisions maladie et décès sont figées depuis 2020.",
      "L'argent mis de côté ne correspond à aucun calcul : il gonfle les dettes du bilan, alors que d'autres dettes réelles ne sont pas couvertes.",
-     "4 829 298 290 FCFA au bilan pour un besoin mesuré de 19 581 392 FCFA", "6, 117 à 127"),
+     "4 829 298 290 FCFA au bilan pour un besoin mesuré de 19 581 392 FCFA", "6, 127 à 137"),
     ("🟠", "STAT-2", "La garantie maladie perd de l'argent, et le décès la finance.",
      "La cotisation maladie ne suffit plus à payer les soins et les frais : sans correction, le déficit va augmenter.",
-     "73,53 % des cotisations maladie consommées en 2025, 97,40 % en 2026", "72 à 86"),
+     "73,53 % des cotisations maladie consommées en 2025, 97,40 % en 2026", "86 à 99"),
     ("🟠", "REG-2", "Les décisions qui engagent l'épargne ne sont pas encadrées.",
      "L'épargne des policiers est employée sans décision du conseil d'administration, alors que les statuts l'exigent.",
-     "[[Placements décidés par la direction générale]], projet de Cocody sans budget", "157, 163, 164"),
+     "[[Placements décidés par la direction générale]], projet de Cocody sans budget", "167, 173, 174"),
     ("🟠", "DON-1", "Des données essentielles manquent pour finir les calculs.",
      "Plusieurs calculs restent impossibles tant que ces fichiers ne sont pas transmis : provisions dossier par dossier, mortalité, santé des retraités.",
-     "Ni base des prestations datée, ni dates de naissance, fichiers de décembre 2024 vides", "45 à 58"),
+     "Ni base des prestations datée, ni dates de naissance, fichiers de décembre 2024 vides", "62 à 73"),
     ("🟡", "STAT-1", "La répartition des cotisations diffère des statuts.",
      "La maladie reçoit plus et le décès moins que ce que prévoient les statuts, ce qui fausse le résultat de chaque garantie.",
-     "3,77 % et 1,23 % prélevés au lieu de 3,50 % et 1,50 %", "59 à 71"),
+     "3,77 % et 1,23 % prélevés au lieu de 3,50 % et 1,50 %", "74 à 85"),
     ("🟡", "STAT-3", "Les calculs par âge restent à faire.",
      "La projection de l'équilibre du FPPN n'est que globale tant que les âges des policiers ne sont pas connus.",
-     "Projection de 2026 à 2030 en deux scénarios", "218 à 228"),
+     "Projection de 2026 à 2030 en deux scénarios", "228 à 238"),
     ("🟢", "PROV-3", "Les pertes probables sur les prêts du Grenier ne sont pas comptées.",
      "Le montant est faible, mais le vrai risque est l'épargne prêtée : le FPPN finance presque tout le crédit du Grenier.",
-     "14 016 392 FCFA à déprécier, aucune dépréciation depuis 2022", "129"),
+     "14 016 392 FCFA à déprécier, aucune dépréciation depuis 2022", "139"),
     ("🟢", "PROV-2", "La provision pour la retraite du personnel est suffisante.",
      "C'est le seul poste où le montant du FPPN couvre largement le besoin. Seule la méthode n'est pas écrite.",
-     "43 666 678 FCFA au bilan pour 17 184 450 FCFA recalculés (départ à 60 ans)", "131 à 142"),
+     "43 666 678 FCFA au bilan pour 17 184 450 FCFA recalculés (départ à 60 ans)", "141 à 152"),
 ]
 
 # ---------------------------------------------------------------- plan d'actions priorisé (modèle validé)

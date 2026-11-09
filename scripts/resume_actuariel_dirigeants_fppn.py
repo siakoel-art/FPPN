@@ -75,7 +75,7 @@ r.h2("2.1. APPROCHE ACTUARIELLE")
 r.para(CA.APPROCHE_INTRO)
 r.puces([e.rstrip(" ;.") + (" ;" if k < len(CA.APPROCHE_ETAPES) - 1 else ".") for k, e in enumerate(CA.APPROCHE_ETAPES)])
 r.tableau(["Analyse", "Méthode retenue", "Pourquoi ce choix"], [[a, b, c] for a, b, c, _ in CA.METHODES],
-          titre="Méthodes retenues et raison du choix", source=RAP + ", diapositives 41 à 47 et 246 à 253.", largeurs_cm=[3.6, 8.0, 6.8], taille=8.5)
+          titre="Méthodes retenues et raison du choix", source=RAP + ", diapositives 47, 48 et 245 à 252.", largeurs_cm=[3.6, 8.0, 6.8], taille=8.5)
 r.h2("2.2. LIMITES DES TRAVAUX")
 r.para("**" + CA.LIMITES_INTRO.split(". ", 1)[0] + ".** " + CA.LIMITES_INTRO.split(". ", 1)[1], gras_auto=False)
 r.puces([e.rstrip(" ;.") + (" ;" if k < len(CA.LIMITES) - 1 else ".") for k, e in enumerate(CA.LIMITES)])
@@ -92,24 +92,24 @@ for k, (titre_q, msg, paras, renvoi) in enumerate(CA.RESULTATS, 1):
         graphique(r, {"type": "barres", "categories": ANS, "format": "0.00", "titre_axe": "Milliards de FCFA",
                       "series": [{"nom": "Épargne due aux policiers", "valeurs": [round(md(v), 2) for v in [10828205640, 10147421276, 9364845293, 9121576576, 10785064432, 13814066964, 15743516391]], "couleur": "112A40"},
                                  {"nom": "Argent réservé à cette épargne", "valeurs": [round(md(v), 2) for v in [714042784, 1957211038, 888844233, 839212069, 699925787, 1608155525, 2562885661]], "couleur": "EFAC62"}]},
-                  "Épargne due et argent réservé pour la rembourser (milliards de FCFA)", RAP + ", diapositives 13 et 90.", hauteur_cm=6.5)
+                  "Épargne due et argent réservé pour la rembourser (milliards de FCFA)", RAP + ", diapositives 13 et 102.", hauteur_cm=6.5)
     if k == 3:
         graphique(r, {"type": "barres", "categories": ["Paiements attendus dans l'année", "Argent disponible en moins d'un an"], "format": "0.00", "titre_axe": "Milliards de FCFA",
                       "series": [{"nom": "Au 31/08/2026", "valeurs": [round(md(10046113184), 2), round(md(3457866951), 2)], "couleur": "112A40"}]},
-                  "Paiements de l'année et argent disponible au 31/08/2026 (milliards de FCFA)", RAP + ", diapositives 7 et 155.", largeur_cm=12.0, hauteur_cm=6.0)
+                  "Paiements de l'année et argent disponible au 31/08/2026 (milliards de FCFA)", RAP + ", diapositives 7 et 165.", largeur_cm=12.0, hauteur_cm=6.0)
     r.para(renvoi + ".", gras_auto=False)
 r.h2("3.5. RATIOS PRUDENTIELS : TRAVAUX DU VOLET ACTUARIEL")
 r.para(CA.RATIOS_INTRO, gras_auto=False)
 for x in CA.RATIOS_PARAS:
     r.para(x)
 r.tableau(["Indicateur", "Norme", "Valeur 2025", "Statut"], [[a, b, c, f"{s} {'Conforme' if s == '🟢' else 'Non conforme'}"] for a, b, c, s in CA.RATIOS_TABLE],
-          titre="Principaux indicateurs de solidité en 2025 (Décision n° 05/2022)", source=RAP + ", diapositives 19 et 168 à 217.", largeurs_cm=[5.4, 4.6, 5.0, 3.4], taille=9)
+          titre="Principaux indicateurs de solidité en 2025 (Décision n° 05/2022)", source=RAP + ", diapositives 19 et 178 à 227.", largeurs_cm=[5.4, 4.6, 5.0, 3.4], taille=9)
 r.h2("3.6. AUTRES ENSEIGNEMENTS")
 r.para("**La garantie maladie ne s'équilibre plus, et des données manquent pour finir les calculs.**", gras_auto=False)
 r.puces([e.rstrip(" ;.") + (" ;" if k < len(CA.AUTRES_CONSTATS) - 1 else ".") for k, e in enumerate(CA.AUTRES_CONSTATS)])
 graphique(r, {"type": "lignes", "categories": ANS, "format": "0.00", "titre_axe": "% des cotisations maladie", "axe_min": 0, "axe_max": 110,
               "series": [{"nom": "Soins rapportés aux cotisations maladie", "valeurs": [12.54, 6.00, 6.47, 26.91, 48.13, 73.53, 97.40], "couleur": "112A40"}]},
-          "Part des cotisations maladie consommée par les soins (%)", RAP + ", diapositives 74 et 75.", hauteur_cm=6.0)
+          "Part des cotisations maladie consommée par les soins (%)", RAP + ", diapositives 87 et 88.", hauteur_cm=6.0)
 
 # ================================================================ 4. synthèse et plan d'actions
 r.partie(4, "Synthèse et plan d'actions priorisé", introduction="Cette partie classe les constats du plus critique au moins critique, puis présente les actions à mener, qui agit et dans quel délai.")
@@ -118,7 +118,7 @@ r.para("**Quatre constats sont critiques : l'épargne, la liquidité, les placem
        "avec ce qu'il veut dire concrètement pour le FPPN et le chiffre qui le fonde.")
 r.tableau(["Criticité", "Constat", "Ce que cela veut dire concrètement", "Chiffre clé", "Rapport"],
           [[f"{b} {CA.CRIT_LIB[b]}", f"**{code}** {txt}", sens, H(chif), f"Diap. {dt}"] for b, code, txt, sens, chif, dt in CA.CONSTATS],
-          titre="Constats du volet actuariel, du plus critique au moins critique", source=RAP + ", diapositives 4 à 13 et 45 à 228.",
+          titre="Constats du volet actuariel, du plus critique au moins critique", source=RAP + ", diapositives 4 à 13 et 45 à 238.",
           largeurs_cm=[2.1, 4.2, 5.6, 4.4, 2.1], taille=8)
 r.doc.add_page_break()
 r.h2("4.2. PLAN D'ACTIONS PRIORISÉ")

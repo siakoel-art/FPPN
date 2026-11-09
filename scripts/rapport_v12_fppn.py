@@ -4081,6 +4081,7 @@ for x in SL:
         x["valable"] = "balances de 2020 au 31/08/2026 (provisoire) ; statut global jugé de 2022 à 2025"
 
 # ---- v13 : structure demandée par Paul Alexandre DAGRY (09/11/2026)
+SANS_NOTES = True  # v13 : rapport sans notes du présentateur (version de l'utilisateur)
 RETOUCHES_U = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "retouches_utilisateur_20261109.json"), encoding="utf-8"))
 _n0 = len(SL)
 _METH = [  # analyse, méthode retenue, pourquoi ce choix, données utilisées, diapositive de détail
@@ -5138,7 +5139,7 @@ for i, x in enumerate(SL, 1):
                 sh.width = Emu(4810927 if sh.name == "Rectangle 9" else 4377564)
             if sh.name == "Image 10":
                 sh.left = Emu(8749481)
-            if x["num"] == "R" and sh.name in RETOUCHES_U["sep_resume"]:
+            if x["num"] == "R" and sh.name in globals().get("RETOUCHES_U", {}).get("sep_resume", {}):
                 sh.left, sh.top, sh.width, sh.height = (Emu(v_) for v_ in RETOUCHES_U["sep_resume"][sh.name])
             if sh.name == "Rectangle 24" and len(str(x["num"])) > 1:
                 sh.text_frame.word_wrap = False
@@ -5251,7 +5252,8 @@ for i, x in enumerate(SL, 1):
             if part:
                 tableau(sl, {"titre": None, "entetes": [nom, "Titre", "Diapo."], "largeurs": [1.6, 12.4, 1.4],
                              "lignes": [[str(n_), t_, str(d_)] for n_, t_, d_ in part], "hauteur_ligne": 0.3}, 1.8, 1.4 + col * 16.0, 7, hauteur_max=15.6)
-    pass  # v13 : pas de notes du présentateur (retirées par l'utilisateur)
+    if x.get("notes") and not globals().get("SANS_NOTES"):
+        sl.notes_slide.notes_text_frame.text = x["notes"]
 COURANTE = None
 
 
@@ -5344,6 +5346,7 @@ for sl in prs.slides:
             encadre(sl, 1.4, 3.85, 31.2, 2.0, [lect_], "Comment lire")
 
 # ---- v13 : retouches de l'utilisateur (09/11/2026) et mise en forme du tableau des limites
+RETOUCHES_U = globals().get("RETOUCHES_U") or {"corrections": [], "formes": {}, "sep_resume": {}}
 _corr13 = RETOUCHES_U["corrections"]
 for sl in prs.slides:
     t_ = [sh.text_frame.text for sh in sl.shapes if sh.has_text_frame and sh.name == "Adenka_Titre"]

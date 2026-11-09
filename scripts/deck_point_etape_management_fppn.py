@@ -2,7 +2,7 @@
 
 Structure demandée : contexte et objectifs, récapitulatif des activités (tableau codifié par axe : méthodes, poids des
 travaux, résultats), recommandations par axe (une diapositive), prochaines étapes (une diapositive).
-Chiffres du rapport actuariel et statistique du 23/10/2026, du plan de travail du 23/10/2026 et de la liste des
+Chiffres du rapport actuariel et statistique du 09/11/2026, du plan de travail du 23/10/2026 et de la liste des
 documents demandés du 26/10/2026. Moteur de mise en page repris du script du rapport (rapport_v12_fppn.py).
 
 Usage : python3 deck_point_etape_management_fppn.py <skill adenka-powerpoint> <sortie.pptx>
@@ -23,7 +23,7 @@ ENTETE = "\n".join([lignes(82, 87), lignes(90, 91), lignes(94, 94), lignes(96, 1
 debut = next(i for i, l in enumerate(SRC, 1) if l.startswith("tmp = SORTIE.replace"))
 fin = next(i for i, l in enumerate(SRC, 1) if l.startswith("finaliser(SORTIE)"))
 MOTEUR = lignes(debut, fin + 1)
-for avant, apres in [('"Audit Comptable et financier FPPN", "Text Placeholder 4": "23 octobre 2026"', '"Audit Comptable et financier FPPN", "Text Placeholder 4": "Novembre 2026"'),
+for avant, apres in [('"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "09 novembre 2026"', '"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "Novembre 2026"'),
                      ('r.text = "Rapport actuariel et statistique"', 'r.text = "Point d\'étape : volets Actuariat et Stratégie"'),
                      ("def remplir_gab(slide, num, d, analyse=None):\n", "def remplir_gab(slide, num, d, analyse=None):\n    if num == 11:\n        remplir_11(slide, d)\n        return\n"),
                      ('entrees = [("Résumé exécutif", 3)]', 'entrees = ENTREES'),
@@ -39,7 +39,7 @@ PBCM = {}
 GAB = {"couverture": 1, "sommaire": 4, "contenu": 5, "merci": 110}
 BLANC, GRIS_CLAIR, CARTE = "FFFFFF", "BBBCBC", "F2F2F2"
 PRIO = {"P1": "C00000", "P2": "ED7D31", "P3": "FFC000", "P4": "70AD47"}
-RAP = "Source : rapport actuariel et statistique du 23/10/2026"
+RAP = "Source : rapport actuariel et statistique du 09/11/2026"
 
 
 def run(p, texte, taille, gras=False, couleur=NOIR, surl=False):
@@ -393,7 +393,7 @@ gab(31, {"titre": "Contexte de la mission", "sous_titre": "Le FPPN gère la pré
                 ("La mission Adenka", "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN. Lancement les 13 et 14/10/2026."),
                 ("Deux volets présentés", "Actuariat : ce que le FPPN devra payer et sa capacité à le payer. Stratégie : objectifs présentés par l'équipe Stratégie.")]},
     "Présenter le FPPN, son cadre, la mission Adenka et les deux volets traités dans ce document.",
-    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 61")
+    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + RAP[9:] + ", diapositive 75")
 SL[-1]["sommaire"] = "Contexte et objectifs"
 gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémentaires : mesurer les engagements, éclairer la stratégie",
          "synthese": "Les codes du volet Actuariat sont repris dans le récapitulatif des activités et les recommandations"},
@@ -404,7 +404,7 @@ gab(11, {"titre": "Objectifs par volet", "sous_titre": "Deux volets complémenta
     source="Source : offre technique Adenka validée par le FPPN, pôle 4 (p. 70) et profil de l'actuaire (p. 74) ; plan d'analyse statistique du 16/10/2026")
 ORDRE_ACT = ["ENG-1", "ENG-2", "PROV-1", "PROV-2", "PROV-3", "ALM-1", "PLA-1", "DON-1", "STAT-1", "STAT-2", "STAT-3", "REG-1", "REG-2"]
 TOUT = {r_[0].split(" ", 1)[1]: r_ for r_ in RECAP_DEMANDES + RECAP_COMPL}
-SRC_RECAP = RAP + ", diapositives 4 à 13, 48 à 61, 75, 90 à 166, 178, 195 et 239 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
+SRC_RECAP = RAP + ", diapositives 4 à 13, 47 à 60, 63 à 75, 88, 102 à 176, 188 et 205 ; plan de travail du 23/10/2026 ; liste des documents demandés du 26/10/2026"
 STR_VIDE = [["STR-1", "Stratégie : à renseigner", "", ""], ["STR-2", "Stratégie : à renseigner", "", ""]]
 STATUT = {"ENG-1": "**En cours.** Reste : comptes individuels d'épargne",
           "ENG-2": "**En cours.** Reste : dossiers non payés, dates de naissance des retraités",

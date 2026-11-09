@@ -52,13 +52,14 @@ rep('''            if sh.name in ("Rectangle 9", "Rectangle 5"):
                 sh.width = Emu(4810927 if sh.name == "Rectangle 9" else 4377564)
             if sh.name == "Image 10":
                 sh.left = Emu(8749481)
-            if x["num"] == "R" and sh.name in RETOUCHES_U["sep_resume"]:
+            if x["num"] == "R" and sh.name in globals().get("RETOUCHES_U", {}).get("sep_resume", {}):
                 sh.left, sh.top, sh.width, sh.height = (Emu(v_) for v_ in RETOUCHES_U["sep_resume"][sh.name])''')
 
 # ---------------------------------------------------------------- notes retirées (version de l'utilisateur sans notes)
 rep('''    if x.get("notes"):
         sl.notes_slide.notes_text_frame.text = x["notes"]''',
-    '''    pass  # v13 : pas de notes du présentateur (retirées par l'utilisateur)''')
+    '''    if x.get("notes") and not globals().get("SANS_NOTES"):
+        sl.notes_slide.notes_text_frame.text = x["notes"]''')
 
 # ---------------------------------------------------------------- liste des tableaux sur deux diapositives
 rep('SL.append({"type": "liste_tableaux", "notes": ""})',
@@ -77,6 +78,7 @@ rep('        assert t_ not in _POS, ("titre en double", t_)\n        _POS[t_] = 
 # ---------------------------------------------------------------- nouvelle partie 3 et réorganisation (avant la résolution des renvois)
 _NOUV = r'''
 # ---- v13 : structure demandée par Paul Alexandre DAGRY (09/11/2026)
+SANS_NOTES = True  # v13 : rapport sans notes du présentateur (version de l'utilisateur)
 RETOUCHES_U = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "retouches_utilisateur_20261109.json"), encoding="utf-8"))
 _n0 = len(SL)
 _METH = [  # analyse, méthode retenue, pourquoi ce choix, données utilisées, diapositive de détail
@@ -219,6 +221,7 @@ rep("_POS = {}\nfor i, x in enumerate(SL, 1):", _NOUV + "_POS = {}\nfor i, x in 
 # ---------------------------------------------------------------- retouches finales (avant l'enregistrement)
 _FIN = r'''
 # ---- v13 : retouches de l'utilisateur (09/11/2026) et mise en forme du tableau des limites
+RETOUCHES_U = globals().get("RETOUCHES_U") or {"corrections": [], "formes": {}, "sep_resume": {}}
 _corr13 = RETOUCHES_U["corrections"]
 for sl in prs.slides:
     t_ = [sh.text_frame.text for sh in sl.shapes if sh.has_text_frame and sh.name == "Adenka_Titre"]
