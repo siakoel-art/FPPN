@@ -307,8 +307,63 @@ with open(os.path.join(_AS, "prestations_hors_soins_v15.csv"), encoding="utf-8-s
         for j, v_ in enumerate([x["lib"], int(x["an"]), x["date"], x["journal"], x["piece"], x["compte"], round(float(x["m"])), x["cat"]], 1):
             val(ws, i, j, v_, FMT if j == 7 else None)
 
+
+# ------------------------------------------------------------------ 36 : documents du 11/11/2026 (v16)
+ws = wb.create_sheet("36_documents_1111")
+barre(ws, ["D1_balances", "32_actifs_contestes", "33_grenier_ef", "30_pidr_fppn"])
+r = explications(ws, "Tableau : faits tirés des documents reçus le 11/11/2026", [
+    ("À quoi sert cet onglet", "Reprendre les montants des documents du 11/11/2026 et les rapprocher des comptes du FPPN."),
+    ("D'où viennent les chiffres", "Mémo sur les comptes 47 et 27 ; rapport d'expertise du siège n° 005/AKKA/19 du 19/03/2019 ; balances et grands livres du Grenier ; déclarations mensuelles des salaires (EDI ITS) ; balances du FPPN."),
+    ("Comment le calcul est fait", "Écart = montant FPPN - montant Grenier ou mémo. Bâtiment net = brut - amortissements. Salariés sans numéro CNPS : numéro 111111111111."),
+    ("Exemple chiffré", "Compte de liaison au 31/08/2026 : 915 477 260 - 845 285 760 = 70 191 500 FCFA."),
+    ("Valable pour", "Balances au 31/08/2026 (provisoire) ; déclarations de salaires de septembre 2024 à septembre 2026."),
+    ("Limites", "Le mémo ne donne pas les pièces. L'écriture d'origine du compte 10620000 n'a pas été reçue."),
+])
+entete(ws, r, ["Bloc", "Élément", "Montant FPPN ou document", "Montant de rapprochement", "Écart", "Source"], [22, 48, 22, 22, 18, 44])
+i = r + 1
+LIG = [("Comptes 47 et 27", "47111104 Investissements au CMP", 5803025455, None, "Mémo et balance au 31/08/2026"),
+       ("Comptes 47 et 27", "47111100 Hôpital de la Police", 3407519850, None, "Mémo et balance au 31/08/2026"),
+       ("Comptes 47 et 27", "47111105 Charges de fonctionnement au CMP", 1280300860, None, "Mémo et balance au 31/08/2026"),
+       ("Comptes 47 et 27", "47111102 Grenier (FPPN) / 37921400 (Grenier)", 915477260, 845285760, "Balance FPPN ; balance Grenier 2026"),
+       ("Comptes 47 et 27", "27110000 + 27120000 Prêts PEP 2004-2015", 379204261, None, "Mémo et balance au 31/08/2026"),
+       ("Comptes 47 et 27", "47111103 Ticket modérateur", 8357475, None, "Mémo et balance au 31/08/2026"),
+       ("Comptes 47 et 27", "27200000 Prêts au personnel (balance / mémo)", 2500000, 2400000, "Balance ; mémo"),
+       ("Siège", "Compte 10620000 / valeur vénale de l'expertise", 2899400000, 2899400000, "Balances 2020-2026 ; rapport du 19/03/2019"),
+       ("Siège", "Bâtiments administratifs 23130000 (brut / amortissements)", 424341213, 273868454, "Balance au 31/08/2026 (écart = valeur nette)"),
+       ("Grenier", "Épargne PEP + EFC : FPPN 31/12/2025 / Grenier", 13814066964, 8493055501, "Balances FPPN 2025 ; balance Grenier 2025"),
+       ("Grenier", "Crédits aux membres au 31/08/2026 (encours / dépréciation)", 1044302107, 0, "Balance Grenier 2026"),
+       ("Grenier", "Fonds de dotation reçu le 18/05/2022, reclassé en dette au 31/12/2025", 500000000, None, "Grand livre 56000000 et 37921400 du Grenier"),
+       ("Grenier", "Résultat 2025 (produits - charges)", 163832237, 133288861, "Balance Grenier 2025"),
+       ("Placements", "Dépôt à terme BOA PEP fermé le 30/10/2025 / FCP ouvert le 04/11/2025", 505383858, 500000000, "État des comptes bancaires ; balances"),
+       ("Personnel", "Salariés août 2026 / sans numéro CNPS", 100, 33, "EDI ITS août 2026"),
+       ("Personnel", "Brut d'août 2026 : total / sans numéro CNPS", 28171544, 6340264, "EDI ITS août 2026")]
+for bloc_, el, a_, b_, src in LIG:
+    val(ws, i, 1, bloc_)
+    val(ws, i, 2, el)
+    val(ws, i, 3, a_, FMT)
+    val(ws, i, 4, b_, FMT)
+    val(ws, i, 5, f"=C{i}-D{i}" if b_ is not None else None, FMT)
+    val(ws, i, 6, src)
+    i += 1
+i += 2
+val(ws, i, 1, "Déclarations mensuelles des salaires (EDI ITS)", gras=True)
+i += 1
+entete(ws, i, ["Mois", "Salariés", "Sans numéro CNPS", "Brut du mois (FCFA)", "Part sans numéro", ""], [22, 48, 22, 22, 18, 44])
+for m_, n_, f_, b_ in [("Septembre 2024", 61, 4, 17326865), ("Octobre 2024", 61, 4, 19097548), ("Novembre 2024", 61, 4, 17171207), ("Janvier 2025", 58, 2, 16332109),
+                       ("Février 2025", 60, 4, 16796156), ("Mars 2025", 61, 5, 17112262), ("Avril 2025", 62, 6, 16922659), ("Mai 2025", 64, 8, 17565658),
+                       ("Juin 2025", 66, 10, 17601063), ("Juillet 2025", 78, 7, 21601248), ("Août 2025", 79, 8, 21866911), ("Septembre 2025", 79, 8, 20283633),
+                       ("Octobre 2025", 79, 8, 19944900), ("Novembre 2025", 77, 7, 22734544), ("Décembre 2025", 79, 8, 45545641), ("Janvier 2026", 79, 10, 24649368),
+                       ("Février 2026", 82, 12, 40287208), ("Mars 2026", 82, 14, 24528001), ("Avril 2026", 82, 14, 24723969), ("Mai 2026", 83, 15, 24989615),
+                       ("Juin 2026", 83, 16, 25133146), ("Juillet 2026", 100, 33, 30999904), ("Août 2026", 100, 33, 28171544), ("Septembre 2026", 98, 30, 27940045)]:
+    i += 1
+    val(ws, i, 1, m_)
+    val(ws, i, 2, n_, FMT)
+    val(ws, i, 3, f_, FMT)
+    val(ws, i, 4, b_, FMT)
+    val(ws, i, 5, f"=C{i}/B{i}", PCT)
+
 # ------------------------------------------------------------------ ordre, guide, traçabilité
-for nom in ("30_pidr_fppn", "31_ratios_fppn", "32_actifs_contestes", "33_grenier_ef", "34_documents_0911", "35_sinistralite"):
+for nom in ("30_pidr_fppn", "31_ratios_fppn", "32_actifs_contestes", "33_grenier_ef", "34_documents_0911", "35_sinistralite", "36_documents_1111"):
     wb.move_sheet(wb[nom], offset=wb.sheetnames.index("13a_methode") - wb.sheetnames.index(nom))
 gd = wb["0_guide"]
 rg = gd.max_row + 2
@@ -318,7 +373,8 @@ for k, (nom, txt) in enumerate((("30_pidr_fppn", "Provision retraite calculée p
                                  ("32_actifs_contestes", "Actifs dont la valeur n'est pas établie et sensibilité des fonds propres."),
                                  ("33_grenier_ef", "Comptes propres du Grenier du Policier, 2024 et 2025."),
                                  ("34_documents_0911", "Documents reçus le 09/11/2026 et usage dans le rapport."),
-                                 ("35_sinistralite", "Prestations maladie par nature réelle et sinistralité des soins seuls (11/11/2026).")), rg + 1):
+                                 ("35_sinistralite", "Prestations maladie par nature réelle et sinistralité des soins seuls (11/11/2026)."),
+                                 ("36_documents_1111", "Documents reçus le 11/11/2026 : comptes 47 et 27, siège, Grenier, salariés sans numéro CNPS.")), rg + 1):
     c = gd.cell(k, 1, nom)
     c.hyperlink = Hyperlink(ref=c.coordinate, location=f"'{nom}'!A1")
     c.font = Font(name="Helvetica", size=9, color=BLEU, underline="single")

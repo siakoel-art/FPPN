@@ -60,13 +60,15 @@ MESSAGES = [
      f" {F(s25['non_soins'])} ({pc(s25['non_soins'] / s25['prest'])}) : dons {F(c25['Dons (autorités, élus, délégués)'])}, gadgets et imprimés {F(c25['Gadgets, imprimés et cartes'])}, "
      f"honoraires trimestriels d'un cabinet {F(HON25)}."),
     ("Le taux proche de zéro de 2020 à 2022 ne mesurait pas le coût réel des soins.",
-     " Des dépenses de santé étaient inscrites à l'actif : clinique du FPPN, créance sur l'Hôpital de la Police (3 407 519 850 FCFA), créance sur l'État (3 932 124 730 FCFA). "),
+     " Des dépenses de santé étaient inscrites à l'actif : clinique du FPPN, créance sur l'Hôpital de la Police (3 407 519 850 FCFA), créance sur l'État (3 932 124 730 FCFA). En 2022, les charges nettes de la clinique (469 980 456 FCFA) auraient porté le taux maladie de 6,47 % à 32,86 %, ce que confirme le mémo du service comptable."),
     ("La valeur de l'actif est surestimée.",
-     " 3 782 519 850 FCFA sont à sortir de l'actif selon le commissaire aux comptes (terrain d'Attoban, créance sur l'Hôpital de la Police)."),
+     " 3 782 519 850 FCFA sont à sortir de l'actif selon le commissaire aux comptes (terrain d'Attoban, créance sur l'Hôpital de la Police). La réserve de réévaluation du siège (2 899 400 000 FCFA) égale sa valeur entière estimée en 2019, et non une plus-value."),
     ("Des engagements hors bilan pèsent sur la trésorerie.",
      " 263 000 000 FCFA bloqués à la BOA après un procès perdu, et un projet immobilier à Azaguié de 19 539 377 111 FCFA approuvé sans plan de financement."),
+    ("Un tiers des salariés n'est pas dans la provision retraite.",
+     " En août 2026, 33 salariés sur 100, surtout de la clinique, sont déclarés sans numéro CNPS et absents du calcul de la provision."),
 ]
-JAUNE_MSG = {3: "En 2022, les charges nettes de la clinique (469 980 456 FCFA) auraient porté le taux maladie de 6,47 % à 32,86 %."}
+JAUNE_MSG = {}
 
 CHANGEMENTS = [
     ("Sinistralité (nouveau, 11/11)", "Analyse dans les deux sens : contenu réel du compte, taux des soins seuls, explication du taux bas, synthèse",
@@ -85,6 +87,14 @@ CHANGEMENTS = [
      "Réconcilier les ratios avant transmission à l'AIRMS", dia("Ratios prudentiels : calculs du FPPN et d'Adenka")),
     ("Documents et demandes", "980 fichiers nouveaux ou modifiés contrôlés, réponses partielles et six nouvelles questions au FPPN",
      "Liste des demandes et PBC mis à jour", dia("Documents reçus le 09/11/2026")),
+    ("Siège et comptes 47 et 27 (nouveau, 11/11)", "Réserve de réévaluation égale à la valeur entière du siège (2 899 400 000 FCFA). Mémo comptable : 11 406 323 425 FCFA de créances sur la clinique, l'hôpital et le Grenier",
+     "Produire l'écriture d'origine, justifier ou déprécier les créances", dia("Réévaluation du siège : le compte 10620000", "Comptes 47 et 27 : ce qu'en dit le service comptable")),
+    ("Grenier : liaison (nouveau, 11/11)", "Écart de 70 191 500 FCFA entre les comptes de liaison, épargne inscrite au Grenier sans actif réel",
+     "Rapprocher chaque mois, supprimer l'épargne inscrite au Grenier", dia("Grenier du Policier : liaison avec le FPPN")),
+    ("Personnel (nouveau, 11/11)", "33 salariés sur 100 sans numéro CNPS en août 2026, hors provision retraite",
+     "Déclarer ces salariés et les intégrer dans la provision", dia("Personnel : salariés hors provision retraite")),
+    ("Placements (11/11)", "Le FCP de 500 000 000 FCFA ouvert le 04/11/2025 provient du dépôt à terme de l'épargne PEP",
+     "Vérifier sa valeur liquidative et son règlement", dia("Calcul pas à pas : couverture de l'épargne")),
     ("Gouvernance (mention brève)", "Prorogation des mandats jugée nulle par l'AIRMS, mise en demeure de transmettre les comptes 2025",
      "Relève du volet juridique, sans effet sur les chiffres actuariels", "—"),
 ]
@@ -93,6 +103,8 @@ DECISIONS = [
     "Facturer la clinique du FPPN au coût réel, avec une comptabilité séparée, et recalculer la cotisation maladie (3,5 % du salaire de base).",
     "Décider du sort du terrain d'Attoban et de la créance sur l'Hôpital de la Police, et déprécier ce qui n'est pas recouvrable.",
     "Suspendre tout engagement sur le projet d'Azaguié jusqu'à une étude de faisabilité et un plan de financement.",
+    "Produire l'écriture d'origine de la réévaluation du siège et corriger la réserve, puis rapprocher le compte de liaison avec le Grenier.",
+    "Déclarer à la CNPS les 33 salariés sans numéro et les intégrer dans la provision retraite.",
 ]
 
 # ------------------------------------------------------------------ mise en page
@@ -126,7 +138,7 @@ def fond(cell, hexa):
 
 para("FPPN : audit du volet actuariel", 9, couleur=GRIS, apres=0)
 para("Ce qui change dans le rapport du 11/11/2026", 16, True, apres=2)
-para("Note pour la direction. Elle résume les ajouts et corrections écrits en bleu dans le rapport, par rapport à la version du 09/11/2026. "
+para("Note pour la direction. Elle résume les ajouts et corrections écrits en bleu dans le rapport, par rapport à la version du 09/11/2026 (documents reçus les 09/11 et 11/11/2026). "
      "Les éléments surlignés en jaune restent à confirmer par le FPPN.", 9, couleur=GRIS, apres=8)
 
 para("Messages clés", 12, True, apres=3)
@@ -166,7 +178,7 @@ for i, ligne in enumerate(CHANGEMENTS):
 for row in tb.rows:
     for j, c in enumerate(row.cells):
         c.width = larg[j]
-para("Source : rapport actuariel du 11/11/2026 ; documents de la dataroom reçus le 09/11/2026 ; grands livres des comptes 2021 au 31/08/2026.", 7.5, couleur=GRIS, apres=8)
+para("Source : rapport actuariel du 11/11/2026 ; documents de la dataroom reçus les 09/11 et 11/11/2026 ; grands livres des comptes 2021 au 31/08/2026.", 7.5, couleur=GRIS, apres=8)
 
 para("Décisions attendues du FPPN", 12, True, apres=3).paragraph_format.keep_with_next = True
 for k, t in enumerate(DECISIONS, 1):
@@ -174,8 +186,8 @@ for k, t in enumerate(DECISIONS, 1):
     p.paragraph_format.left_indent, p.paragraph_format.first_line_indent = Cm(0.6), Cm(-0.6)
     p.paragraph_format.space_after = Pt(3)
     p.add_run(f"{k}. {t}")
-para("Sigles : AIRMS : Agence ivoirienne de régulation de la mutualité sociale. BOA : Bank of Africa. CMP : Clinique médicale du policier. "
-     "EFC : épargne de fin de carrière. FPPN : Fonds de prévoyance de la Police nationale. PBC : liste des documents demandés. PEP : plan d'épargne du policier.",
+para("Sigles : AIRMS : Agence ivoirienne de régulation de la mutualité sociale. BOA : Bank of Africa. CMP : Clinique médicale du policier. CNPS : Caisse nationale de prévoyance sociale. "
+     "EFC : épargne de fin de carrière. FCP : fonds commun de placement. FPPN : Fonds de prévoyance de la Police nationale. PBC : liste des documents demandés. PEP : plan d'épargne du policier.",
      7.5, couleur=GRIS, apres=0)
 d.save(SORTIE)
 print("note écrite :", SORTIE)

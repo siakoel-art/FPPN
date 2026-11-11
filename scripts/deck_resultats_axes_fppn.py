@@ -23,7 +23,7 @@ ENTETE = "\n".join([lignes(82, 87), lignes(90, 91), lignes(94, 94), lignes(96, 1
 debut = next(i for i, l in enumerate(SRC, 1) if l.startswith("tmp = SORTIE.replace"))
 fin = next(i for i, l in enumerate(SRC, 1) if l.startswith("finaliser(SORTIE)"))
 MOTEUR = lignes(debut, fin + 1)
-for avant, apres in [('"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "10 novembre 2026"', '"Audit Comptable et financier FPPN", "Text Placeholder 4": "26 octobre 2026"'),
+for avant, apres in [('"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "11 novembre 2026"', '"Audit Comptable et financier FPPN", "Text Placeholder 4": "26 octobre 2026"'),
                      ('r.text = "Rapport actuariel et statistique"', 'r.text = "Résultats, hypothèses et conclusions"'),
                      ('entrees = [("Résumé exécutif", 3)]', 'entrees = [("Synthèse des quatre axes", 3)]')]:
     assert avant in MOTEUR, avant

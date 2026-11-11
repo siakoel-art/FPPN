@@ -2,7 +2,7 @@
 
 Structure : contexte et objectifs (ce qui est attendu des analyses), constats et enseignements rattachés à chaque analyse
 attendue avec renvoi aux diapositives du rapport principal, constats classés du plus critique au moins critique (boules),
-recommandations par axe sur le modèle du point d'étape. Chiffres du rapport actuariel et statistique du 10/11/2026.
+recommandations par axe sur le modèle du point d'étape. Chiffres du rapport actuariel et statistique du 11/11/2026.
 Moteur repris du point d'étape (deck_point_etape_management_fppn.py), lui-même repris du rapport (rapport_v12_fppn.py).
 
 Usage : python3 deck_resume_executif_rapport_fppn.py <skill adenka-powerpoint> <sortie.pptx>
@@ -24,7 +24,7 @@ ENTETE = "\n".join([lignes(82, 87), lignes(90, 91), lignes(94, 94), lignes(96, 1
 debut = next(i for i, l in enumerate(SRC, 1) if l.startswith("tmp = SORTIE.replace"))
 fin = next(i for i, l in enumerate(SRC, 1) if l.startswith("finaliser(SORTIE)"))
 MOTEUR = lignes(debut, fin + 1)
-for avant, apres in [('"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "10 novembre 2026"', '"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "Novembre 2026"'),
+for avant, apres in [('"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "11 novembre 2026"', '"Audit comptable et financier de la gestion du FPPN", "Text Placeholder 4": "Novembre 2026"'),
                      ('r.text = "Rapport actuariel et statistique"', 'r.text = "Résumé exécutif du rapport actuariel"'),
                      ("def remplir_gab(slide, num, d, analyse=None):\n", "def remplir_gab(slide, num, d, analyse=None):\n    if num == 11:\n        remplir_11(slide, d)\n        return\n"),
                      ('entrees = [("Résumé exécutif", 3)]', 'entrees = ENTREES'),
@@ -138,7 +138,7 @@ PBCM = {}
 GAB = {"couverture": 1, "sommaire": 4, "contenu": 5, "merci": 110}
 BLANC, GRIS_CLAIR, CARTE = "FFFFFF", "BBBCBC", "F2F2F2"
 PRIO = {"P1": "C00000", "P2": "ED7D31", "P3": "FFC000", "P4": "70AD47"}
-RAP = "Source : rapport actuariel et statistique du 10/11/2026"
+RAP = "Source : rapport actuariel et statistique du 11/11/2026"
 
 
 def run(p, texte, taille, gras=False, couleur=NOIR, surl=False):
@@ -450,9 +450,9 @@ RECAP_DEMANDES = [
     ["🟢 PROV-3", "Demande 2 : prêts du Grenier", "Dépréciation par tranche de retard, aux taux de la politique de crédit (40 %, 80 %, 100 %)",
      "Balances âgées de 2 959 prêts au 31/12/2025 et au 31/08/2026",
      "**Les pertes probables sur prêts ne sont pas comptées.** 14 016 392 FCFA à déprécier, aucune dépréciation depuis 2022. Montant faible : le vrai risque est l'épargne prêtée, le FPPN finançant 87,66 % de l'encours."],
-    ["🟢 PROV-2", "Demande 2 : retraite du personnel", "Unités de crédit projetées (méthode actuarielle), comparée aux droits acquis",
+    ["🟡 PROV-2", "Demande 2 : retraite du personnel", "Unités de crédit projetées (méthode actuarielle), comparée aux droits acquis",
      "Calcul agent par agent à partir des déclarations de salaires (DISA) de 2021 à 2025, 79 agents en 2025",
-     "**La provision du personnel est suffisante, et la méthode actuarielle est la plus juste.** Recalcul : 17 184 450 FCFA avec un départ à 60 ans (ordonnance n° 2012-03), pour 43 666 678 FCFA au compte du FPPN (droits acquis : 43 195 084 FCFA). Elle tient compte du départ possible avant la retraite, des hausses de salaire et du temps, et donne le coût juste de chaque année."],
+     "**La provision du personnel est suffisante, et la méthode actuarielle est la plus juste.** Recalcul : 17 184 450 FCFA avec un départ à 60 ans (ordonnance n° 2012-03), pour 43 666 678 FCFA au compte du FPPN (droits acquis : 43 195 084 FCFA). Elle tient compte du départ possible avant la retraite, des hausses de salaire et du temps, et donne le coût juste de chaque année. 33 salariés sans numéro CNPS n'y figurent pas (août 2026)."],
     ["🔴 ALM-1", "Demande 3 : adossement actif-passif", "Classement des actifs par liquidité, écoulement de l'épargne au taux observé, écart de liquidité par échéance, tests de résistance, scénarios de couverture",
      "Actifs et dettes de 2 bilans classés par échéance, sorties d'épargne de 5 années, 3 scénarios (central, choc, choc sévère)",
      "**L'argent disponible ne couvre qu'un tiers des paiements de l'année.** Couverture de 34,42 % (26,22 % en choc sévère), manque de 12 596 052 822 FCFA à cinq ans. Couverture des dettes : 96,33 % sur le papier, 27,19 % sans les biens non évalués."],
@@ -466,7 +466,7 @@ RECAP_COMPL = [
      "**Le FPPN ne respecte pas 14 règles de solidité sur 36, ce qui expose son agrément.** 7 conformes, 15 en attente de pièces. Fonds propres : -879 498 700 FCFA. Liquidité : 0,13 (1,15 en lecture corrigée). Frais : 36,34 % des cotisations pour 20 % au plus."],
     ["🟠 STAT-2", "Sinistralité", "Taux de sinistralité réglementaire (Décision n° 05/2022), par garantie, ratio combiné, excédent par risque",
      "Prestations et cotisations de 7 exercices, par garantie",
-     "**La garantie maladie perd de l'argent, et le décès la finance.** Soins : 6,00 % des cotisations maladie en 2021, 73,53 % en 2025, 97,40 % en 2026 (déficit de 702 millions). Le taux global de 75,20 % est dans la norme mais masque ce déficit."],
+     "**La garantie maladie perd de l'argent, et le décès la finance.** Soins : 6,00 % des cotisations maladie en 2021, 73,53 % en 2025, 97,40 % en 2026 (déficit de 702 millions). Le taux global de 75,20 % est dans la norme mais masque ce déficit. 27,52 % des « prestations » de 2025 ne sont pas des soins."],
     ["🟠 REG-2", "Gouvernance", "Entretiens, logigrammes du FPPN, lecture des statuts et des décisions",
      "4 entretiens, 4 circuits redessinés à partir des logigrammes du FPPN",
      "**Les décisions qui engagent l'épargne ne sont pas encadrées.** Placements décidés par la direction générale. Projet de Cocody sans budget. Ni politique de placement, ni comité actif-passif. Clinique sans comptabilité séparée."],
@@ -478,13 +478,13 @@ RECAP_COMPL = [
      "**Les effectifs progressent, mais la répartition des cotisations diffère des statuts.** 23 119 cotisants en janvier 2024, 31 198 en août 2026 (+34,95 %). Taux prélevés : 3,77 % et 1,23 % au lieu de 3,50 % et 1,50 %. Cotisations : +45,76 % de 2020 à 2025."],
     ["🔴 ACT-1", "Valeur des actifs", "Lecture des rapports du commissaire aux comptes, des PV du conseil et des courriers de l'AIRMS reçus le 09/11/2026, sensibilité des fonds propres",
      "4 actifs examinés (2 terrains, 2 créances), rapports du commissaire aux comptes de 2022 à 2025",
-     "**Certains actifs ne sont pas correctement évalués.** Terrain d'Attoban sans titre (375 000 000 FCFA), créance sur l'Hôpital de la Police inchangée depuis 2020 (3 407 519 850 FCFA). Sans eux, les fonds propres passeraient à -4 662 018 550 FCFA au 31/08/2026."],
+     "**Certains actifs ne sont pas correctement évalués.** Terrain d'Attoban sans titre (375 000 000 FCFA), créance sur l'Hôpital de la Police inchangée depuis 2020 (3 407 519 850 FCFA). Sans eux, les fonds propres passeraient à -4 662 018 550 FCFA au 31/08/2026. Réserve de réévaluation du siège : 2 899 400 000 FCFA, valeur entière de 2019."],
     ["🟠 ALM-2", "Engagements hors bilan", "Relevé des décisions des PV du conseil et de l'Assemblée générale de 2021 à 2026",
      "28 PV et rapports du conseil et de l'Assemblée générale",
      "**Des engagements hors bilan pèsent sur la trésorerie future.** Procès perdu sur l'EFC : 263 000 000 FCFA bloqués. Projet d'Azaguié : 19 539 377 111 FCFA, sans plan de financement. Projet d'entrée au capital de SOMAVIE."],
     ["🟡 GRE-1", "Comptes du Grenier", "Lecture des états financiers du Grenier 2022 à 2025, rapprochement avec les balances âgées",
      "États financiers de 4 exercices",
-     "**Le Grenier ne déprécie aucun prêt et inscrit l'épargne PEP et EFC dans ses comptes.** Résultat 2025 : 30 543 376 FCFA avant toute perte. Épargne de 8 493 055 501 FCFA inscrite dans deux comptabilités."],
+     "**Le Grenier ne déprécie aucun prêt et inscrit l'épargne PEP et EFC dans ses comptes.** Résultat 2025 : 30 543 376 FCFA avant toute perte. Épargne de 8 493 055 501 FCFA inscrite dans deux comptabilités. Compte de liaison : 70 191 500 FCFA d'écart avec le FPPN."],
     ["🟡 STAT-3", "Mortalité et projection", "Tables CIMA, projection agrégée de l'équilibre en deux scénarios",
      "4 tables de mortalité, projection de 2026 à 2030 en 2 scénarios",
      "**Les calculs par âge restent à faire.** La mortalité par âge est impossible sans dates de naissance. La projection de l'équilibre n'est que globale : elle sera affinée à réception des données."],
@@ -545,62 +545,62 @@ ENS_DEMANDES = [
     ["ENG", "Demande 1 : engagements envers les adhérents et ayants droit",
      "Épargne due au 31/08/2026 : 15 743 516 391 FCFA. Intérêts promis jamais comptabilisés : 3 278 913 238 FCFA (2 541 799 542 FCFA si l'EFC est servie à 3,50 %). Allocations décès dues : 489 419 669 FCFA. Provision du personnel recalculée : 17 184 450 FCFA. Santé des retraités non mesurable.",
      "**L'épargne est le premier engagement, et sa valeur n'est pas démontrée.** Aucun taux n'est arrêté et les intérêts ne sont pas comptabilisés. Le verdict deviendra « Démontré » avec le taux servi, les relevés individuels et les âges des retraités.",
-     "🟠", "5, 100 à 103, 116, 129, 137"],
+     "🟠", "5, 106 à 109, 122, 135, 144"],
     ["PROV", "Demande 2 : suffisance des provisions au regard des prestations servies",
      "Provisions maladie et obsèques : 4 829 298 290 FCFA, inchangées depuis 2020. Besoin mesuré : 19 581 392 FCFA. Intérêts d'épargne (3 278 913 238 FCFA) et pertes sur prêts du Grenier (14 016 392 FCFA) non provisionnés.",
      "**Les provisions ne sont pas insuffisantes en montant global, mais mal affectées et non calculées.** Elles doivent être recalculées chaque année (statuts, art. 89). L'excédent ne peut être réaffecté qu'après décision des organes et avis de l'AIRMS.",
-     "🟠", "6, 120 à 132, 149"],
+     "🟠", "6, 126 à 138, 157"],
     ["ALM", "Demande 3 : adossement actif-passif",
      "Actif à moins d'un an au 31/08/2026 : 3 457 866 951 FCFA. Paiements attendus dans l'année, épargne comprise : 10 046 113 184 FCFA. Couverture : 34,42 % (26,22 % en test sévère). Manque cumulé à cinq ans : 12 596 052 822 FCFA.",
      "**L'épargne, exigible à tout moment, finance des actifs longs.** Terrains, clinique, créance sur l'hôpital et prêts du Grenier ne se vendent pas vite. Il faut un échéancier de l'épargne, une réserve de liquidité et une politique actif-passif votée.",
-     "🔴", "7, 154 à 165"],
+     "🔴", "7, 162 à 175"],
     ["PLA", "Demande 4 : adéquation des placements aux engagements",
      "Placements financiers moyens 2025 : 763 752 135 FCFA, soit 5,53 % de l'épargne due. Rendement moyen de 2021 à 2025 : 4,90 %. Produits financiers 2025 (117 912 488 FCFA) inférieurs aux intérêts d'une année sur l'EFC à 3,50 % (309 709 577 FCFA). Aucune politique de placement votée.",
      "**Le problème n'est pas d'abord le rendement, mais le volume et la liquidité.** L'essentiel de l'épargne est immobilisé dans des actifs qui ne produisent ni revenu financier ni liquidité.",
-     "🔴", "8, 169 à 173"],
+     "🔴", "8, 179 à 183"],
 ]
 ENS_COMPL = [
     ["REG-1", "Conformité prudentielle (36 indicateurs de l'AIRMS)",
      "14 indicateurs sur 36 non conformes de 2022 à 2025, 7 conformes, 15 en attente de pièces. Fonds propres : -879 498 700 FCFA au 31/08/2026. Liquidité : 0,13 en 2025 (1,15 en lecture corrigée).",
      "**Le FPPN expose son agrément.** Deux exercices de suite non conformes permettent un retrait d'agrément (règlement n° 07/2009, art. 84).",
-     "🔴", "19, 175 à 225"],
+     "🔴", "19, 185 à 235"],
     ["STAT-2", "Sinistralité et résultat par garantie",
      "Sinistralité maladie : 6,00 % en 2021, 73,53 % en 2025, 97,40 % sur les huit mois de 2026. Ratio combiné maladie 2025, frais compris : 109,87 %.",
      "**La garantie maladie perd de l'argent, et le décès la finance.** La cotisation maladie ne couvre plus le coût complet de la garantie.",
-     "🟠", "79 à 92, 182"],
+     "🟠", "80 à 98, 192"],
     ["ACT-1", "Valeur des actifs",
      "Terrain d'Attoban sans titre foncier (375 000 000 FCFA), créance sur l'Hôpital de la Police inchangée depuis 2020 (3 407 519 850 FCFA), terrain SONEB sans titre (450 000 000 FCFA), créance sur l'État de 3 932 124 730 FCFA.",
      "**Certains actifs ne sont pas correctement évalués.** Sans le terrain d'Attoban et la créance sur l'hôpital, les fonds propres passeraient à -4 662 018 550 FCFA au 31/08/2026.",
-     "🔴", "7, 158"],
+     "🔴", "7, 168"],
     ["ALM-2", "Engagements hors bilan",
      "Procès perdu sur l'EFC : 263 000 000 FCFA bloqués à la BOA. Projet d'Azaguié : 19 539 377 111 FCFA, approuvé le 12/08/2025. Projet d'entrée au capital de SOMAVIE.",
      "**Des engagements hors bilan pèsent sur la trésorerie future**, sans plan de financement transmis.",
-     "🟠", "159"],
+     "🟠", "169"],
     ["REG-2", "Gouvernance des décisions",
      "Placements décidés par la direction générale, sans délibération du conseil. Projet de Cocody sans budget. Ni politique de placement, ni comité actif-passif.",
      "**L'épargne des adhérents est employée sans décision des organes**, alors que les statuts l'exigent (art. 85).",
-     "🟠", "164, 170, 171"],
+     "🟠", "174, 180, 181"],
     ["DON-1", "Données de base",
      "4 287 fichiers lus, 4 454 416 lignes de cotisations contrôlées. Ni base des prestations datée, ni dates de naissance. Fichiers maladie et décès de décembre 2024 vides.",
      "**Des données essentielles manquent pour finir les calculs.** Mortalité observée, santé des retraités et projection par âge restent impossibles.",
-     "🟠", "55 à 66"],
+     "🟠", "56 à 67"],
     ["GRE-1", "Comptes du Grenier",
      "Résultat 2025 : 30 543 376 FCFA, sans aucune provision pour créances douteuses. Épargne PEP et EFC de 8 493 055 501 FCFA inscrite au passif du Grenier.",
      "**Le Grenier ne déprécie aucun prêt, et la même épargne figure dans deux comptabilités.**",
-     "🟡", "133"],
+     "🟡", "140"],
     ["STAT-1", "Effectifs et cotisations",
      "23 119 cotisants en janvier 2024, 31 198 en août 2026 (+34,95 %). Taux prélevés : 3,77 % et 1,23 % au lieu de 3,50 % et 1,50 %. Cotisations : +45,76 % de 2020 à 2025.",
      "**Les effectifs progressent, mais la répartition des cotisations diffère des statuts.**",
-     "🟡", "67 à 78"],
+     "🟡", "68 à 79"],
     ["STAT-3", "Tables de mortalité et projection de l'équilibre",
      "4 tables de mortalité comparées. Projection agrégée de l'équilibre de 2026 à 2030, en deux scénarios.",
      "**Les calculs par âge restent à faire.** La projection sera affinée à réception des dates de naissance.",
-     "🟡", "226 à 236"],
+     "🟡", "236 à 246"],
 ]
 LEG_VERD = [("🔴", "Insuffisant", "exigence non satisfaite ou risque élevé"), ("🟠", "Partiel", "démontré en partie, impact significatif"), ("🟡", "Moyen", "amélioration souhaitable"), ("🟢", "Satisfaisant", "point maîtrisé")]
-DETAIL = {"ENG-1": "5, 100 à 103", "ENG-2": "114 à 116, 127 à 130", "PROV-1": "6, 120 à 130", "PROV-2": "135 à 147", "PROV-3": "132", "ALM-1": "7, 152 à 165", "PLA-1": "8, 166 à 173",
-          "REG-1": "19, 175 à 225", "STAT-2": "79 à 92", "REG-2": "164, 170, 171", "DON-1": "55 à 66", "STAT-1": "67 à 78", "STAT-3": "226 à 236", "ACT-1": "7, 158", "ALM-2": "159", "GRE-1": "133"}
-SRC_R = "Source : rapport actuariel et statistique du 10/11/2026"
+DETAIL = {"ENG-1": "5, 106 à 109", "ENG-2": "120 à 122, 133 à 136", "PROV-1": "6, 126 à 136", "PROV-2": "142 à 155", "PROV-3": "138", "ALM-1": "7, 160 à 175", "PLA-1": "8, 176 à 183",
+          "REG-1": "19, 185 à 235", "STAT-2": "80 à 98", "REG-2": "174, 180, 181", "DON-1": "56 à 67", "STAT-1": "68 à 79", "STAT-3": "236 à 246", "ACT-1": "7, 166 à 168", "ALM-2": "169", "GRE-1": "139, 140"}
+SRC_R = "Source : rapport actuariel et statistique du 11/11/2026"
 
 # ---------------------------------------------------------------- diapositives
 SL.append({"type": "couverture", "notes": "Résumé exécutif du rapport actuariel et statistique : contexte et objectifs, constats et enseignements, recommandations."})
@@ -612,18 +612,18 @@ gab(31, {"titre": "Contexte de la mission", "sous_titre": "Le FPPN gère la pré
                 ("La mission", "Audit comptable et financier du 01/01/2020 au 31/08/2026, sur la base d'une offre technique validée par le FPPN. Lancement les 13 et 14/10/2026."),
                 ("Le rapport actuariel", "291 diapositives, établies sur les documents reçus jusqu'au 22/10/2026. Chaque chiffre est relié au classeur des calculs.")]},
     "Présenter le FPPN, son cadre, la mission et le rapport actuariel que ce résumé synthétise.",
-    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + SRC_R[9:] + ", diapositives 41 à 44 et 69")
+    source="Source : offre technique Adenka ; statuts du FPPN édités le 15/06/2023 ; " + SRC_R[9:] + ", diapositives 41 à 44 et 71")
 SL[-1]["sommaire"] = "Contexte et objectifs"
 contenu({"titre": "Ce qui est attendu des analyses", "sous_titre": "Quatre questions posées par la mission, et les travaux nécessaires pour y répondre",
          "synthese": "Chaque analyse attendue est reprise dans la partie suivante, avec ses constats, ses enseignements et le renvoi au rapport principal"},
         "Lire chaque ligne : la question posée, ce que l'analyse doit établir, puis où trouver le détail dans le rapport principal.",
         tableau={"titre": None, "entetes": ["Code", "Analyse attendue", "Question posée", "Ce que l'analyse doit établir", "Détail dans le rapport"], "largeurs": [1.9, 6.2, 9.0, 9.6, 4.5], "taille": 9.5,
                  "sans_code": True, "lignes": [
-                     ["ENG", "**Demande 1 :** engagements envers les adhérents et ayants droit", "Que doit le FPPN à ses adhérents : épargne et intérêts, allocations décès, soins, personnel ?", "La valeur de chaque engagement à la date d'arrêté, et ce qui manque pour la démontrer", "Diapositives 5, 94 à 118, 151"],
-                     ["PROV", "**Demande 2 :** suffisance des provisions au regard des prestations servies", "Les provisions du bilan couvrent-elles ce qui reste à payer ?", "La comparaison, provision par provision, du montant au bilan et du besoin mesuré", "Diapositives 6, 119 à 154"],
-                     ["ALM", "**Demande 3 :** adossement actif-passif", "Les actifs permettent-ils de payer les engagements à leur échéance ?", "La couverture des paiements de l'année et à cinq ans, avec des tests de résistance", "Diapositives 7, 155 à 170"],
-                     ["PLA", "**Demande 4 :** adéquation des placements aux engagements", "Les placements sont-ils assez sûrs, liquides et rentables pour servir l'épargne ?", "Le volume, le rendement et la gouvernance des placements", "Diapositives 8, 171 à 178"],
-                     ["DON  STAT  REG", "**Travaux complémentaires**, nécessaires aux quatre demandes", "Les données sont-elles fiables, la garantie équilibrée, les règles de l'AIRMS respectées ?", "La qualité des données, les effectifs, la sinistralité, les 36 indicateurs, les tables de mortalité et la projection", "Diapositives 56 à 93, 180 à 242"]]},
+                     ["ENG", "**Demande 1 :** engagements envers les adhérents et ayants droit", "Que doit le FPPN à ses adhérents : épargne et intérêts, allocations décès, soins, personnel ?", "La valeur de chaque engagement à la date d'arrêté, et ce qui manque pour la démontrer", "Diapositives 5, 106 à 130, 169"],
+                     ["PROV", "**Demande 2 :** suffisance des provisions au regard des prestations servies", "Les provisions du bilan couvrent-elles ce qui reste à payer ?", "La comparaison, provision par provision, du montant au bilan et du besoin mesuré", "Diapositives 6, 131 à 172"],
+                     ["ALM", "**Demande 3 :** adossement actif-passif", "Les actifs permettent-ils de payer les engagements à leur échéance ?", "La couverture des paiements de l'année et à cinq ans, avec des tests de résistance", "Diapositives 7, 173 à 190"],
+                     ["PLA", "**Demande 4 :** adéquation des placements aux engagements", "Les placements sont-ils assez sûrs, liquides et rentables pour servir l'épargne ?", "Le volume, le rendement et la gouvernance des placements", "Diapositives 8, 191 à 198"],
+                     ["DON  STAT  REG", "**Travaux complémentaires**, nécessaires aux quatre demandes", "Les données sont-elles fiables, la garantie équilibrée, les règles de l'AIRMS respectées ?", "La qualité des données, les effectifs, la sinistralité, les 36 indicateurs, les tables de mortalité et la projection", "Diapositives 58 à 105, 200 à 262"]]},
         source=SRC_R + ", diapositives 4 à 8 et 41 à 44 ; offre technique Adenka validée par le FPPN")
 for k, (lot, titre_, sous_, synth_) in enumerate((
         (ENS_DEMANDES, "Constats et enseignements : les quatre demandes", "Engagements et provisions partiellement démontrés, adossement et placements insuffisants",
@@ -644,7 +644,7 @@ for _k14, _lot14 in enumerate((TOUS[:8], TOUS[8:]), 1):
             tableau={"titre": None, "entetes": ["Code", "Analyse", "Constat", "Commentaires", "Détail", "Criticité"], "largeurs": [1.6, 3.7, 7.6, 13.9, 2.65, 1.75], "taille": 8,
                      "sans_code": True, "legende": LEG_CRIT,
                      "lignes": [[r_[0].split(" ", 1)[1], r_[1], "**" + r_[4].split("**")[1] + "**", r_[4].split("**", 2)[2].strip(), DETAIL[r_[0].split(" ", 1)[1]], r_[0].split(" ", 1)[0]] for r_ in _lot14]},
-            source=SRC_R + ", diapositives 4 à 13, 46 à 236 ; plan de travail du 23/10/2026")
+            source=SRC_R + ", diapositives 4 à 13, 48 à 256 ; plan de travail du 23/10/2026")
 #@@CONSTATS_ACTIVITES@@
 contenu({"titre": "Recommandations - Actuariat", "sous_titre": "Cinq axes de recommandations, dont neuf actions à lancer dans les trois mois",
          "synthese": "Chaque axe répond aux constats codés du récapitulatif, avec une priorité de P1 à P4"},
