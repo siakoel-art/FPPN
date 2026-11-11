@@ -239,8 +239,76 @@ for i, x in enumerate(DOCS, r + 1):
         if j == 4 and v in wb.sheetnames:
             c.hyperlink = Hyperlink(ref=c.coordinate, location=f"'{v}'!A1")
 
+
+# ------------------------------------------------------------------ 35 : sinistralité lue dans les deux sens (v15, 11/11/2026)
+import csv as _csv  # noqa: E402
+_AS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+SQ = {int(k): v for k, v in json.load(open(os.path.join(_AS, "sinistralite_v15.json"), encoding="utf-8")).items()}
+ws = wb.create_sheet("35_sinistralite")
+barre(ws, ["D1_balances", "31_ratios_fppn"])
+r = explications(ws, "Tableau : prestations maladie par nature réelle et sinistralité des soins seuls", [
+    ("À quoi sert cet onglet", "Vérifier ce que contient le compte des prestations maladie et recalculer la sinistralité sans les dépenses étrangères aux soins."),
+    ("D'où viennent les chiffres", "Grands livres des comptes 2021 à 2025 et du 01/01 au 31/08/2026 (comptes 601, 6018 et 60800007, hors à-nouveaux) ; cotisations, frais affectés et ratio réglementaire repris des balances (onglets D1 et 31)."),
+    ("Comment le calcul est fait", "Chaque écriture est classée par son libellé (DON, K'DO, CADEAU, PANIER : dons ; GADGET, IMPRIMERIE, CARTE : gadgets et imprimés ; factures n° 00444… : honoraires d'un cabinet ; CMP : clinique. Les dons à caractère médical (dialyse, soins, médicaments, kit d'accouchement) restent dans les soins). Soins seuls = total - dépenses étrangères aux soins. Taux = montant / cotisations maladie. Ratio combiné = (prestations + frais affectés) / cotisations."),
+    ("Exemple chiffré", "2025 : soins seuls = 1 771 635 361 - 487 492 003 = 1 284 143 358 FCFA ; 1 284 143 358 / 2 409 281 030 = 53,30 %."),
+    ("Valable pour", "Exercices 2021 à 2025 et du 01/01 au 31/08/2026 (balance provisoire)."),
+    ("Limites", "Classement par libellé, sans pièce justificative. La nature des honoraires du cabinet reste à confirmer par le FPPN."),
+])
+_A = list(range(2021, 2027))
+entete(ws, r, ["Ligne"] + [str(a) for a in _A[:-1]] + ["31/08/2026"], [52, 18, 18, 18, 18, 18, 18])
+_CATS = ["Clinique du FPPN (CMP)", "Autres prestataires de soins", "Dons (autorités, élus, délégués)", "Gadgets, imprimés et cartes", "Honoraires d'un cabinet (factures trimestrielles)", "Régularisations comptables"]
+i = r + 1
+for c_ in _CATS:
+    val(ws, i, 1, c_)
+    for j, a in enumerate(_A, 2):
+        val(ws, i, j, round(SQ[a]["cats"].get(c_, 0.0)), FMT)
+    i += 1
+r1, r2 = r + 1, i - 1
+L = {}
+for lab, f in [("Total des prestations maladie", lambda c: f"=SUM({c}{r1}:{c}{r2})"),
+               ("Dont dépenses étrangères aux soins", lambda c: f"=SUM({c}{r1 + 2}:{c}{r2})"),
+               ("Soins seuls", lambda c: f"={c}{i - 2}-{c}{i - 1}")]:
+    val(ws, i, 1, lab, gras=True)
+    for j in range(2, 8):
+        val(ws, i, j, f(get_column_letter(j)), FMT, gras=True)
+    L[lab] = i
+    i += 1
+for lab, cle in [("Cotisations maladie", "cot"), ("Frais affectés à la maladie", "frais"), ("Numérateur du taux réglementaire (60 + 6901 - 7901)", None), ("Dénominateur du taux réglementaire (70 + 7906 - 6906)", None)]:
+    val(ws, i, 1, lab)
+    for j, a in enumerate(_A, 2):
+        if cle:
+            val(ws, i, j, round(SQ[a][cle]), FMT)
+        else:
+            val(ws, i, j, None, FMT)
+    L[lab] = i
+    i += 1
+for j, a in enumerate(_A, 2):
+    ws.cell(L["Numérateur du taux réglementaire (60 + 6901 - 7901)"], j).value = round(SQ[a]["sin_num"])
+    ws.cell(L["Dénominateur du taux réglementaire (70 + 7906 - 6906)"], j).value = round(SQ[a]["sin_den"])
+i += 1
+for lab, f in [("Maladie : taux comptable", lambda c: f"={c}{L['Total des prestations maladie']}/{c}{L['Cotisations maladie']}"),
+               ("Maladie : taux des soins seuls", lambda c: f"={c}{L['Soins seuls']}/{c}{L['Cotisations maladie']}"),
+               ("Part de la clinique du FPPN dans les soins", lambda c: f"={c}{r1}/{c}{L['Soins seuls']}"),
+               ("Maladie : ratio combiné comptable", lambda c: f"=({c}{L['Total des prestations maladie']}+{c}{L['Frais affectés à la maladie']})/{c}{L['Cotisations maladie']}"),
+               ("Maladie : ratio combiné des soins seuls", lambda c: f"=({c}{L['Soins seuls']}+{c}{L['Frais affectés à la maladie']})/{c}{L['Cotisations maladie']}"),
+               ("Toutes garanties : taux réglementaire comptable", lambda c: f"={c}{L['Numérateur du taux réglementaire (60 + 6901 - 7901)']}/{c}{L['Dénominateur du taux réglementaire (70 + 7906 - 6906)']}"),
+               ("Toutes garanties : taux réglementaire des soins seuls", lambda c: f"=({c}{L['Numérateur du taux réglementaire (60 + 6901 - 7901)']}-{c}{L['Dont dépenses étrangères aux soins']})/{c}{L['Dénominateur du taux réglementaire (70 + 7906 - 6906)']}")]:
+    val(ws, i, 1, lab, gras=True)
+    for j in range(2, 8):
+        val(ws, i, j, f(get_column_letter(j)), PCT, gras=True)
+    i += 1
+i += 2
+val(ws, i, 1, "Détail des écritures étrangères aux soins (grands livres, une ligne par écriture)", gras=True)
+i += 1
+entete(ws, i, ["Libellé", "Exercice", "Date", "Journal", "Pièce", "Compte", "Montant net (FCFA)", "Nature"], [52, 18, 18, 18, 18, 18, 18, 30])
+with open(os.path.join(_AS, "prestations_hors_soins_v15.csv"), encoding="utf-8-sig") as f_:
+    for x in _csv.DictReader(f_, delimiter=";"):
+        i += 1
+        for j, v_ in enumerate([x["lib"], int(x["an"]), x["date"], x["journal"], x["piece"], x["compte"], round(float(x["m"])), x["cat"]], 1):
+            val(ws, i, j, v_, FMT if j == 7 else None)
+
 # ------------------------------------------------------------------ ordre, guide, traçabilité
-for nom in ("30_pidr_fppn", "31_ratios_fppn", "32_actifs_contestes", "33_grenier_ef", "34_documents_0911"):
+for nom in ("30_pidr_fppn", "31_ratios_fppn", "32_actifs_contestes", "33_grenier_ef", "34_documents_0911", "35_sinistralite"):
     wb.move_sheet(wb[nom], offset=wb.sheetnames.index("13a_methode") - wb.sheetnames.index(nom))
 gd = wb["0_guide"]
 rg = gd.max_row + 2
@@ -249,7 +317,8 @@ for k, (nom, txt) in enumerate((("30_pidr_fppn", "Provision retraite calculée p
                                  ("31_ratios_fppn", "Ratios prudentiels du FPPN comparés aux ratios recalculés."),
                                  ("32_actifs_contestes", "Actifs dont la valeur n'est pas établie et sensibilité des fonds propres."),
                                  ("33_grenier_ef", "Comptes propres du Grenier du Policier, 2024 et 2025."),
-                                 ("34_documents_0911", "Documents reçus le 09/11/2026 et usage dans le rapport.")), rg + 1):
+                                 ("34_documents_0911", "Documents reçus le 09/11/2026 et usage dans le rapport."),
+                                 ("35_sinistralite", "Prestations maladie par nature réelle et sinistralité des soins seuls (11/11/2026).")), rg + 1):
     c = gd.cell(k, 1, nom)
     c.hyperlink = Hyperlink(ref=c.coordinate, location=f"'{nom}'!A1")
     c.font = Font(name="Helvetica", size=9, color=BLEU, underline="single")
