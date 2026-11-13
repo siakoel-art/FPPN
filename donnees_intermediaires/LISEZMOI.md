@@ -113,6 +113,25 @@ Les provisions figées de 4 829 298 290 FCFA sont retrouvées (`complements.json
 | `resultats/sensibilites_carte.json` | 15605 | `fed901ec06c0d2df` |
 | `resultats/verif_precomptes.json` | 143655 | `09c445ef76fced02` |
 
+## Test des intérêts de l'épargne (13/11/2026)
+
+Dossier `test_interets/`. Les fichiers `*_nominatif.parquet` contiennent des noms et des matricules : ils ne doivent pas être diffusés.
+
+```bash
+T=$DI/test_interets; mkdir -p $T
+python scripts/gl_epargne_fppn.py "D:/03-Adenka-Audit/02-Documents FPPN/Balance générale et Grand livre" $T/gl_epargne.parquet
+python scripts/test_interets_epargne_fppn.py $B $T/gl_epargne.parquet $T
+python scripts/regle_interets_pep_fppn.py $T/gl_epargne.parquet $T/detail_nominatif.parquet $T
+```
+
+Résultats (`regle_interets_pep.json`) :
+- **Règle appliquée par le FPPN au PEP : reçu = total versé × 1,035, une seule fois, quelle que soit la durée.** Sur les 6 482 remboursements PEP de 09/2020 à 08/2026, 4 987 (76,9 %) suivent cette règle à 1 FCFA près (2026 : 2 528 sur 2 633). Les acomptes et rachats partiels sont payés sans intérêt (93,9 % et 96,5 %).
+- Intérêts ainsi payés : 198 040 675 FCFA, prélevés sur le compte d'épargne 41195100, aucun compte de charges ne porte d'intérêts sur l'épargne des policiers (recherche dans les grands livres 2023 au 31/08/2026).
+- Manuel : « le PEP est rémunéré au taux de 3,5% tous les ans » (« MANUEL DE PRODUIT D'EPARGNE FPPN VF VF.docx », partie PEP). Sur 1 190 policiers sortis payés selon la règle (historique complet, durée médiane 3,20 ans) : 19 715 675 FCFA payés en plus du versé, contre 43 468 398 FCFA d'intérêts promis (intérêt simple de chaque précompte jusqu'à la sortie). Manque : 23 752 723 FCFA.
+- 277 policiers : le FPPN rembourse sur une base inférieure au versé de 1 à 3 mois de précomptes (4 576 001 FCFA versés non repris dans le calcul), à rapprocher des trop-perçus remboursés ensuite.
+- Non concluants : 54 dossiers payés au-delà de 1,035 (sorties plus anciennes, durée médiane 9,77 ans), 86 dossiers avec plus de 3 mois d'écart (paiements partiels ou homonymes), dossiers non rapprochés par le nom (1 521 écritures PEP, 1 668 741 919 FCFA).
+- EFC : non concluant. Les précomptes EFC ne sont connus que depuis 01/2023 et les règlements EFC sont des montants ronds (1 800 000, 1 900 000, 2 000 000 FCFA…) qui ne suivent ni le versé ni le versé × 1,055. Il faut le règlement de l'Entraide de Fin de Carrière pour le tester.
+
 ## Ce qui reste pour régénérer le rapport lui-même
 
 `rapport_v12_fppn.py` attend aussi les modules des skills Adenka (`pptx_tools`, `adenka_docx`, gabarit `Timesaver_Adenka.pptx`) et le dossier d'images de code (`images_code_fppn.py`, qui demande `pygments`). Ils ne sont pas installés sur le PC à ce jour.
