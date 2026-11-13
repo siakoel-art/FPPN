@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+# Données intermédiaires (contiennent des données nominatives) : jamais committées
+donnees_intermediaires/*
+!donnees_intermediaires/LISEZMOI.md
