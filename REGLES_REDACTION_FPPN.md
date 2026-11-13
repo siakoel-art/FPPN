@@ -19,7 +19,8 @@ Ces règles s'appliquent au rapport technique, à la version dirigeant et à tou
 ## Titres
 - Le titre dit le message, en une phrase affirmative courte (une ligne, environ 70 caractères au plus), sans sigle ni jargon.
 - Jamais de question dans un titre ou un sous-titre.
-- Le sous-titre donne le chiffre qui prouve le titre.
+- Le sous-titre est la conclusion de la diapositive : ce que le lecteur doit en retenir et ce que cela change pour le FPPN, avec le chiffre qui le prouve (13/11/2026).
+- Pas de formule abstraite (« épargne due », « mis de côté », « peu protégée ») : dire concrètement où est l'argent et ce qui se passe.
 
 ## Mise en forme
 - Tableaux aérés, police d'au moins 12 points. Un tableau long est découpé sur plusieurs diapositives (1/2, 2/2…).
