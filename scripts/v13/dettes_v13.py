@@ -52,7 +52,7 @@ _SRC5 = ["(1) « BALANCE FPPN DU 01-01-2026 AU 31-08-2026.xlsx », extourne de l
          "(3) Épargne au 31/08/2026 (41195100 et 41195200) × taux moyen de retrait 2021 à 2025 (19,24 %), classeur, onglet 24a.",
          "(4) 3,5 % du solde du plan d'épargne au 31/08/2026, règle des entretiens (3,5 % une seule fois)."]
 s5 = _D17.nouvelle(prs, _fond17, f"Il manque au moins {_nb17(_B - _disp)} FCFA pour payer l'année",
-                   f"Pour 100 FCFA à payer dans l'année, le Fonds dispose de {_nb17(100 * _disp / _B, 2)} FCFA avec les provisions au besoin, {_nb17(100 * _disp / _A, 2)} selon son bilan", _SRC5)
+                   f"Pour 100 FCFA à payer dans l'année, le Fonds n'a que {_nb17(100 * _disp / _B, 2)} FCFA (lecture B)", _SRC5)
 _D17.tableau(s5, 1.4, 2.8, 31.2, ["", "A. Bilan tel quel", "B. Provisions au besoin", "C. B et intérêts du plan d'épargne"],
              [["Dettes de l'année, hors épargne (1)", _nb17(_dct), _nb17(_dct), _nb17(_dct)],
               ["Soins et décès en attente", f"{_nb17(_prov)} (1)", f"{_nb17(_bes)} (2)", f"{_nb17(_bes)} (2)"],
@@ -61,7 +61,7 @@ _D17.tableau(s5, 1.4, 2.8, 31.2, ["", "A. Bilan tel quel", "B. Provisions au bes
               ["**Total à payer dans l'année**", f"**{_nb17(_A)}**", f"**{_nb17(_B)}**", f"**{_nb17(_C)}**"],
               ["Argent disponible dans l'année (1)", _nb17(_disp), _nb17(_disp), _nb17(_disp)],
               ["**Pour 100 FCFA à payer**", f"**{_nb17(100 * _disp / _A, 2)}**", f"**{_nb17(100 * _disp / _B, 2)}**", f"**{_nb17(100 * _disp / _C, 2)}**"]],
-             [9.6, 7.0, 7.0, 7.6], 12, 0.95)
+             _largeurs13(["", "A. Bilan tel quel", "B. Provisions au besoin", "C. B et intérêts du plan d'épargne"], [["Dettes de l'année, hors épargne (1)", "1 933 438 207", "1 933 438 207", "1 933 438 207"], ["Épargne retirée dans l'année (3)", "3 028 376 687", "3 028 376 687", "3 028 376 687"]], 31.2), 12, 0.95)
 _D17.texte(s5, 1.4, 11.3, 31.2, 4.0,
            [f"**La lecture B est la plus juste : il manque {_nb17(_B - _disp)} FCFA pour payer l'année.** La lecture A garde des provisions figées depuis 2020 qui ne correspondent à aucun calcul.",
             f"**La lecture C ajoute les intérêts du plan d'épargne s'ils étaient tous payés dans l'année : {_nb17(100 * _disp / _C, 2)} FCFA pour 100 FCFA à payer.** [[Les intérêts de l'entraide restent à ajouter quand sa règle sera connue.]]"], 13)
@@ -69,14 +69,14 @@ _SRC6 = ["(1) « MANUEL DE PRODUIT D'EPARGNE FPPN VF VF.docx », partie PEP. « 
          "(2) Grands livres 2020 à 2026, compte 41195100 : 4 987 remboursements sur 6 482 égaux au versé × 1,035, calcul Adenka.",
          "(3) Calcul Adenka sur les soldes moyens des comptes 41195100 et 41195200, du 01/01/2020 au 31/08/2026, sans capitalisation (classeur, onglet 21)."]
 s6 = _D17.nouvelle(prs, _fond17, "Le Fonds paie des intérêts sans jamais les inscrire en charges",
-                   f"Selon la règle des entretiens, 3,5 FCFA pour 100 FCFA versés, une seule fois, soit 3,5 % du montant versé : {_nb17(_int)} FCFA dus sur le plan d'épargne au 31/08/2026", _SRC6)
+                   f"3,5 % du montant versé, une seule fois : {_nb17(_int)} FCFA dus sur le plan d'épargne", _SRC6)
 _D17.tableau(s6, 1.4, 2.8, 31.2, ["Règle", "Taux", "Intérêts dus au 31/08/2026"],
              [["Règle appliquée par le Fonds (entretiens, comptes) (2)", "Plan d'épargne : 3,5 % une seule fois", _nb17(_int)],
               ["Manuel des produits d'épargne (1)", "Plan d'épargne 3,5 % et entraide 5,5 % par an", "3 278 913 238 (3)"],
               ["Tout à 3,5 % par an", "Plan d'épargne et entraide", "2 541 799 542 (3)"],
               ["Cartographie des prestations (1)", "Entraide 3,5 % puis 5,5 % à partir de 2024", "2 954 084 955 (3)"],
               ["Cahier des charges de 2021 (1)", "Entraide : 14 %, période non dite", "Non calculé"]],
-             [11.6, 11.0, 8.6], 12, 1.0)
+             _largeurs13(["Règle", "Taux", "Intérêts dus au 31/08/2026"], [["Règle appliquée par le Fonds (entretiens, comptes) (2)", "Plan d'épargne 3,5 % et entraide 5,5 % par an", "3 278 913 238 (3)"]], 31.2), 12, 1.0)
 _D17.texte(s6, 1.4, 9.4, 31.2, 6.0,
            [f"**Le Fonds rend 3,5 FCFA pour 100 FCFA versés, une seule fois, quelle que soit la durée d'épargne, soit 3,5 % du montant versé (cotisé) (2).** De 09/2020 à 08/2026, ces intérêts font {_nb17(K13['interets_payes_pep'])} FCFA, pris sur le compte d'épargne sans charge.",
             "**Le manuel promet 3,5 % « tous les ans » (1) :** la différence avec la règle appliquée doit être tranchée par les organes du Fonds, puis écrite et communiquée aux policiers. [[Texte fixant la règle à recevoir.]]",
@@ -91,3 +91,52 @@ for _el in [x for x in list(_lst17) if x in [_ids17[i] for i in _emp17]]:
     prs.part.drop_rel(_el.get(_qn17("r:id")))
     _lst17.remove(_el)
 print("v13 : diapositives sur les dettes placées :", len(_nouv17))
+
+
+# ---- v13 : marques « [[…]] » restées visibles (sous-titres, module des dettes) : surlignage jaune
+from copy import deepcopy as _dc13
+from pptx.text.text import _Run as _Run13
+
+
+def _paras13(shapes):
+    for sh in shapes:
+        if sh.shape_type == 6:
+            yield from _paras13(sh.shapes)
+        if getattr(sh, "has_text_frame", False) and sh.has_text_frame:
+            yield from sh.text_frame.paragraphs
+        if getattr(sh, "has_table", False) and sh.has_table:
+            for row in sh.table.rows:
+                for c in row.cells:
+                    yield from c.text_frame.paragraphs
+
+
+_nj13 = 0
+for _sl in prs.slides:
+    for _p in _paras13(_sl.shapes):
+        if "[[" not in "".join(r.text for r in _p.runs):
+            continue
+        _dedans = False
+        for _r in list(_p.runs):
+            _parts = re.split(r"(\[\[|\]\])", _r.text)
+            if len(_parts) == 1 and not _dedans:
+                continue
+            _ancre = _r._r
+            for _pt in _parts:
+                if _pt == "[[":
+                    _dedans = True
+                    continue
+                if _pt == "]]":
+                    _dedans = False
+                    continue
+                if not _pt:
+                    continue
+                _nr = _dc13(_r._r)
+                _ancre.addnext(_nr)
+                _ancre = _nr
+                _ro = _Run13(_nr, _p)
+                _ro.text = _pt
+                if _dedans:
+                    surligner(_ro)
+            _r._r.getparent().remove(_r._r)
+            _nj13 += 1
+print("v13 : morceaux surlignés en jaune :", _nj13)

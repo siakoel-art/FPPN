@@ -143,6 +143,21 @@ python scripts/registre_revue_fppn.py revue_independante/FPPN_Verification_revue
 
 Registre : 85 lignes couvrant les 155 constats des cinq réviseurs (doublons regroupés). 67 confirmés, 7 confirmés en partie, 11 non revérifiés faute de pièce. Décisions proposées : 66 à corriger, 7 à ajouter, 12 à demander au FPPN.
 
+## Rapport v13 du 13/11/2026
+
+```bash
+python scripts/images_code_fppn.py scripts $DI/images_code
+python scripts/v13/base_v13_fppn.py $B $DI/base_v13            # extourne de la provision de la clinique (255 000 000 FCFA)
+# chaîne amont relancée sur $DI/base_v13 vers $DI/resultats_v13 (mêmes commandes que plus haut), sensibilites.xlsx recalculé par Excel
+python scripts/v13/chiffres_v13_fppn.py $DI/base_v13 $DI/resultats_v13 $DI/controle/FPPN_Calculs_rapport_20261111_recalcule.xlsx $DI/test_interets/regle_interets_pep.json $DI/v13/chiffres_v13.json
+python scripts/v13/patch_v13.py                                   # écrit scripts/rapport_v13_fppn.py
+R=$DI/resultats_v13; SK="C:/Users/<utilisateur>/.claude/skills/adenka-powerpoint"
+python scripts/rapport_v13_fppn.py $R/resultats.json $R/complements.json $R/ratios.json $DI/images_code "$SK" rapport/FPPN_Rapport_actuariel_statistique_20261113.pptx $DI/base_v13 $R/sensibilites.xlsx $R/sensibilites_carte.json $R/donnees_v9.json $R/donnees_v10.json $R/donnees_v11.json $DI/pbc/correspondance_pbc.json $DI/v13/chiffres_v13.json
+python scripts/v13/livrables_v13_fppn.py $DI/v13/chiffres_v13.json   # classeur et demandes du 13/11/2026
+```
+
+Contrôles : 330 diapositives, 2 611 chiffres sur 2 655 retrouvés dans le texte (les écarts sont des sous-titres réécrits et 11 écarts déjà présents en v12), structure PowerPoint sans défaut, aucun point-virgule, aucun sigle ni question dans les titres.
+
 ## Ce qui reste pour régénérer le rapport lui-même
 
 `rapport_v12_fppn.py` attend aussi les modules des skills Adenka (`pptx_tools`, `adenka_docx`, gabarit `Timesaver_Adenka.pptx`) et le dossier d'images de code (`images_code_fppn.py`, qui demande `pygments`). Ils ne sont pas installés sur le PC à ce jour.

@@ -45,6 +45,13 @@ CORR13 = [
     ("rapport_v9_fppn.py, donnees_v9_fppn.py,", "rapport_v13_fppn.py (étapes v11 à v13), donnees_v9_fppn.py à donnees_v11_fppn.py,", None),
     # validité (A-M12, E-M14)
     ("jusqu'au 22/10/2026", "jusqu'au 11/11/2026", "jusqu'au 11/11/2026"),
+    # mots interdits et ponctuation (contrôle qualité du 13/11/2026)
+    ("le FPPN assure la santé des policiers retraités", "le FPPN prend en charge la santé des policiers retraités", None),
+    ("Le FPPN assure la santé", "Le FPPN prend en charge la santé", None),
+    ("L'écart se creuse chaque année", "L'écart s'élargit chaque année", None),
+    ("un rendement inférieur au taux servi creuse la dette d'épargne", "un rendement inférieur au taux servi alourdit la dette d'épargne", None),
+    ('("Ce qui nous y a conduits"', '("Ce qui y a conduit"', None),
+    ('"—", "Risque de crédi', '"n.d.", "Risque de crédi', None),
 ]
 for _a, _b, _bleu in CORR13:
     rep(_a, _b, n=None)

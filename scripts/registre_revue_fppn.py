@@ -86,7 +86,7 @@ L = [
   "Phrase en diapositive 17. Couverture 6,49 %, 11,64 %, 16,28 % de 2024 à 2026 : elle remonte.", CF, C),
  ("Sinistralité 2026", "B-B1, A-M2, B-m4", "13, 19, 21, 82, 84, 85, 91, 93, 95, 98", "Bloquant",
   "Trois factures de la clinique d'octobre à décembre 2025 comptées deux fois (provision 2025 puis facture 2026).",
-  "Grand livre 2025 : OD 805, 806, 807, 255 000 000 FCFA. Grand livre 2026 : pièces SIN 462, 552, 619, 240 615 119 FCFA (le réviseur cite 240 471 119, écart de 144 000 FCFA à expliquer). Aucun crédit en comptes 60 en 2026. S/C maladie 97,40 % devient 83,16 %, taux réglementaire 75,20 % devient 65,14 %.",
+  "Grand livre 2025 : OD 805, 806, 807, 255 000 000 FCFA. Grand livre 2026 : pièces SIN 462, 552, 619, 240 471 119 FCFA (chiffre du réviseur confirmé). Aucune extourne en 2026. Correction retenue en v13 : extourne de la provision (255 000 000 FCFA), soit S/C maladie 2026 de 82,31 % au lieu de 97,40 % et taux réglementaire de 64,54 % au lieu de 75,20 %.",
   CF, C),
  ("Sinistralité 2026", "B-V1", "82, 93", "À vérifier",
   "Facture générale de la clinique de février 2026 peut-être absente.",
@@ -139,8 +139,8 @@ L = [
   "Part maladie en comptabilité : 70,00 % de 2020 à 2023, 70,22 %, 70,50 %, 70,65 %. La comptabilité suit le barème 70 / 30.", CF, C),
  ("Sinistralité historique et tendances", "B-M8, B-V4", "76", "Majeur",
   "Écart comptabilité / précomptes de 6,89 % attribué à la clé.",
-  "Le texte cite 2 587 432 980 FCFA de précomptes 936 en 2025. La base et le classeur donnent 2 529 485 250 FCFA, soit un écart de 4,75 %. Le chiffre du texte n'est pas celui du classeur.",
-  CF, C),
+  "Les 2 587 432 980 FCFA additionnent les précomptes de la Solde (poste 936, 2 529 485 250 FCFA) et ceux de la caisse de retraite : le chiffre est juste. La remarque du réviseur sur la différence de périmètre (retraités, civils, décalage de comptabilisation) reste valable avant d'attribuer l'écart à la clé.",
+  PA, C),
  ("Sinistralité historique et tendances", "B-M10", "75, 79", "Majeur",
   "La baisse de la cotisation par adhérent n'est pas montrée.",
   "Arithmétique confirmée : 125 690 FCFA (2020) contre 107 884 FCFA (2025).", CF, A),
@@ -291,7 +291,7 @@ noir, gris, orange = "060606", "BBBCBC", "EFAC62"
 f = Font(name="Helvetica", size=10)
 fb = Font(name="Helvetica", size=10, bold=True, color="FFFFFF")
 bd = Border(*(Side(style="thin", color=gris),) * 4)
-ws.append(["Registre de vérification de la revue indépendante du rapport du 11/11/2026 (13/11/2026)"])
+ws.append(["Registre de vérification de la revue indépendante du rapport du 11/11/2026 (13/11/2026, version 2)"])
 ws["A1"].font = Font(name="Helvetica", size=13, bold=True)
 ws.append(["Vérification sur les balances, les grands livres 2023 au 31/08/2026, le classeur du 11/11/2026 recalculé et le texte du rapport (scripts verif_revue_fppn.py, regle_interets_pep_fppn.py). Aucune modification du rapport avant validation."])
 ws["A2"].font = Font(name="Helvetica", size=9, italic=True)

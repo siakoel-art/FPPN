@@ -20,6 +20,9 @@ for _x in SL:
     if _x["type"] not in ("contenu", "gab") or _x.get("_dettes13"):
         continue
     _t0 = _x["entete"].get("titre")
+    for _a, _b in (("de la chaîne de traitement", "du traitement des données"), ("la chaîne de traitement", "le traitement des données"),
+                   ("Chaîne de traitement", "Traitement des données"), ("chaîne de traitement", "traitement des données")):
+        _t0 = (_t0 or "").replace(_a, _b)
     if _t0 in _par13 and _vus13[_t0] < len(_par13[_t0]):
         _n = _par13[_t0][_vus13[_t0]]
         _vus13[_t0] += 1
@@ -65,13 +68,54 @@ for _x in _aj13:
 
 # 4. tableaux en 12 points : découpage
 def _lignes13(txt, largeur):
-    return sum(max(1, _m13.ceil(len(str(p)) / max(1.0, largeur * 4.2))) for p in str(txt).split("\n"))
+    return sum(max(1, _m13.ceil(len(str(p)) / max(1.0, (largeur - 0.24) * 4.9))) for p in str(txt).split("\n"))
 
 
 def _haut13(ligne, largeurs):
-    return 0.22 + 0.48 * max(_lignes13(c, w) for c, w in zip(ligne, largeurs))
+    return 0.14 + 0.45 * max(_lignes13(c, w) for c, w in zip(ligne, largeurs))
 
 
+def _brut13(v):
+    return re.sub(r"\*\*|\[\[|\]\]|§§[^§]*§§", lambda m: "diapositive 999" if m.group(0).startswith("§§") else "", str(v))
+
+
+def _largeurs13(entetes, lignes, total, cw=1 / 4.9, pad=0.34):
+    """Largeurs de colonnes selon le contenu : colonnes courtes (chiffres, codes) à leur largeur naturelle sur une ligne,
+    reste de la place aux colonnes de texte en proportion de leur volume ; jamais sous le mot le plus long."""
+    nc = len(entetes)
+    cols = [[_brut13(entetes[j])] + [_brut13(l[j]) for l in lignes if j < len(l)] for j in range(nc)]
+    nat = [max(len(p) for t in c for p in t.split("\n")) * cw + pad for c in cols]
+    mini = [max(1.4, max((len(w) for t in c for w in t.split()), default=1) * cw + pad) for c in cols]
+    if sum(nat) <= total:
+        return [n + (total - sum(nat)) * n / sum(nat) for n in nat]
+    courtes = [j for j in range(nc) if nat[j] <= 0.16 * total]
+    longues = [j for j in range(nc) if j not in courtes]
+    res = [0.0] * nc
+    for j in courtes:
+        res[j] = nat[j]
+    reste = total - sum(res)
+    if not longues or reste < sum(mini[j] for j in longues):
+        # pas assez de place : chaque colonne courte redescend vers son minimum
+        for j in courtes:
+            res[j] = mini[j]
+        reste = total - sum(res)
+        longues = longues or courtes
+    vol = {j: sum(len(t) for t in cols[j]) for j in longues}
+    for j in longues:
+        res[j] = max(mini[j], reste * vol[j] / max(1, sum(vol.values())))
+    k = total / sum(res)
+    return [round(w * k, 2) for w in res]
+
+
+# largeurs de colonnes ajustées au contenu (tableaux des diapositives de contenu, largeur totale inchangée)
+for _x in SL:
+    _tb = _x.get("tableau") if _x["type"] in ("contenu", "annexe") else None
+    if _tb and _tb.get("lignes") and len(_tb.get("largeurs", [])) == len(_tb["entetes"]) and not _tb.get("largeurs_fixes"):
+        _tb["largeurs"] = _largeurs13(_tb["entetes"], _tb["lignes"], sum(_tb["largeurs"]))
+# un sous-titre de deux lignes prend la place de la ligne de synthèse
+for _x in SL:
+    if _x["type"] == "contenu" and len(str(_x["entete"].get("sous_titre") or "")) > 95:
+        _x["entete"]["synthese"] = ""
 _dec13 = {}
 _NSL13 = []
 for _x in SL:
@@ -103,7 +147,11 @@ for _x in SL:
     t0 = _x["entete"]["titre"]
     for k_, idx in enumerate(blocs, 1):
         y = dict(_x)
-        y["entete"] = dict(_x["entete"], titre=f"{t0} ({k_}/{len(blocs)})")
+        _mm = re.search(r" \((\d+)/(\d+)\)$", t0)
+        _tk = (t0 if k_ == 1 else t0[:-1] + f", suite {k_ - 1})") if _mm else f"{t0} ({k_}/{len(blocs)})"
+        y["entete"] = dict(_x["entete"], titre=_tk)
+        if t0 in BLEU_T:
+            BLEU_T.add(_tk)
         tb2 = dict(tb, lignes=[tb["lignes"][i] for i in idx])
         if tb.get("fonds"):
             tb2["fonds"] = {(idx.index(r), c): v for (r, c), v in tb["fonds"].items() if r in idx}
@@ -113,8 +161,10 @@ for _x in SL:
                 y.pop(cle, None)
         y["tableau"] = tb2
         _NSL13.append(y)
-    _dec13[t0] = f"{t0} (1/{len(blocs)})"
-    bl13(f"{t0} (1/{len(blocs)})")
+    _t1 = t0 if re.search(r" \(\d+/\d+\)$", t0) else f"{t0} (1/{len(blocs)})"
+    if _t1 != t0:
+        _dec13[t0] = _t1
+    bl13(_t1)
 SL[:] = _NSL13
 print("v13 : tableaux découpés :", len(_dec13))
 _REN13.update(_dec13)
@@ -134,3 +184,27 @@ for _t in TRACE:
 for _l in FIG + TAB:
     if _l[2] in _MAP13:
         _l[2] = _MAP13[_l[2]][0]
+# 6. figures et tableaux renumérotés dans l'ordre des diapositives (diapositives nouvelles et découpées)
+_MAP13N = {}
+for _lst, _mot in ((FIG, "Figure"), (TAB, "Tableau")):
+    _ord = sorted(_lst, key=lambda e_: (e_[2], e_[0]))
+    _MAP13N[_mot] = {str(e_[0]): str(k_) for k_, e_ in enumerate(_ord, 1)}
+    for k_, e_ in enumerate(_ord, 1):
+        e_[0] = k_
+    _lst.sort(key=lambda e_: e_[0])
+
+
+def _num13(v):
+    if isinstance(v, str):
+        return re.sub(r"\b(Figure|Tableau) (\d+) :", lambda m: m.group(1) + " " + _MAP13N[m.group(1)].get(m.group(2), m.group(2)) + " :", v)
+    if isinstance(v, list):
+        return [_num13(e) for e in v]
+    if isinstance(v, tuple):
+        return tuple(_num13(e) for e in v)
+    if isinstance(v, dict):
+        return {k: (_num13(e) if k not in ("num", "_partie", "type") else e) for k, e in v.items()}
+    return v
+
+
+for _i, _x in enumerate(SL):
+    SL[_i] = _num13(_x)

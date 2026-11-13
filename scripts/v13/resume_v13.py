@@ -63,7 +63,7 @@ contenu(blt13({"titre": "Sur les quatre questions de la mission, deux réponses 
         disposition="dessous",
         analyse=["**La même cause explique trois réponses : le Fonds n'a ni taux d'intérêt écrit, ni calendrier de remboursement, ni argent mis de côté pour l'épargne.**"],
         valable="période du 01/09/2020 au 31/08/2026, documents reçus jusqu'au 11/11/2026",
-        source=f"Sources : (1) {B26}, comptes 41195100 et 41195200. (2) entretiens avec le Fonds, [[service et date à compléter]]. (3) {B26}, comptes 15801000 et 15802000. (4) classeur de calcul, onglets 24b et 24c. (5) grands livres 2021 à 2025, comptes 5221, 5330 et 77")
+        source=f"Sources : (1) {B26}, comptes 41195100 et 41195200. (2) entretiens avec le Fonds, service et date [à compléter]. (3) {B26}, comptes 15801000 et 15802000. (4) classeur de calcul, onglets 24b et 24c. (5) grands livres 2021 à 2025, comptes 5221, 5330 et 77")
 
 # 4. Pourquoi : épargne, argent disponible, biens comptés trop cher
 contenu(blt13({"titre": f"Pour 100 FCFA d'épargne reçus, le Fonds n'en a gardé que {_pp(100 * _ban / _ep)} en banque",
@@ -97,14 +97,14 @@ contenu(blt13({"titre": f"En 2025, la maladie a dépensé {_pp(100 * _comb25)} F
 # 6. Dépenses hors soins
 contenu(blt13({"titre": "En 2025, 487 492 003 FCFA payés comme des soins ont servi à autre chose",
                "sous_titre": "Ces dons, gadgets et honoraires représentent 27,52 FCFA sur 100 FCFA de prestations maladie, soit 27,52 % : sans eux, la maladie dépenserait moins qu'elle ne reçoit",
-               "synthese": "[[« Paiement non justifié » seulement si aucune pièce n'est reçue pour ces sorties]]"}),
+               "synthese": ""}),
         "Dépenses enregistrées comme prestations maladie qui ne sont pas des soins, classées d'après le libellé de chaque écriture.",
         tableau={"titre": tab("Dépenses hors soins dans les prestations maladie de 2025"), "entetes": ["Nature d'après le libellé", "FCFA"], "largeurs": [20.0, 11.2], "taille": 12,
                  "lignes": [["Dons (autorités, élus, délégués)", "203 689 140"], ["Gadgets, imprimés et cartes", "167 972 000"],
                             ["Honoraires d'un cabinet (factures trimestrielles)", "115 830 863"], ["Total classé hors soins", "487 492 003"],
                             ["Libellés oubliés par le classement (imprimeurs, cérémonies, hadj, lobbying)", "au moins 55 067 300"]]},
         disposition="dessous",
-        analyse=["**Les comptes de soins servent aussi à payer des dons, des gadgets et des honoraires.** Jusqu'en 2024, les dons passaient par le compte 6583 (52 270 446 FCFA en 2021). Il est vide en 2025.",
+        analyse=["**Les comptes de soins servent aussi à payer des dons, des gadgets et des honoraires.** [[Ces sorties ne seront qualifiées de « paiement non justifié » que si aucune pièce n'est reçue.]] Jusqu'en 2024, les dons passaient par le compte 6583 (52 270 446 FCFA en 2021). Il est vide en 2025.",
                  "Les 1 280 300 860 FCFA de charges de la clinique encore inscrits à l'actif s'ajoutent à ces sorties : ils grossissent les biens du Fonds au lieu de ses charges."],
         valable="grand livre 2025, comptes 6011 à 6080, classement par libellé",
         source=f"Sources : (1) {GL25}, comptes 6011 à 6080, classement Adenka (classeur, onglet 35_sinistralite). (2) {B25}, compte 65830000. (3) mémo du service comptable sur les comptes 47 et 27 (11/11/2026)")
