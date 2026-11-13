@@ -19,8 +19,13 @@ from pygments.token import Comment, Keyword, Name, Number, Operator, String, Tok
 
 SCRIPTS, SORTIE = sys.argv[1], sys.argv[2]
 os.makedirs(SORTIE, exist_ok=True)
-MONO = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
-UI = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
+def _police(linux, windows):
+    return linux if os.path.exists(linux) else os.path.join(os.environ.get("WINDIR", "C:/Windows"), "Fonts", windows)
+
+
+MONO = _police("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", "consola.ttf")
+UI = _police("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf", "arial.ttf")
+SYM = _police("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "seguisym.ttf")
 CHEMIN = ["C:", "Dev", "Missions", "05-FPPN", "05-Analyses", "scripts"]
 
 # Couleurs du thème Dark Modern de VS Code
@@ -84,7 +89,7 @@ def image(nom, fichier, debut, n, terminal):
     for m in ("File", "Edit", "Selection", "View", "Go", "Run", "Terminal", "Help"):
         d.text((x, 12), m, fill=TXT_UI, font=fu)
         x += d.textlength(m, font=fu) + 26
-    fsym = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+    fsym = ImageFont.truetype(SYM, 20)
     d.text((x + 20, 10), "\u2190   \u2192", fill="#8b8b8b", font=fsym)
     d.rounded_rectangle([700, 8, 1340, 38], 6, fill="#2a2a2a", outline=BORD)
     d.text((714, 13), "Search", fill="#8b8b8b", font=fus)
