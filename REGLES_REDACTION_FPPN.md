@@ -7,6 +7,9 @@ Ces règles s'appliquent au rapport technique, à la version dirigeant et à tou
 - Langage simple : un dirigeant de la Police, et même un enfant de 9 ans, comprend sans appeler l'auteur.
 - Factuel : dire ce que le chiffre veut dire pour le FPPN et ce qui risque d'arriver (exemple : « à fin août, 97 FCFA sur 100 cotisés sont déjà partis en soins, au même rythme il manquera… à fin décembre »).
 - Un taux est toujours traduit en « pour 100 FCFA », donné avec son pourcentage exact (deux décimales), comparé à la norme quand elle existe.
+  Forme à suivre (13/11/2026) : d'abord les FCFA pour 100 FCFA, puis « soit X % de [la base] », la base nommée en mots simples.
+  Exemple : « Le Fonds rend 3,5 FCFA pour 100 FCFA versés, une seule fois, quelle que soit la durée d'épargne, soit 3,5 % du montant versé (cotisé). »
+  Autre exemple : « Sur 100 FCFA de cotisations, 65,14 FCFA sont partis en prestations, soit 65,14 % des cotisations, sous la norme de 70 % à 80 %. »
 - Un taux arrêté au 31/08 est prolongé à fin décembre « au même rythme » (calcul expliqué en annexe).
 - Montants exacts en FCFA. Pourcentages à deux décimales.
 - Les provisions : toujours préciser que le FPPN ne calcule pas ses provisions et que le besoin est une estimation d'Adenka.
