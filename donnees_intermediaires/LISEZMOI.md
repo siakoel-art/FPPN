@@ -132,6 +132,17 @@ Résultats (`regle_interets_pep.json`) :
 - Non concluants : 54 dossiers payés au-delà de 1,035 (sorties plus anciennes, durée médiane 9,77 ans), 86 dossiers avec plus de 3 mois d'écart (paiements partiels ou homonymes), dossiers non rapprochés par le nom (1 521 écritures PEP, 1 668 741 919 FCFA).
 - EFC : non concluant. Les précomptes EFC ne sont connus que depuis 01/2023 et les règlements EFC sont des montants ronds (1 800 000, 1 900 000, 2 000 000 FCFA…) qui ne suivent ni le versé ni le versé × 1,055. Il faut le règlement de l'Entraide de Fin de Carrière pour le tester.
 
+## Vérification de la revue indépendante (13/11/2026)
+
+Dossier `revue/` : texte du rapport du 11/11/2026 par diapositive, texte de la Décision n° 05/2022, recalculs (`verif_revue.json`).
+
+```bash
+python scripts/verif_revue_fppn.py $B $DI/controle/FPPN_Calculs_rapport_20261111_recalcule.xlsx $DI/revue/rapport_20261111_texte.json "D:/03-Adenka-Audit/02-Documents FPPN/Balance générale et Grand livre" $DI/revue/verif_revue.json
+python scripts/registre_revue_fppn.py revue_independante/FPPN_Verification_revue_independante_20261113.xlsx
+```
+
+Registre : 85 lignes couvrant les 155 constats des cinq réviseurs (doublons regroupés). 67 confirmés, 7 confirmés en partie, 11 non revérifiés faute de pièce. Décisions proposées : 66 à corriger, 7 à ajouter, 12 à demander au FPPN.
+
 ## Ce qui reste pour régénérer le rapport lui-même
 
 `rapport_v12_fppn.py` attend aussi les modules des skills Adenka (`pptx_tools`, `adenka_docx`, gabarit `Timesaver_Adenka.pptx`) et le dossier d'images de code (`images_code_fppn.py`, qui demande `pygments`). Ils ne sont pas installés sur le PC à ce jour.
