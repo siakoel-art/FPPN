@@ -68,11 +68,11 @@ for _x in _aj13:
 
 # 4. tableaux en 12 points : découpage
 def _lignes13(txt, largeur):
-    return sum(max(1, _m13.ceil(len(str(p)) / max(1.0, (largeur - 0.24) * 4.9))) for p in str(txt).split("\n"))
+    return sum(max(1, _m13.ceil(len(str(p)) / max(1.0, (largeur - 0.24) * 4.6))) for p in str(txt).split("\n"))
 
 
 def _haut13(ligne, largeurs):
-    return 0.14 + 0.45 * max(_lignes13(c, w) for c, w in zip(ligne, largeurs))
+    return 0.16 + 0.5 * max(_lignes13(c, w) for c, w in zip(ligne, largeurs))
 
 
 def _brut13(v):
@@ -114,22 +114,32 @@ for _x in SL:
         _tb["largeurs"] = _largeurs13(_tb["entetes"], _tb["lignes"], sum(_tb["largeurs"]))
 # un sous-titre de deux lignes prend la place de la ligne de synthèse
 for _x in SL:
-    if _x["type"] == "contenu" and len(str(_x["entete"].get("sous_titre") or "")) > 95:
+    if _x["type"] in ("contenu", "gab") and len(str(_x["entete"].get("sous_titre") or "")) > 95:
         _x["entete"]["synthese"] = ""
 _dec13 = {}
-_NSL13 = []
-for _x in SL:
-    tb = _x.get("tableau") if _x["type"] == "contenu" else None
-    if not tb or _x.get("graphique") or _x.get("graphiques") or _x.get("_dettes13"):
-        _NSL13.append(_x)
-        continue
+
+
+def _dispo13(x, tb, suite=False):
+    """Hauteur disponible (cm) pour le tableau d'une diapositive de contenu ou d'annexe."""
+    if x["type"] == "annexe":
+        return 12.4
+    d = BAS_CONTENU - 3.85 - (0.75 if tb.get("titre") else 0) - 0.7 - (0.62 if tb.get("legende") or tb.get("statut_col") is not None else 0)
+    paras = [] if suite else (x.get("analyse") or [])
+    if paras and x.get("disposition", "dessous") == "dessous":
+        nl = sum(_m13.ceil(len(str(p)) / 150) for p in paras) + (1 if x.get("implication") else 0)
+        d -= min(7.5, 0.75 * nl + 0.9)
+    return d
+
+
+def _decoupe13(x):
+    """Renvoie la liste des diapositives (une ou plusieurs) qui portent le tableau de x en 12 points."""
+    tb = x.get("tableau") if x["type"] in ("contenu", "annexe") else None
+    if not tb or x.get("graphique") or x.get("graphiques") or x.get("_dettes13") or x.get("_partie") == "R":
+        return [x]
     tb["taille"] = 12
+    tb.pop("hauteur_ligne", None)
     larg = tb["largeurs"]
-    dispo = BAS_CONTENU - 3.85 - (0.75 if tb.get("titre") else 0) - 0.7 - (0.62 if tb.get("legende") or tb.get("statut_col") is not None else 0)
-    paras = _x.get("analyse") or []
-    if paras and _x.get("disposition", "dessous") == "dessous":
-        nl = sum(_m13.ceil(len(str(p)) / 150) for p in paras) + (1 if _x.get("implication") else 0)
-        dispo -= min(6.0, 0.6 * nl + 0.6)
+    dispo = _dispo13(x, tb)
     h_ent = _haut13(tb["entetes"], larg)
     blocs, cour, h = [], [], h_ent
     for i_, ligne in enumerate(tb["lignes"]):
@@ -137,19 +147,29 @@ for _x in SL:
         if cour and h + hl > dispo:
             blocs.append(cour)
             cour, h = [], h_ent
-            dispo = BAS_CONTENU - 3.85 - (0.75 if tb.get("titre") else 0) - 0.7 - (0.62 if tb.get("legende") or tb.get("statut_col") is not None else 0)
+            dispo = _dispo13(x, tb, suite=True)
         cour.append(i_)
         h += hl
     blocs.append(cour)
+    # une ou deux lignes seules en fin de découpage remontent dans le bloc précédent (estimation prudente)
+    if len(blocs) > 1 and len(blocs[-1]) <= 2:
+        _hb = h_ent + sum(_haut13(tb["lignes"][i], larg) for i in blocs[-2] + blocs[-1])
+        if _hb <= 1.10 * (_dispo13(x, tb, suite=len(blocs) > 2) if len(blocs) > 2 else _dispo13(x, tb)):
+            _der = blocs.pop()
+            blocs[-1] += _der
     if len(blocs) == 1:
-        _NSL13.append(_x)
-        continue
-    t0 = _x["entete"]["titre"]
+        return [x]
+    cle = "titre" if x["type"] == "annexe" else None
+    t0 = x["titre"] if cle else x["entete"]["titre"]
+    out = []
     for k_, idx in enumerate(blocs, 1):
-        y = dict(_x)
+        y = dict(x)
         _mm = re.search(r" \((\d+)/(\d+)\)$", t0)
         _tk = (t0 if k_ == 1 else t0[:-1] + f", suite {k_ - 1})") if _mm else f"{t0} ({k_}/{len(blocs)})"
-        y["entete"] = dict(_x["entete"], titre=_tk)
+        if cle:
+            y["titre"] = _tk
+        else:
+            y["entete"] = dict(x["entete"], titre=_tk)
         if t0 in BLEU_T:
             BLEU_T.add(_tk)
         tb2 = dict(tb, lignes=[tb["lignes"][i] for i in idx])
@@ -157,14 +177,38 @@ for _x in SL:
             tb2["fonds"] = {(idx.index(r), c): v for (r, c), v in tb["fonds"].items() if r in idx}
         if k_ > 1:
             tb2["titre"] = (tb["titre"] + " (suite)") if tb.get("titre") else None
-            for cle in ("analyse", "implication", "encadre"):
-                y.pop(cle, None)
+            for c_ in ("analyse", "implication", "encadre"):
+                y.pop(c_, None)
         y["tableau"] = tb2
-        _NSL13.append(y)
+        out.append(y)
     _t1 = t0 if re.search(r" \(\d+/\d+\)$", t0) else f"{t0} (1/{len(blocs)})"
-    if _t1 != t0:
+    if _t1 != t0 and not cle:
         _dec13[t0] = _t1
     bl13(_t1)
+    return out
+
+
+def _listes13():
+    """Listes des figures et des tableaux en 12 points : 32 lignes par diapositive (deux colonnes de 16)."""
+    nouv = []
+    for x in SL:
+        if x["type"] == "liste_tableaux" and x.get("part") and x["part"][0] > 0:
+            continue
+        if x["type"] in ("liste_figures", "liste_tableaux"):
+            n_ = max(1, _m13.ceil(len(FIG if x["type"] == "liste_figures" else TAB) / 32))
+            nouv += [dict(x, part=(k_, n_)) for k_ in range(n_)]
+        else:
+            nouv.append(x)
+    SL[:] = nouv
+
+
+_listes13()
+_NSL13 = []
+for _x in SL:
+    for _y in _decoupe13(_x):
+        if _y["type"] == "annexe":
+            _y["_v13"] = True
+        _NSL13.append(_y)
 SL[:] = _NSL13
 print("v13 : tableaux découpés :", len(_dec13))
 _REN13.update(_dec13)

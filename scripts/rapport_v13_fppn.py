@@ -199,7 +199,7 @@ SC_ = C["sensibilite_cle"]
 INF = {int(k): v for k, v in C["inflation"]["valeurs"].items()}
 RT = {x["code"]: x for x in Q["ratios"]}; exec('# ---- v14 : ajouts et corrections du 10/11/2026 écrits en bleu\nBLEU = "0070C0"\nBLEU_T = set()   # titres de diapositives entièrement nouvelles\nBLEU_P = []      # morceaux de texte nouveaux ou corrigés dans des diapositives existantes\n\n\ndef bl(t):\n    """Enregistre un texte nouveau ou corrigé (écrit en bleu à la fin) et le renvoie tel quel."""\n    for m_ in re.split(r"\\*\\*|\\[\\[|\\]\\]", str(t)):\n        if len(m_.strip()) >= 4:\n            BLEU_P.append(m_.strip())\n            BLEU_P.append(_pv14(m_.strip()))\n    return t\n\n\ndef _pv14(t):\n    """Même transformation que le rendu (pas de point-virgule dans les diapositives)."""\n    return re.sub(r" ; (\\w)", lambda m_: ". " + m_.group(1).upper(), str(t))\n\n\nBLEU_L = []      # lignes de tableau entièrement nouvelles (repérées par leur cellule la plus longue)\n\n\ndef bll(t):\n    """Ligne de tableau entièrement nouvelle : toute la ligne sera en bleu."""\n    BLEU_L.append(str(t))\n    BLEU_L.append(_pv14(t))\n    return t\n\n\ndef blt(entete):\n    """Diapositive entièrement nouvelle : tout son texte sera en bleu."""\n    BLEU_T.add(entete["titre"])\n    return entete')
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "v13", "bleu_v13.py"), encoding="utf-8").read())
-BLEU_P.extend(["Les provisions figées gonflent le passif à moins d'un an : la lecture des comptes tels quels est le cas le plus défavorable, et la lecture avec les provisions ramenées au besoin est donnée à côté.", 'Adossement par échéance établi sur les grands livres, en deux lectures', "La hausse arrive par paliers, chaque mois de juillet : aucun test de tendance n'a de valeur sur une série en marches.", 'La sinistralité maladie est stable de 2020 à 2022, puis monte de 23,31 points par an de 2023 à 2025', 'en 2020 et 2022, le FPPN rendait moins de 10 FCFA de prestations pour 100 FCFA de cotisations (20,77 FCFA en 2021)', 'retards en baisse à expliquer et précomptes incomplets', 'La dépréciation prévue par la politique de crédit réduit le résultat du Grenier sans le rendre négatif', 'nomme trois provisions techniques', 'le non-respect des ratios de contrôle (tableau 1 et section II de la Décision) entraîne des sanctions', 'ce sont deux tendances bâties sur 2023 à 2025, déjà dépassées par les huit mois de 2026.', 'elle remplacera ces deux tendances par un scénario central expliqué, recalé sur 2026.', 'cinq apportent des faits nouveaux', "jusqu'au 11/11/2026"])
+BLEU_P.extend(["Les provisions figées gonflent le passif à moins d'un an : la lecture des comptes tels quels est le cas le plus défavorable, et la lecture avec les provisions ramenées au besoin est donnée à côté.", 'Adossement par échéance établi sur les grands livres, en deux lectures', "La hausse arrive par paliers, chaque mois de juillet : aucun test de tendance n'a de valeur sur une série en marches.", 'La sinistralité maladie, stable de 2020 à 2022, monte de 23,31 points par an de 2023 à 2025', 'en 2020 et 2022, le FPPN rendait moins de 10 FCFA de prestations pour 100 FCFA de cotisations (20,77 FCFA en 2021)', 'retards en baisse à expliquer et précomptes incomplets', 'La dépréciation prévue par la politique de crédit réduit le résultat du Grenier sans le rendre négatif', 'nomme trois provisions techniques', 'le non-respect des ratios de contrôle (tableau 1 et section II de la Décision) entraîne des sanctions', 'ce sont deux tendances bâties sur 2023 à 2025, déjà dépassées par les huit mois de 2026.', 'elle remplacera ces deux tendances par un scénario central expliqué, recalé sur 2026.', 'cinq apportent des faits nouveaux', "jusqu'au 11/11/2026", 'après extourne de la provision de 2025, sous la norme, budget 2026 calé sur 80 %', 'Intérêts selon le manuel, non comptabilisés', 'Intérêts selon le manuel, non provisionnés', 'selon le manuel,', '(scénario le plus haut)', "aujourd'hui estimé à au moins", '(état 2021)', 'En retirant aussi le terrain SONEB (450 000 000 FCFA, sans titre)', "% une fois les dettes de l'année payées", '% (31/08/2026, après extourne)', '% sur les huit mois de 2026 après extourne', '% au 31/08/2026 après extourne, sous la norme', '% en 2026 après extourne)', '% au 31/08/2026 après extourne.', 'et dépasse largement le besoin estimé par Adenka, qui reste un minimum.', 'Les huit mois de 2026 sont déjà sous le scénario B'])
 for x in Q["ratios"]:
     for cle in ("valeurs", "valeurs_retraitees", "statuts", "statuts_retraites", "num", "den"):
         if cle in x:
@@ -455,6 +455,7 @@ def psap_m_elargie(cl):
 
 
 DELAI = {a: _PM[a]["dettes_cliniques"] / (_PM[a]["factures_enregistrees"] / _PM[a]["mois"]) for a in range(2020, 2027)}
+DELAI[2020] = _PM[2020]["dettes_cliniques"] / (_PM[2020]["factures_enregistrees"] / 4)  # balance 2020 : du 01/09 au 31/12
 GRD = {}
 for _g in V10["grenier_depreciation"]:
     GRD[_g["arrete"]] = GRD.get(_g["arrete"], 0.0) + _g["encours"] * _g["taux"]
@@ -527,7 +528,7 @@ contenu({"titre": "Demande 1 : engagements envers les adhérents", "sous_titre":
                             ["Mêmes intérêts si l'EFC est servie à 3,5 %", F("V1 intérêts 3,5", INT35), "Borne basse : taux indiqué par la direction comptable", ref("Épargne : intérêts dus non comptabilisés")],
                             ["Taux servi sur l'EFC selon les documents", "3,5 %, 5,5 % ou 14 %", "Aucun taux arrêté par une décision signée", ref("EFC et PEP : trois taux dans trois documents")],
                             ["Allocations décès et frais funéraires dus au 31/08/2026 (41591000 et 41592000)", F("V1 dette décès", DETTE_DEC26), "Liste du FPPN des décès non payés, valorisés au barème", ref("Allocations décès : dette réelle et provision obsèques")],
-                            ["Décès connus après la clôture (états 2021 et 2023)", F("V1 décès tardifs", TARD_DEC), "Ordre de grandeur de ce qui manque chaque 31 décembre", ref("Allocations décès : décès connus après la clôture")],
+                            ["Décès connus après la clôture (état 2021)", F("V1 décès tardifs", TARD_DEC), "Ordre de grandeur de ce qui manque chaque 31 décembre", ref("Allocations décès : décès connus après la clôture")],
                             ["Soins facturés l'année suivante (clôture 2024, estimation élargie)", F("V1 maladie tardive", psap_m_elargie(2024)), "Dette maladie non encore facturée à la clôture", ref("Provision maladie : montant nécessaire")],
                             ["Provision du personnel recalculée au 31/12/2025", F("V1 PIDR", PIDR25["dbo"]), f"Compte 196 du FPPN : {F('V1 PIDR 196', PIDR25['provision_196'])}", ref("Provision du personnel par entité de 2021 à 2025")],
                             ["Santé des policiers retraités", N("V1 retraités", CG[-1]["retraites"]) + " retraités cotisants (" + CG[-1]["libelle"] + ")", f"Non mesurable : soins des retraités non isolés ; date de naissance connue pour {N('V1 ret dn', RDN['nb'])} retraités seulement", ref("Santé des retraités : ce que l'on peut mesurer")]]},
@@ -683,7 +684,7 @@ DEFS = {  # code : (ce que le ratio mesure, comment le lire)
     "RL2": ("La capacité à payer les dettes à court terme avec les créances à court terme et la trésorerie.",
             "Sous 1 : les créances et la trésorerie ne suffisent pas à payer les dettes à court terme."),
     "RL3": ("La capacité à payer immédiatement les dettes à court terme avec la seule trésorerie.",
-            "Sous 1 : un retrait massif ne pourrait pas être payé avec l'argent disponible."),
+            "Sous 1 : un retrait massif n'est pas payable avec l'argent disponible."),
     "RL4": ("La réserve de trésorerie des risques longs, en trimestres de sorties d'épargne et de frais.",
             "0 : aucune réserve de trésorerie n'est constituée."),
     "RL5": ("La couverture par les fonds propres des sorties d'épargne des deux derniers exercices.",
@@ -691,11 +692,11 @@ DEFS = {  # code : (ce que le ratio mesure, comment le lire)
     "RL6": ("Le rendement des sommes réellement placées (dépôts à terme et FCP).",
             "À comparer au taux du marché et au taux servi aux épargnants : un rendement inférieur au taux servi alourdit la dette d'épargne."),
     "RL7": ("L'argent laissé sur des comptes courants qui ne rapportent aucun intérêt.",
-            "Plus le solde est élevé, plus le manque à gagner est important. La norme demande un solde proche de zéro."),
+            "Plus le solde est fort, plus le manque à gagner est important. La norme demande un solde proche de zéro."),
     "CHF": ("La part des cotisations absorbée par les charges de fonctionnement.",
             "Au-dessus de 20 % : les frais prennent une part des cotisations qui manque aux prestations et aux réserves."),
     "CHB": ("La part de l'ensemble des produits absorbée par les charges de fonctionnement brutes.",
-            "Au-dessus de 15 % : les frais de gestion sont élevés au regard des ressources."),
+            "Au-dessus de 15 % : les frais de gestion pèsent trop au regard des ressources."),
     "CUP": ("Les frais de fonctionnement engagés pour 1 FCFA de prestations.",
             "Au-dessus de 15 % : la gestion coûte cher par rapport aux prestations servies."),
     "CHP": ("La part des charges de fonctionnement consacrée au personnel.",
@@ -1314,7 +1315,7 @@ contenu({"titre": "Circuit EFC et PEP : du bulletin à la comptabilisation", "so
          "synthese": "Logigramme du FPPN redessiné ; les cadres rouges signalent les contrôles absents constatés par Adenka"},
         "Couloirs repris du logigramme du FPPN. Forme arrondie bleue : début ou fin. Rectangle : étape. Losange : décision. Forme ondulée : document. Cadre rouge : contrôle absent.",
         logigramme="epargne",
-        analyse=["**Le circuit s'arrête à la comptabilisation des précomptes.** Aucune étape ne rapproche le fichier aller du fichier retour, aucune ne calcule les intérêts dus ni ne produit de relevé par épargnant (" + F("CE int", INT55) + " d'intérêts dus au 31/08/2026)."],
+        analyse=["**Le circuit s'arrête à la comptabilisation des précomptes.** Aucune étape ne rapproche le fichier aller du fichier retour, aucune ne calcule les intérêts ni ne produit de relevé par épargnant (selon le manuel, " + F("CE int", INT55) + " d'intérêts dus au 31/08/2026)."],
         source=_SRC_FLOW + " ; " + SRC_ENT19[9:])
 contenu({"titre": "Circuit de la flotte automobile (GNA)", "sous_titre": "Le FPPN encaisse une commission de 20 % dont l'assiette n'est pas documentée",
          "synthese": "Logigramme du FPPN redessiné ; les cadres rouges signalent les contrôles absents constatés par Adenka"},
@@ -1933,6 +1934,14 @@ contenu({"titre": "Prestations maladie par nature", "sous_titre": "Plus de la mo
 
 # ---- v15 : sinistralité lue dans les deux sens (grands livres 2021 à 2026)
 SQ = {int(k_): v_ for k_, v_ in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "sinistralite_v15.json"), encoding="utf-8")).items()}
+_E13 = K13["extourne"]
+_q = SQ[2026]
+_q["prest"] -= _E13
+_q["cmp"] -= _E13
+_q["soins"] -= _E13
+_q["sin_num"] -= _E13
+_q["cats"]["Clinique du FPPN (CMP)"] -= _E13
+_q.update(sc=_q["prest"] / _q["cot"], sc_soins=_q["soins"] / _q["cot"], part_cmp=_q["cmp"] / _q["soins"], comb=(_q["prest"] + _q["frais"]) / _q["cot"], comb_soins=(_q["soins"] + _q["frais"]) / _q["cot"], sin=_q["sin_num"] / _q["sin_den"], sin_soins=(_q["sin_num"] - _q["non_soins"]) / _q["sin_den"])
 _A15 = list(range(2021, 2027))
 _LIB15 = ["2021", "2022", "2023", "2024", "2025", "31/08/2026"]
 contenu(blt({"titre": "Sinistralité : lire le taux dans les deux sens", "sous_titre": "Pour une mutuelle sociale, un taux bas n'est pas une réussite et un taux qui monte n'est pas forcément un progrès",
@@ -1941,9 +1950,9 @@ contenu(blt({"titre": "Sinistralité : lire le taux dans les deux sens", "sous_t
         tableau={"titre": tab("Lire un taux de sinistralité : assureur, mutuelle sociale et situation du FPPN"), "entetes": ["Niveau du taux", "Pour un assureur", "Pour une mutuelle sociale (norme AIRMS)", "Ce que l'on observe au FPPN"],
                  "largeurs": [4.6, 7.4, 9.0, 10.2], "taille": 8.5,
                  "lignes": [["Sous 70 %", "Très rentable : la prime dépasse largement le coût des sinistres", "Anomalie : les cotisations ne reviennent pas assez aux adhérents en soins. L'AIRMS l'a relevé pour 2022 (9,06 %)", "2020 à 2024 : taux réglementaire de 8,92 % à 40,34 %, excédents de 2 083 908 202 FCFA (2021) et 2 060 332 677 FCFA (2022)"],
-                            ["De 70 % à 80 %", "Correct, la marge reste positive", "Cible : il reste 20 % à 30 % pour les frais (au plus 20 %) et les réserves", "31/08/2026 : 75,20 %, dans la norme pour la première fois, budget 2026 calé sur 80 %"],
-                            ["Au-dessus de 80 %", "Marge faible", "Pas assez de marge pour les frais et la réserve obligatoire", "Maladie seule : 73,53 % (2025) puis 97,40 % (31/08/2026)"],
-                            ["Ratio combiné au-dessus de 100 %", "Perte technique", "La garantie consomme plus qu'elle ne reçoit, frais compris : elle puise dans les réserves", "Maladie : 109,87 % en 2025 et 141,52 % sur les huit mois de 2026, avec des frais de 36,34 % (2025) et 44,12 % (31/08/2026) des cotisations"]]},
+                            ["De 70 % à 80 %", "Correct, la marge reste positive", "Cible : il reste 20 % à 30 % pour les frais (au plus 20 %) et les réserves", "31/08/2026 : " + n13(K13["regl_26"], 2) + " % après extourne de la provision de 2025, sous la norme, budget 2026 calé sur 80 %"],
+                            ["Au-dessus de 80 %", "Marge faible", "Pas assez de marge pour les frais et la réserve obligatoire", "Maladie seule : 73,53 % (2025) puis " + n13(100 * SQ[2026]["sc"], 2) + " % (31/08/2026, après extourne)"],
+                            ["Ratio combiné au-dessus de 100 %", "Perte technique", "La garantie consomme plus qu'elle ne reçoit, frais compris : elle puise dans les réserves", "Maladie : 109,87 % en 2025 et " + n13(100 * SQ[2026]["comb"], 2) + " % sur les huit mois de 2026 après extourne, avec des frais de 36,34 % (2025) et 44,12 % (31/08/2026) des cotisations"]]},
         disposition="dessous",
         analyse=["**Un taux qui approche la norme est d'abord une correction :** en 2020 et 2022, le FPPN rendait moins de 10 FCFA de prestations pour 100 FCFA de cotisations (20,77 FCFA en 2021), ce que l'AIRMS lui a demandé de corriger (courrier du 29/09/2023).",
                  "**Mais la question utile est de savoir si le taux mesure bien les soins, et si l'équilibre tient frais compris.** Les deux diapositives suivantes répondent : le taux est gonflé par des dépenses étrangères aux soins, et la maladie perd de l'argent même sans elles."],
@@ -2006,9 +2015,9 @@ contenu(blt({"titre": "Sinistralité : ce qu'il faut en retenir", "sous_titre": 
          "synthese": "Ni le taux bas d'hier ni la conformité apparente d'aujourd'hui ne doivent être lus comme de bonnes nouvelles"}),
         "Synthèse de l'analyse de la sinistralité dans les deux sens.",
         tableau={"titre": tab("Sinistralité : ce qui rassure, ce qui inquiète, ce qu'il faut faire"), "entetes": ["Ce qui rassure", "Ce qui inquiète", "Ce qu'il faut faire"], "largeurs": [10.4, 10.4, 10.4], "taille": 8.5,
-                 "lignes": [["Les cotisations reviennent davantage aux adhérents : 75,20 % au 31/08/2026, dans la norme", "Une partie du taux n'est pas du soin : dons, gadgets, honoraires (" + nb(SQ[2025]["non_soins"]) + " FCFA en 2025)", "Sortir des prestations les dépenses hors soins et justifier les honoraires du cabinet"],
+                 "lignes": [["Les cotisations reviennent davantage aux adhérents : " + n13(100 * SQ[2026]["sin"], 2) + " % au 31/08/2026 après extourne, sous la norme", "Une partie du taux n'est pas du soin : dons, gadgets, honoraires (" + nb(SQ[2025]["non_soins"]) + " FCFA en 2025)", "Sortir des prestations les dépenses hors soins et justifier les honoraires du cabinet"],
                             ["L'accès aux soins s'élargit (clinique, retraités, MEDOC)", "La clinique du FPPN reçoit environ 7 FCFA de soins sur 10 et fixe elle-même ses factures", "Tenir une comptabilité séparée de la clinique et facturer au coût réel, contrôlé"],
-                            ["Le décès reste très excédentaire (21,76 % au 31/08/2026)", "La maladie est déficitaire même en soins seuls (ratio combiné de 119,07 % en 2026)", "Recalculer la cotisation maladie (3,5 % du salaire de base) et ramener les frais à 20 % au plus"],
+                            ["Le décès reste très excédentaire (21,76 % au 31/08/2026)", "La maladie est déficitaire même en soins seuls (ratio combiné de " + n13(100 * SQ[2026]["comb_soins"], 2) + " % en 2026 après extourne)", "Recalculer la cotisation maladie (3,5 % du salaire de base) et ramener les frais à 20 % au plus"],
                             ["Le budget 2026 vise une sinistralité de 80 %", "Le taux est piloté par le budget, pas par une mesure du risque", "Calculer les provisions dossier par dossier et suivre le ratio combiné chaque trimestre"]]},
         disposition="dessous",
         analyse=["**Message clé : un taux de sinistralité ne vaut que par ce qu'il contient.** Au FPPN, il a d'abord été trop bas parce que des dépenses de santé étaient inscrites à l'actif, puis il a été gonflé par des dépenses étrangères aux soins. Le vrai signal est le ratio combiné de la maladie, qui dépasse 100 % en 2026."],
@@ -2041,7 +2050,7 @@ contenu({"titre": "Choix de la formule : frais de gestion", "sous_titre": "La fo
 
 retenir("sinistralité", ("La sinistralité maladie approche le niveau des cotisations", "Ratio S/C maladie multiplié par plus de douze depuis 2021, résultat en baisse, déficit sur 2026",
                          "Les prestations maladie absorbent une part croissante des cotisations, et le résultat du FPPN baisse depuis 2021."),
-        f"La sinistralité maladie est stable de 2020 à 2022, puis monte de 23,31 points par an de 2023 à 2025 : sur six années avec une rupture, aucun test n'a de valeur probante. La pente moyenne est d'environ {N('Pente S/C (ret)', C['tendances'][1]['pente'], 2)} points par an de 2020 à 2025. Les frais dépassent la norme de 20 % des cotisations. " + bl("Sans les dons, gadgets et honoraires imputés aux soins, le taux maladie est de 53,30 % en 2025 et de 74,95 % au 31/08/2026."),
+        f"La sinistralité maladie, stable de 2020 à 2022, monte de 23,31 points par an de 2023 à 2025. Pente moyenne : {N('Pente S/C (ret)', C['tendances'][1]['pente'], 2)} points par an de 2020 à 2025. Les frais dépassent la norme de 20 % des cotisations. " + bl("Sans les dons, gadgets et honoraires imputés aux soins, le taux maladie est de 53,30 % en 2025 et de " + n13(100 * SQ[2026]['sc_soins'], 2) + " % au 31/08/2026 après extourne."),
         "Sans maîtrise des prestations et des frais, le FPPN deviendra déficitaire et ne pourra plus doter sa réserve obligatoire.",
         "Le FPPN doit détailler le compte global de prestations par nature et par prestataire, et transmettre la base des prestations.",
         "La hausse rapide du ratio maladie est le principal risque technique : à ce rythme, les cotisations maladie ne couvriront plus les prestations.")
@@ -2117,7 +2126,7 @@ contenu({"titre": "Poste 998 : autres références", "sous_titre": "Le poste de 
                  "**Leur nature n'est documentée nulle part.** Il peut s'agir de remboursements de prêts PEP (comptes 27110000 et 27120000), ce que le FPPN doit confirmer."],
         implication="Tant que ces références ne sont pas expliquées, la dette d'épargne PEP ne peut pas être reconstituée à partir des précomptes.",
         source=SRC_PREC)
-retenir("épargne", ("L'épargne due aux mutualistes est très peu couverte par des actifs disponibles", "Couverture de 16,28 % au 31/08/2026 ; un retrait de 21,34 % épuiserait toute la trésorerie",
+retenir("épargne", ("L'épargne due aux mutualistes est très peu couverte par des actifs disponibles", "Couverture de 16,28 % au 31/08/2026 ; un retrait de 21,34 % épuise toute la trésorerie, et de " + n13(K13["seuil_retrait"], 2) + " % une fois les dettes de l'année payées",
                     "La dette d'épargne augmente plus vite que les actifs réservés, et l'écart finance des emplois peu liquides."),
         F("Épargne (ret)", b[2026]["epargne_totale"]) + " d'épargne sont dus au 31/08/2026, pour " + F("Actifs réservés (ret)", b[2026]["actifs_dedies_epargne"]) + " d'actifs réservés.",
         "Le FPPN ne peut pas rembourser rapidement une vague de retraits, et il ne respecte pas le ratio de solvabilité des risques longs.",
@@ -2401,7 +2410,7 @@ contenu({"titre": "Provisions attendues par produit", "sous_titre": "Seules la m
                  "lignes": [["Maladie", "PSAP dossier par dossier et sinistres tardifs (art. 10)", F("PSAP maladie (p9)", PV["psap_maladie"]["2025"]), "Montant hérité d'environ 2004, non calculé ; besoin mesuré de quelques millions de FCFA (méthode courte)."],
                             ["Décès (obsèques)", "PSAP dossier par dossier et sinistres tardifs (art. 10)", F("PSAP décès (p9)", PV["psap_deces"]["2025"]), "Montant hérité d'environ 2004, inchangé ; le calcul annuel des allocations restant à payer est passé au compte 41591000."],
                             ["Toutes garanties", "Provision pour risques en cours (art. 9)", "Aucune", "Cotisation précomptée sur le mois qu'elle couvre : provision nulle (statuts, art. 88)."],
-                            ["EFC, PEP", "Provision mathématique si un capital est garanti (art. 11)", "Dettes d'épargne seulement", "Intérêts dus non comptabilisés : " + F("PPP int", INT55) + " au 31/08/2026 (PEP 3,5 %, EFC 5,5 %)."],
+                            ["EFC, PEP", "Provision mathématique si un capital est garanti (art. 11)", "Dettes d'épargne seulement", "Intérêts selon le manuel, non comptabilisés : " + F("PPP int", INT55) + " au 31/08/2026 (PEP 3,5 %, EFC 5,5 %)."],
                             ["Santé des retraités", "Provision mathématique si garantie à vie (art. 11)", "Aucune", "Âges et règles de la garantie non reçus."],
                             ["Prêts du Grenier", "Dépréciation des créances (PCMS, prudence)", "Aucune depuis 2022", "Dépréciation calculée avec la politique de crédit du Grenier (40 %, 80 %, 100 %)."],
                             ["Flotte automobile", "Aucune provision technique (risque porté par GNA)", "Compte de tiers 47111106", "Trop-perçus à traiter comme une dette envers les adhérents."],
@@ -2467,7 +2476,7 @@ contenu({"titre": "Provision maladie : montant nécessaire", "sous_titre": f"Le 
                  "lignes": [[f"31/12/{c}", F(f"PMN dette {c}", _PM[c]["dettes_cliniques"]), F(f"PMN retard {c}", TARDM[c]["references_annee_precedente"]), F(f"PMN besoin {c}", psap_m_elargie(c)),
                              F(f"PMN prov {c}", PV["psap_maladie"][str(c)]), F(f"PMN écart {c}", PV["psap_maladie"][str(c)] - psap_m_elargie(c))] for c in (2022, 2023, 2024)]},
         disposition="dessous",
-        analyse=[f"**La provision maladie du bilan ne correspond à aucun calcul et vaut de {N('PMN fois min', min(PV['psap_maladie'][str(c)] / psap_m_elargie(c) for c in (2022, 2023, 2024)), 0)} à {N('PMN fois max', max(PV['psap_maladie'][str(c)] / psap_m_elargie(c) for c in (2022, 2023, 2024)), 0)} fois le besoin mesuré.** Son montant est identique de 2020 au 31/08/2026, alors que les prestations maladie ont été multipliées par {N('PMN mult prest', s[2025]['prest_maladie'] / s[2020]['prest_maladie'], 1)} de 2020 à 2025.",
+        analyse=[f"**La provision maladie du bilan ne correspond à aucun calcul et dépasse largement le besoin estimé par Adenka, qui reste un minimum.** Son montant est identique de 2020 au 31/08/2026, alors que les prestations maladie ont été multipliées par {N('PMN mult prest', s[2025]['prest_maladie'] / s[2020]['prest_maladie'], 1)} de 2020 à 2025.",
                  "**Le besoin n'est pas nul** : l'article 89 des statuts et l'article 10 du règlement d'exécution n° 004/2022 imposent de l'estimer chaque année."],
         implication="L'excédent est en réalité une réserve. Son reclassement relève d'une décision de l'Assemblée générale (statuts, art. 85) et du dialogue avec l'AIRMS ; il ne peut se faire qu'avec une base des prestations portant les dates des soins, du dépôt et du paiement (PBC, item 71).",
         valable="clôtures 2022, 2023 et 2024 ; prestations maladie des balances ; factures de cliniques du journal SIN",
@@ -2747,7 +2756,7 @@ for _ent, _sous, _morceaux in (("Direction Générale", "Les cinq provisions les
                          "largeurs": _LARG_I, "taille": 8,
                          "lignes": _lignes_pidr(_part)},
                 disposition="dessous",
-                analyse=[f"**L'agent {_top['id']} porte la provision la plus élevée de ce tableau ({F('PIDR top ' + _ent + _suffixe, _top['dbo'])})**, avec {N('PIDR top anc ' + _ent + _suffixe, _top['anciennete'], 2)} ans d'ancienneté."],
+                analyse=[f"**L'agent {_top['id']} porte la plus forte provision de ce tableau ({F('PIDR top ' + _ent + _suffixe, _top['dbo'])})**, avec {N('PIDR top anc ' + _ent + _suffixe, _top['anciennete'], 2)} ans d'ancienneté."],
                 implication="Ces montants s'additionnent dans la diapositive « Provision du personnel par entité ». L'âge de départ, la date d'embauche et l'entité de chaque agent sont demandés au FPPN (PBC, item 113).",
                 valable="agents déclarés dans la DISA 2025, évaluation au 31/12/2025 ; paramètres de l'onglet 14a",
                 source=SRC_DISA + " ; onglet 14b du classeur v9")
@@ -2772,9 +2781,9 @@ contenu({"titre": "Conclusion : engagements envers les adhérents", "sous_titre"
          "synthese": f"Engagements mesurés au 31/08/2026 : {F('CE total', EP_DUE26 + INT55 + DETTE_DEC26 + TARD_DEC)} (épargne avec intérêts dus, allocations décès dues et décès tardifs)"},
         "Synthèse de l'évaluation des engagements du FPPN envers ses adhérents et leurs ayants droit. Chaque ligne indique la méthode retenue, le résultat et ce qui empêche d'aller plus loin.",
         tableau={"titre": tab("Engagements envers les adhérents et ayants droit : méthode et résultat"), "entetes": ["Engagement", "Méthode retenue", "Résultat", "Ce qui manque pour conclure"], "largeurs": [5.8, 9.4, 5.4, 10.6], "taille": 8.5,
-                 "lignes": [["Épargne PEP et EFC", "Solde comptable + intérêts dus du 01/01/2020 au taux du manuel", F("CE épargne", EP_DUE26 + INT55), "Taux arrêté, relevés individuels, âge de départ de chaque titulaire d'EFC"],
+                 "lignes": [["Épargne PEP et EFC", "Solde comptable + intérêts du 01/01/2020 au taux du manuel (scénario le plus haut)", F("CE épargne", EP_DUE26 + INT55), "Taux arrêté, relevés individuels, âge de départ de chaque titulaire d'EFC"],
                             ["Allocations décès dues", "Liste du FPPN des décès non payés au barème (41591000, 41592000)", F("CE décès", DETTE_DEC26), "Date de dépôt de chaque demande, pour écarter les dossiers forclos"],
-                            ["Décès non encore déclarés", "Décès d'une année enregistrés l'année suivante (états 2021 et 2023)", F("CE tardifs", TARD_DEC), "Date d'enregistrement dans les états 2022, 2024 et 2025"],
+                            ["Décès non encore déclarés", "Décès d'une année enregistrés l'année suivante (état 2021)", F("CE tardifs", TARD_DEC), "Date d'enregistrement dans les états 2022, 2024 et 2025"],
                             ["Soins faits, non encore facturés", "Factures de cliniques d'une année enregistrées l'année suivante", F("CE maladie", psap_m_elargie(2024)), "Base des prestations avec dates des soins, du dépôt et du paiement"],
                             ["Santé des retraités", "Non mesurable", "Non mesuré", "Âges et prestations des retraités"],
                             ["Personnel du FPPN (hors adhérents)", "Recalcul agent par agent (décret n° 2017-210)", F("CE PIDR", PIDR25["dbo"]), "Fichier des agents policiers détachés"]]},
@@ -2831,7 +2840,7 @@ contenu({"titre": "Enjeux d'un provisionnement mal calibré", "sous_titre": "Une
         tableau={"titre": tab("Effets d'une provision mal calibrée et situation du FPPN"), "entetes": ["Erreur", "Effet sur les comptes", "Effet sur les ratios et les décisions", "Situation au FPPN"],
                  "largeurs": [4.6, 8.4, 9.0, 9.2], "taille": 8.5,
                  "lignes": [["Provision trop forte", "Résultat et fonds propres sous-évalués. Charges futures déjà couvertes deux fois", "Sinistralité et frais mal mesurés. Cotisations jugées insuffisantes à tort", f"Maladie et obsèques : {F('EN trop', PROV_MAL + PROV_OBS - psap_m_elargie(2024) - TARD_DEC)} au-dessus des besoins mesurés"],
-                            ["Provision trop faible", "Dettes futures absentes du bilan. Résultat et fonds propres surévalués", "Marge de solvabilité et réserve obligatoire surévaluées. Tarifs et placements décidés sur une base fausse", f"Intérêts dus non provisionnés : {F('EN int', INT55)}. Prêts non dépréciés : {F('EN gre', _GR26)}"],
+                            ["Provision trop faible", "Dettes futures absentes du bilan. Résultat et fonds propres surévalués", "Marge de solvabilité et réserve obligatoire surévaluées. Tarifs et placements décidés sur une base fausse", f"Intérêts selon le manuel, non provisionnés : {F('EN int', INT55)}. Prêts non dépréciés : {F('EN gre', _GR26)}"],
                             ["Provision non recalculée", "Montant sans lien avec les engagements de l'année", "Impossible de démontrer la suffisance à l'AIRMS ou au commissaire aux comptes", "Montants identiques de 2020 au 31/08/2026 (statuts, art. 89, non appliqué)"]]},
         disposition="dessous",
         analyse=["**Le risque principal du FPPN n'est pas un manque global de provisions, mais leur affectation.** Les engagements d'épargne, les plus importants, sont les moins provisionnés."],
@@ -2963,7 +2972,7 @@ contenu(blt({"titre": "Actifs dont la valeur n'est pas établie", "sous_titre": 
                             ["Terrain SONEB, Songon (10 ha)", "450 000 000 FCFA", "Acheté en 2023, sans titre foncier. Remplacé en 2026 par une parcelle de 9 ha à Jacqueville, dotée d'une lettre d'attribution de 2021", "Protocole d'accord du 16/02/2026"],
                             ["Créance sur l'État (soins des policiers blessés en service commandé)", "3 932 124 730 FCFA", "Recouvrement demandé avec l'appui de l'AIRMS ; comité de recouvrement créé. Le lien avec la créance sur l'Hôpital de la Police n'est pas établi", "Courrier de l'AIRMS du 05/01/2026 ; PV du CA de mars 2026"]]},
         disposition="dessous",
-        analyse=[f"[[**Si le terrain d'Attoban et la créance sur l'Hôpital de la Police sortaient de l'actif, les fonds propres passeraient de {F('AV fp25', b[2025]['fonds_propres'])} à {F('AV fp25s', b[2025]['fonds_propres'] - _ACT_CONT)} au 31/12/2025, et de {F('AV fp26', b[2026]['fonds_propres'])} à {F('AV fp26s', b[2026]['fonds_propres'] - _ACT_CONT)} au 31/08/2026.**]] Ce calcul reste une sensibilité tant que le CA n'a pas décidé.",
+        analyse=[f"[[**Si le terrain d'Attoban et la créance sur l'Hôpital de la Police sortaient de l'actif, les fonds propres passeraient de {F('AV fp25', b[2025]['fonds_propres'])} à {F('AV fp25s', b[2025]['fonds_propres'] - _ACT_CONT)} au 31/12/2025, et de {F('AV fp26', b[2026]['fonds_propres'])} à {F('AV fp26s', b[2026]['fonds_propres'] - _ACT_CONT)} au 31/08/2026.**]] En retirant aussi le terrain SONEB (450 000 000 FCFA, sans titre), ils tombent à {n13(K13['fp_sans_contestes'])} FCFA au 31/08/2026. Ce calcul reste une sensibilité tant que le conseil d'administration n'a pas décidé.",
                  "**Certains actifs ne sont donc pas correctement évalués.** Leur valeur au bilan surestime ce que le FPPN pourrait mobiliser pour payer l'épargne."],
         implication="Le FPPN doit faire évaluer ses terrains et sa clinique, obtenir un accord écrit sur les créances, et déprécier ce qui n'est pas recouvrable. L'adossement et les fonds propres du rapport sont des maxima.",
         valable="bilan au 31/12/2025 et au 31/08/2026 (balance provisoire) ; documents reçus le 09/11/2026",
@@ -4045,7 +4054,7 @@ contenu({"titre": "Projection agrégée : deux scénarios", "sous_titre": f"Si l
         disposition="dessous",
         analyse=[f"**Au rythme de 2023 à 2025, les prestations croissent de {pc('PJ tp (a)', _TC['prestations'])} par an et les cotisations de {pc('PJ tc (a)', _TC['cotisations'])} : l'équilibre technique ne tient pas.**",
                  f"**La hausse des prestations maladie ralentit déjà : {pc('PJ cr 2024', _CRP[2024])} en 2024, {pc('PJ cr 2025', _CRP[2025])} en 2025.** Prolonger le rythme moyen est donc une hypothèse pessimiste.",
-                 "**Le scénario B montre l'équilibre atteint si les prestations suivent les cotisations.** La réalité se situe entre les deux scénarios ; seule une projection par âge permettrait de la situer."],
+                 "**Le scénario B montre l'équilibre atteint si les prestations suivent les cotisations.** Les huit mois de 2026 sont déjà sous le scénario B ; seule une projection par âge permettrait de la situer."],
         implication="Le FPPN doit suivre chaque trimestre le rapport prestations / cotisations de la maladie : c'est l'indicateur avancé du déséquilibre que montre le scénario A.",
         valable="cotisations, prestations et frais de gestion des comptes 2023 à 2025, garanties maladie et décès prises ensemble ; hors épargne, Grenier et produits financiers",
         source=SRC_COMPTA + " ; onglet 25 du classeur des calculs")
@@ -4166,7 +4175,7 @@ contenu({"titre": "Analyses en attente", "sous_titre": "Quatre analyses attenden
         "Chaque analyse en attente utilise la méthode retenue dans le rapport, pas une méthode écartée. Les numéros renvoient à la PBC du 23/10/2026.",
         tableau={"titre": tab("Analyses en attente, méthode retenue et données nécessaires"), "entetes": ["Analyse", "Méthode retenue", "Ce que l'analyse précisera", "Données nécessaires (PBC n°)"],
                  "largeurs": [5.6, 9.4, 8.4, 7.8], "taille": 9,
-                 "lignes": [["Provision maladie", "Soins de l'année facturés après la clôture, sur la base des factures datées (date des soins, du dépôt et du paiement)", f"Montant exact, aujourd'hui borné à {F('AT psap', psap_m_elargie(2024))} au 31/12/2024", "Base des prestations datée (" + _n(71) + ")"],
+                 "lignes": [["Provision maladie", "Soins de l'année facturés après la clôture, sur la base des factures datées (date des soins, du dépôt et du paiement)", f"Montant exact, aujourd'hui estimé à au moins {F('AT psap', psap_m_elargie(2024))} au 31/12/2024", "Base des prestations datée (" + _n(71) + ")"],
                             ["Provision décès", "Dossiers connus au compte 41591000 et décès survenus déclarés après la clôture", "Part des dossiers forclos dans la dette de " + F("AT dette", DETTE_DEC26), "Liste des dossiers du 41591000, fichiers des décès (" + _n(115, 92) + ")"],
                             ["Mortalité observée et santé des retraités", "Décès observés comparés aux décès attendus des tables CIMA H et F, par âge", "Écart de mortalité des policiers, engagement de santé à vie des retraités", "Dates de naissance des mutualistes et des retraités (" + _n(9, 120) + ")"],
                             ["Engagement d'épargne par épargnant", "Solde de chaque compte individuel augmenté des intérêts au taux arrêté", "Échéancier des sorties, à la place du taux de sortie observé", "Comptes individuels, taux servi (" + _n(17, 99) + ")"]]},
@@ -4647,6 +4656,7 @@ SL.append({"type": "merci", "notes": ""})
 # ===========================================================================
 GAB = {"couverture": 1, "sommaire": 5, "separateur": 2, "contenu": 5, "annexe": 5, "liste_figures": 5, "liste_tableaux": 5, "merci": 110}
 tmp = SORTIE.replace(".pptx", "_tmp.pptx")
+exec(open(os.path.join(V13, "annexes_v13.py"), encoding="utf-8").read())
 selection(TIMESAVER, tmp, [x["gab"] if x["type"] == "gab" else GAB[x["type"]] for x in SL])
 
 
@@ -5591,8 +5601,8 @@ for i, x in enumerate(SL, 1):
         moitie = (len(liste) + 1) // 2
         for col, part in enumerate((liste[:moitie], liste[moitie:])):
             if part:
-                tableau(sl, {"titre": None, "entetes": [nom, "Titre", "Diapo."], "largeurs": [1.6, 12.4, 1.4],
-                             "lignes": [[str(n_), t_, str(d_)] for n_, t_, d_ in part], "hauteur_ligne": 0.3}, 1.8, 1.4 + col * 16.0, 7, hauteur_max=15.6)
+                tableau(sl, {"titre": None, "entetes": [nom, "Titre", "Diapo."], "largeurs": [2.3, 11.3, 1.8],
+                             "lignes": [[str(n_), t_, str(d_)] for n_, t_, d_ in part], }, 1.8, 1.4 + col * 16.0, 12, hauteur_max=15.6)
     if x.get("notes") and not globals().get("SANS_NOTES"):
         sl.notes_slide.notes_text_frame.text = x["notes"]
 COURANTE = None

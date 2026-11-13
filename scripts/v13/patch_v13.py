@@ -64,6 +64,10 @@ rep("_POS = {}\nfor i, x in enumerate(SL, 1):",
 rep('if "BLEU_P" in globals():  # v14',
     'exec(open(os.path.join(V13, "dettes_v13.py"), encoding="utf-8").read())\nif "BLEU_P" in globals():  # v14')
 
+# ---- 7 bis. annexes ajoutées après la passe : découpage en 12 points juste avant le rendu (après les contenus, numéros inchangés)
+rep("selection(TIMESAVER, tmp, [x[\"gab\"] if x[\"type\"] == \"gab\" else GAB[x[\"type\"]] for x in SL])",
+    "exec(open(os.path.join(V13, \"annexes_v13.py\"), encoding=\"utf-8\").read())\nselection(TIMESAVER, tmp, [x[\"gab\"] if x[\"type\"] == \"gab\" else GAB[x[\"type\"]] for x in SL])")
+
 # ---- 8. contrôle des chiffres : un chiffre d'un tableau découpé peut être sur l'une des diapositives du découpage
 rep('    t_["retrouve"] = t_["texte"] in textes[t_["diapositive"] - 1] if t_["diapositive"] <= len(textes) else False',
     '    t_["retrouve"] = any(t_["texte"] in textes[t_["diapositive"] - 1 + j_] for j_ in range(t_.get("_n13", 1)) if t_["diapositive"] + j_ <= len(textes))')

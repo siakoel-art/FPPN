@@ -140,3 +140,14 @@ for _sl in prs.slides:
             _r._r.getparent().remove(_r._r)
             _nj13 += 1
 print("v13 : morceaux surlignés en jaune :", _nj13)
+
+
+# ---- v13 : cadre des sous-titres de deux lignes ajusté à leur texte (le texte reste ancré en haut)
+from pptx.util import Pt as _Pt13
+_ns13 = 0
+for _sl in prs.slides:
+    for _sh in _sl.shapes:
+        if _sh.has_text_frame and _sh.name == "Adenka_SousTitre" and len(_sh.text_frame.text) > 95 and _sh.height < _Pt13(40):
+            _sh.height = _Pt13(40)
+            _ns13 += 1
+print("v13 : sous-titres de deux lignes ajustés :", _ns13)
