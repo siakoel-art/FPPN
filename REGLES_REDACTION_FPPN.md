@@ -10,11 +10,14 @@ Ces règles s'appliquent au rapport technique, à la version dirigeant et à tou
   Forme à suivre (13/11/2026) : d'abord les FCFA pour 100 FCFA, puis « soit X % de [la base] », la base nommée en mots simples.
   Exemple : « Le Fonds rend 3,5 FCFA pour 100 FCFA versés, une seule fois, quelle que soit la durée d'épargne, soit 3,5 % du montant versé (cotisé). »
   Autre exemple : « Sur 100 FCFA de cotisations, 65,14 FCFA sont partis en prestations, soit 65,14 % des cotisations, sous la norme de 70 % à 80 %. »
+  Le « soit X % de [base] » (ou « ce qui représente environ X % de [base] ») suit chaque « X FCFA pour 100 FCFA », sans exception (16/11/2026).
 - Un taux arrêté au 31/08 est prolongé à fin décembre « au même rythme » (calcul expliqué en annexe).
 - Montants exacts en FCFA. Pourcentages à deux décimales.
 - Les provisions : toujours préciser que le FPPN ne calcule pas ses provisions et que le besoin est une estimation d'Adenka.
 - « Paiement non justifié » pour l'argent sorti sans pièce ni contrat reçu ; « Irrégularité » quand un texte précis n'est pas respecté. Chiffrer, ne pas accuser.
 - Ce qui reste à confirmer est surligné en jaune.
+- Un constat technique s'explique en suivant la logique : ce qui s'est passé, en mots simples ; comment on le sait (écriture, compte, pièce) ; ce que cela change, chiffré (tableau « tel quel / corrigé » si utile) ; ce qui reste à confirmer et par qui. Ces intitulés ne sont pas écrits : le paragraphe enchaîne naturellement (16/11/2026).
+- Tout terme comptable ou actuariel (provision, extourne, créance, réévaluation, compte de liaison, adossement…) est expliqué en mots simples à sa première apparition dans la diapositive.
 
 ## Titres
 - Le titre dit le message, en une phrase affirmative courte (une ligne, environ 70 caractères au plus), sans sigle ni jargon.
@@ -27,6 +30,7 @@ Ces règles s'appliquent au rapport technique, à la version dirigeant et à tou
 - Graphiques natifs PowerPoint, modifiables (pas d'image).
 - Sources en bas de page, numérotées (1), (2)… : chaque numéro renvoie au fichier exact reçu (nom entre guillemets) et à l'endroit qui prouve le fait (compte, onglet, pièce).
 - Sigles en bas de diapositive. Pas de point-virgule dans les diapositives.
+- Renvois dans les tableaux : en-tête de colonne « Diapo », cellule « D42 » (et non « diapositive 42 ») (16/11/2026).
 - Tout ajout ou correction par rapport à la version précédente est écrit en bleu (0070C0).
 - Charte Adenka Timesaver, police Helvetica.
 - Pas de mention interne, pas de nom de personne : citer la direction ou le service.
