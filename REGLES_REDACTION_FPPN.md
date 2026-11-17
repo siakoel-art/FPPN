@@ -31,6 +31,11 @@ Ces règles s'appliquent au rapport technique, à la version dirigeant et à tou
 - Sources en bas de page, numérotées (1), (2)… : chaque numéro renvoie au fichier exact reçu (nom entre guillemets) et à l'endroit qui prouve le fait (compte, onglet, pièce).
 - Sigles en bas de diapositive. Pas de point-virgule dans les diapositives.
 - Renvois dans les tableaux : en-tête de colonne « Diapo », cellule « D42 » (et non « diapositive 42 ») (16/11/2026).
+- Choix du 17/11/2026 :
+  - « D42 » seulement dans les tableaux. Dans le texte courant, « (diapositive 42) ».
+  - Les sous-titres peuvent arrondir (« 15,7 milliards de FCFA ») pour rester lisibles. Le montant exact au franc figure dans le texte ou le tableau de la même diapositive.
+  - « provision (argent mis de côté) » à la première apparition dans la diapositive, puis « provision ».
+  - « fonds propres (ce que le Fonds possède moins ce qu'il doit) » à la première apparition, puis « fonds propres ». Plus de « richesse propre ».
 - Tout ajout ou correction par rapport à la version précédente est écrit en bleu (0070C0).
 - Charte Adenka Timesaver, police Helvetica.
 - Pas de mention interne, pas de nom de personne : citer la direction ou le service.
